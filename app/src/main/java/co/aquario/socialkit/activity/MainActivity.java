@@ -1,23 +1,35 @@
-package co.aquario.socialkit;
+package co.aquario.socialkit.activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.mikepenz.iconics.typeface.FontAwesome;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
+import com.mikepenz.materialdrawer.model.SectionDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.nispok.snackbar.Snackbar;
 import com.squareup.otto.Subscribe;
 import com.squareup.picasso.Picasso;
 
+import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.FailedEvent;
 import co.aquario.socialkit.event.SomeEvent;
 import co.aquario.socialkit.event.SuccessEvent;
@@ -28,10 +40,58 @@ import co.aquario.socialkit.model.SomeData;
 
 public class MainActivity extends ActionBarActivity {
 
+    private Drawer.Result result = null;
+    private Context context;
+    private Activity activity;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        context = this;
+        activity = this;
+        //new Drawer().withActivity(this).build();
+
+
+        // Handle Toolbar
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setElevation(0);
+        }
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        result = new Drawer()
+                .withActivity(this)
+                .withToolbar(toolbar)
+                .withHeader(R.layout.header)
+                .withActionBarDrawerToggle(true)
+                .withTranslucentStatusBar(true)
+                .addDrawerItems(
+                        new PrimaryDrawerItem().withName("Channels").withIcon(FontAwesome.Icon.faw_terminal),
+                        new PrimaryDrawerItem().withName("Social").withIcon(FontAwesome.Icon.faw_users),
+                        new PrimaryDrawerItem().withName("Videos").withIcon(FontAwesome.Icon.faw_video_camera),
+                        new PrimaryDrawerItem().withName("Photos").withIcon(FontAwesome.Icon.faw_camera_retro),
+                        new SectionDrawerItem().withName("Menu"),
+                        new SecondaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home),
+                        new SecondaryDrawerItem().withName("Live History").withIcon(FontAwesome.Icon.faw_history),
+                        new SecondaryDrawerItem().withName("Setting").withIcon(FontAwesome.Icon.faw_cog),
+                        new SecondaryDrawerItem().withName("Maxpoint").withIcon(FontAwesome.Icon.faw_btc),
+                        new SecondaryDrawerItem().withName("Tattoo Store").withIcon(FontAwesome.Icon.faw_shopping_cart).setEnabled(false),
+                        new SecondaryDrawerItem().withName("Term & Policies").withIcon(FontAwesome.Icon.faw_terminal),
+                        new SecondaryDrawerItem().withName("Log Out").withIcon(FontAwesome.Icon.faw_sign_out)
+
+                )
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id, IDrawerItem drawerItem) {
+                        if (drawerItem instanceof Nameable) {
+                            Snackbar.with(getApplicationContext()).text(((Nameable) drawerItem).getName()).show(activity);
+                        }
+                    }
+                }).build();
+
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()

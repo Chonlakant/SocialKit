@@ -37,4 +37,8 @@ dependencies {
 
     compile 'com.nispok:snackbar:2.9.0'
 
+    compile('com.mikepenz.materialdrawer:library:1.0.2@aar') {
+        transitive = true
+    }
+
 }
