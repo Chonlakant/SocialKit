@@ -20,7 +20,8 @@
         <activity
             android:name=".activity.LoginActivity"
             android:label="@string/title_activity_login"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/AppSecondTheme" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

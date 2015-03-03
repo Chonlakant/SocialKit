@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.androidquery.auth.FacebookHandle;
@@ -25,10 +26,10 @@ import org.json.JSONObject;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.MainActivity;
+import co.aquario.socialkit.event.FailedNetworkEvent;
 import co.aquario.socialkit.event.LoadFbProfileEvent;
 import co.aquario.socialkit.event.LoginEvent;
 import co.aquario.socialkit.event.LoginFailedAuthEvent;
-import co.aquario.socialkit.event.LoginFailedNetworkEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
 import co.aquario.socialkit.event.UpdateProfileEvent;
 import co.aquario.socialkit.handler.ApiBus;
@@ -66,7 +67,8 @@ public class LoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        View rootView = null;
+        rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
         userEt = (MaterialEditText) rootView.findViewById(R.id.et_user);
         passEt = (MaterialEditText) rootView.findViewById(R.id.et_pass);
@@ -85,8 +87,20 @@ public class LoginFragment extends BaseFragment {
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ApiBus.getInstance().post(new LoginEvent(userEt.getText().toString(),
-                        passEt.getText().toString()));
+                if(!userEt.getText().toString().trim().equals("") && !passEt.getText().toString().trim().equals(""))
+                    ApiBus.getInstance().post(new LoginEvent(userEt.getText().toString().trim(),
+                        passEt.getText().toString().trim()));
+                else
+                    Toast.makeText(getActivity().getApplicationContext(),"Please input user/pass",Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        registerBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getFragmentManager().beginTransaction().add(R.id.login_container, new RegisterFragment(),"REGISTER").commit();
+                //ApiBus.getInstance().post(new RegisterEvent());
             }
         });
 
@@ -120,7 +134,7 @@ public class LoginFragment extends BaseFragment {
                     .text(profile.id)
                     .show(getActivity());
 
-            getFragmentManager().beginTransaction().add(R.id.login_container, new ThinkingFragment()).commit();
+            getFragmentManager().beginTransaction().replace(R.id.login_container, new ThinkingFragment()).commit();
             ApiBus.getInstance().post(produceProfileEvent());
 
         }
@@ -150,7 +164,7 @@ public class LoginFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void onLoginFailedNetwork(LoginFailedNetworkEvent event) {
+    public void onLoginFailedNetwork(FailedNetworkEvent event) {
         Log.e("ARAIWA", "onLoginFailedNetwork");
         prefManager.clear();
         Snackbar.with(getActivity().getApplicationContext()).text("Cannot connect to server").show(getActivity());
@@ -160,6 +174,8 @@ public class LoginFragment extends BaseFragment {
     public void onLoginFailedAuth(LoginFailedAuthEvent event) {
         Log.e("ARAIWA", "onLoginFailedAuth");
         Snackbar.with(getActivity().getApplicationContext()).text("Wrong username or password").show(getActivity());
+        Toast.makeText(getActivity().getApplicationContext(),"Wrong username or password",Toast.LENGTH_SHORT).show();
+
         //prefManager.clear();
     }
 

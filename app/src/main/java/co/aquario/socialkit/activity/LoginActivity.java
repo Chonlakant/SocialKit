@@ -4,18 +4,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.UpdateProfileEvent;
-import co.aquario.socialkit.fragment.BaseFragment;
 import co.aquario.socialkit.fragment.LoginFragment;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.UserProfile;
@@ -76,31 +72,4 @@ public class LoginActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-
-
-    public static class ThinkingFragment extends BaseFragment {
-
-        public ThinkingFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_thinking, container, false);
-            return rootView;
-        }
-    }
-
-    public static class RegisterFragment extends BaseFragment {
-
-        public RegisterFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_register, container, false);
-            return rootView;
-        }
-    }
 }

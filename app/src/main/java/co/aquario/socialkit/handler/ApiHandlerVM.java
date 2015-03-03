@@ -8,11 +8,15 @@ import com.squareup.otto.Subscribe;
 import java.util.HashMap;
 import java.util.Map;
 
+import co.aquario.socialkit.event.FailedNetworkEvent;
 import co.aquario.socialkit.event.LoginEvent;
 import co.aquario.socialkit.event.LoginFailedAuthEvent;
-import co.aquario.socialkit.event.LoginFailedNetworkEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
+import co.aquario.socialkit.event.RegisterEvent;
+import co.aquario.socialkit.event.RegisterFailedEvent;
+import co.aquario.socialkit.event.RegisterSuccessEvent;
 import co.aquario.socialkit.model.LoginData;
+import co.aquario.socialkit.model.RegisterData;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
@@ -62,7 +66,38 @@ public class ApiHandlerVM {
             @Override
             public void failure(RetrofitError error) {
                 Log.e("response",error.getBody().toString());
-                apiBus.post(new LoginFailedNetworkEvent());
+                apiBus.post(new FailedNetworkEvent());
+            }
+        });
+    }
+
+    @Subscribe public void onRegisterEvent(RegisterEvent event) {
+        Map<String, String> options = new HashMap<String, String>();
+
+        options.put("name", event.getName());
+        options.put("username", event.getUsername());
+        options.put("password", event.getPassword());
+        options.put("email", event.getGender());
+        options.put("gender", event.getEmail());
+
+        api.register(options, new Callback<RegisterData>() {
+            @Override
+            public void success(RegisterData loginData, Response response) {
+                //Log.e("loginData",loginData.apiToken);
+                Log.e("response", response.getBody().toString());
+
+                if (loginData.status.equals("1"))
+                    apiBus.post(new RegisterSuccessEvent(loginData));
+                else
+                    apiBus.post(new RegisterFailedEvent());
+
+                Log.e("POSTBACK", "post response back to LoginActivity");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("response", error.getBody().toString());
+                apiBus.post(new FailedNetworkEvent());
             }
         });
     }
