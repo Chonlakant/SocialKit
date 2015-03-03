@@ -14,4 +14,8 @@ public class UserProfile {
     public String avatar;
     @Expose
     public String cover;
+    @Expose
+    public String username;
+    @Expose
+    public String email;
 }

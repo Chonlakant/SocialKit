@@ -30,13 +30,23 @@
 
         <FrameLayout
             android:layout_width="480dp"
-            android:layout_height="200dp"
+            android:layout_height="320dp"
             android:layout_marginTop="72dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
             android:background="#aa252525"
             android:padding="16px"
             android:id="@+id/frameLayout">
+
+            <de.hdodenhof.circleimageview.CircleImageView
+
+                android:id="@+id/profile_image"
+                android:layout_width="128dp"
+                android:layout_height="128dp"
+                android:src="@drawable/profile"
+                app:border_width="2dp"
+                app:border_color="#FF000000"
+                android:layout_gravity="center" />
 
             <LinearLayout
                 android:orientation="vertical"
@@ -45,64 +55,27 @@
                 android:layout_marginLeft="8dp"
                 android:layout_marginRight="8dp">
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Username or Phone number"
-                    android:text=""
-                    android:textCursorDrawable="@drawable/text_cursor_cyan"
-                    app:baseColor="@android:color/white"
-                    app:floatingLabel="highlight"
-                    app:maxCharacters="12"
-                    app:primaryColor="?colorAccent" />
 
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Password"
-                    android:text=""
-                    android:textCursorDrawable="@drawable/text_cursor_cyan"
-                    app:baseColor="@android:color/white"
-                    app:floatingLabel="highlight"
-                    app:primaryColor="?colorAccent" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="fill_parent"
-                    android:layout_height="fill_parent"
-                    android:divider="@drawable/divider"
-                    android:showDividers="middle"
-                    android:layout_marginTop="6dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Register"
-                        android:id="@+id/textView2"
-                        android:textColor="#ddd"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center" />
-
-
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textAppearance="?android:attr/textAppearanceMedium"
-                        android:text="Login"
-                        android:id="@+id/textView3"
-                        android:textColor="#ddd"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:gravity="center" />
-                </LinearLayout>
             </LinearLayout>
+
+            <TextView
+                android:id="@+id/profile_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_margin="20dp"
+                android:text="@string/hello_world"
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+
+                android:layout_gravity="center_horizontal|bottom" />
 
         </FrameLayout>
 
         <LinearLayout
+            android:id="@+id/btn_logout"
             android:orientation="horizontal"
             android:layout_width="fill_parent"
             android:layout_height="60dp"
@@ -115,20 +88,22 @@
             android:background="@color/indigo_700">
 
             <TextView
+                android:id="@+id/tv_fb"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Login with Facebook"
-                android:id="@+id/textView4"
+                android:text="Logout"
+
                 android:layout_weight="1"
                 android:gravity="center"
                 android:layout_gravity="center"
                 android:textColor="#eee"
-                android:drawableLeft="@drawable/ic_fb"
                 android:drawablePadding="5dp"
                 android:layout_marginLeft="42dp"
                 android:layout_marginRight="42dp" />
         </LinearLayout>
+
+
 
     </RelativeLayout>
 </RelativeLayout>

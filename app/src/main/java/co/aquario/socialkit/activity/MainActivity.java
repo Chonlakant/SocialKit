@@ -22,8 +22,8 @@ import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.nispok.snackbar.Snackbar;
 
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.event.SomeEvent;
 import co.aquario.socialkit.fragment.BaseFragment;
+import co.aquario.socialkit.fragment.MainFragment;
 import co.aquario.socialkit.handler.ApiBus;
 
 
@@ -84,11 +84,14 @@ public class MainActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new MainFragment())
                     .commit();
-            Snackbar.with(this).text("before post").show(this);
-            ApiBus.getInstance().post(new SomeEvent("var1",
-                    2));
+            Snackbar.with(this).text("finish login").show(this);
+
+
+
+            //ApiBus.getInstance().post(new SomeEvent("var1",
+              //      2));
         }
     }
 
@@ -143,7 +146,7 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_register, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             /*
             randomView = (ImageView) rootView.findViewById(R.id.imageView);
             author = (TextView) rootView.findViewById(R.id.textView);

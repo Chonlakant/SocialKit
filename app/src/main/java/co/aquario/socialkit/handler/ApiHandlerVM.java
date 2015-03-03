@@ -9,7 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import co.aquario.socialkit.event.LoginEvent;
-import co.aquario.socialkit.event.LoginFailedEvent;
+import co.aquario.socialkit.event.LoginFailedAuthEvent;
+import co.aquario.socialkit.event.LoginFailedNetworkEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
 import co.aquario.socialkit.model.LoginData;
 import retrofit.Callback;
@@ -47,16 +48,21 @@ public class ApiHandlerVM {
         api.login(options, new Callback<LoginData>() {
             @Override
             public void success(LoginData loginData, Response response) {
-                Log.e("loginData",loginData.apiToken);
+                //Log.e("loginData",loginData.apiToken);
                 Log.e("response",response.getBody().toString());
-                apiBus.post(new LoginSuccessEvent(loginData));
+
+                if(loginData.status.equals("1"))
+                    apiBus.post(new LoginSuccessEvent(loginData));
+                else
+                    apiBus.post(new LoginFailedAuthEvent());
 
                 Log.e("POSTBACK","post response back to LoginActivity");
             }
 
             @Override
             public void failure(RetrofitError error) {
-                apiBus.post(new LoginFailedEvent());
+                Log.e("response",error.getBody().toString());
+                apiBus.post(new LoginFailedNetworkEvent());
             }
         });
     }
