@@ -2,21 +2,15 @@ package co.aquario.socialkit.activity;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.mikepenz.iconics.typeface.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
@@ -26,16 +20,11 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.nispok.snackbar.Snackbar;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.event.FailedEvent;
 import co.aquario.socialkit.event.SomeEvent;
-import co.aquario.socialkit.event.SuccessEvent;
 import co.aquario.socialkit.fragment.BaseFragment;
 import co.aquario.socialkit.handler.ApiBus;
-import co.aquario.socialkit.model.SomeData;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -94,7 +83,7 @@ public class MainActivity extends ActionBarActivity {
 
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
             Snackbar.with(this).text("before post").show(this);
@@ -143,8 +132,9 @@ public class MainActivity extends ActionBarActivity {
     public static class PlaceholderFragment extends BaseFragment {
 
         //@InjectView(R.id.imageView)
-        public ImageView randomView;
-        public TextView author;
+
+        //public ImageView randomView;
+        //public TextView author;
 
         public PlaceholderFragment() {
 
@@ -153,7 +143,8 @@ public class MainActivity extends ActionBarActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            View rootView = inflater.inflate(R.layout.fragment_register, container, false);
+            /*
             randomView = (ImageView) rootView.findViewById(R.id.imageView);
             author = (TextView) rootView.findViewById(R.id.textView);
 
@@ -166,31 +157,34 @@ public class MainActivity extends ActionBarActivity {
                             randomTime));
                 }
             });
+            */
 
             //ButterKnife.inject(getActivity(),rootView);
             return rootView;
         }
 
 
+        /*
 
         @Subscribe
-        public void onSomeSuccess(SuccessEvent event) {
-            SomeData imageData = event.getSomeResponse();
-            Log.e("HEY3!",imageData.src);
-            Picasso.with(getActivity()).load(imageData.src+"?fit=crop&fm=jpg&h=480&q=60&w=640").fit().centerInside().into(randomView);
-            author.setText(imageData.author);
+        public void onSomeSuccess(LoginSuccessEvent event) {
+            //SomeData imageData = event.getSomeResponse();
+            //Log.e("HEY3!",imageData.src);
+            //Picasso.with(getActivity()).load(imageData.src+"?fit=crop&fm=jpg&h=480&q=80&w=640").fit().centerInside().into(randomView);
+            //author.setText(imageData.author);
 
-            ActionBarActivity actionBarActivity = (ActionBarActivity)getActivity();
-            ActionBar actionBar = actionBarActivity.getSupportActionBar();
+            //ActionBarActivity actionBarActivity = (ActionBarActivity)getActivity();
+            //ActionBar actionBar = actionBarActivity.getSupportActionBar();
 
-            actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(imageData.color)));
-            //imageDataList.addAll(event.getImageSearchResponse().getResponseData().getResults());
-            //adapter.notifyDataSetChanged();
+            //actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor(imageData.color)));
+
         }
 
         @Subscribe
-        public void onSomeFailed(FailedEvent event) {
+        public void onSomeFailed(LoginFailedEvent event) {
             Snackbar.with(getActivity()).text("Failed to load images").show(getActivity());
         }
+
+        */
     }
 }

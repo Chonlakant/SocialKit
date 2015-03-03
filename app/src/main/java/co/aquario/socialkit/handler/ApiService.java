@@ -2,7 +2,7 @@ package co.aquario.socialkit.handler;
 
 import java.util.Map;
 
-import co.aquario.socialkit.model.SomeData;
+import co.aquario.socialkit.model.ImageData;
 import retrofit.Callback;
 import retrofit.http.GET;
 import retrofit.http.QueryMap;
@@ -13,8 +13,8 @@ import retrofit.http.QueryMap;
 public interface ApiService {
     @GET("/random/")
     public void getRandomImage2(@QueryMap Map<String, String> options,
-                          Callback<SomeData> responseJson);
+                          Callback<ImageData> responseJson);
     @GET("/random/")
     public void getRandomImage(
-                          Callback<SomeData> responseJson);
+                          Callback<ImageData> responseJson);
 }

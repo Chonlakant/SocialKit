@@ -18,15 +18,15 @@ public class SomeResponse {
 }
 */
 
-public class SomeResponse {
+public class ImageDataResponse {
 
-    private SomeData randomImageData;
+    private ImageData randomImageData;
 
-    public SomeResponse(SomeData randomImageData) {
+    public ImageDataResponse(ImageData randomImageData) {
         this.randomImageData = randomImageData;
     }
 
-    public SomeData getSomeData() {
+    public ImageData getSomeData() {
         return randomImageData;
     }
 }

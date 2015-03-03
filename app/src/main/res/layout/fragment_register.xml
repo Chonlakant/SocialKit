@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email address*"
+        android:text=""
+
+        android:textCursorDrawable="@drawable/text_cursor_cyan"
+        app:baseColor="@android:color/white"
+        app:floatingLabel="highlight"
+        app:maxCharacters="12"
+        app:primaryColor="@color/material_drawer_primary" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Username*"
+        android:text=""
+
+        android:textCursorDrawable="@drawable/text_cursor_cyan"
+        app:baseColor="@android:color/white"
+        app:floatingLabel="highlight"
+        app:maxCharacters="12"
+        app:primaryColor="@color/material_drawer_primary" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password*"
+        android:text=""
+
+        android:textCursorDrawable="@drawable/text_cursor_cyan"
+        app:baseColor="@android:color/white"
+        app:floatingLabel="highlight"
+        app:maxCharacters="12"
+        app:primaryColor="@color/material_drawer_primary" />
+
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Repeat password*"
+        android:text=""
+
+        android:textCursorDrawable="@drawable/text_cursor_cyan"
+        app:baseColor="@android:color/white"
+        app:floatingLabel="highlight"
+        app:maxCharacters="12"
+        app:primaryColor="@color/material_drawer_primary" />
+
+    <RadioGroup
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Male"
+            android:id="@+id/radioButton"
+            android:layout_weight="1" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Female"
+            android:id="@+id/radioButton2"
+            android:layout_weight="1" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Phone number*"
+            android:text=""
+
+            android:textCursorDrawable="@drawable/text_cursor_cyan"
+            app:baseColor="@android:color/white"
+            app:floatingLabel="highlight"
+            app:maxCharacters="12"
+            app:primaryColor="@color/material_drawer_primary"
+            android:layout_weight="1" />
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <com.rengwuxian.materialedittext.MaterialEditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="SMS-OTP password*"
+            android:text=""
+
+            android:textCursorDrawable="@drawable/text_cursor_cyan"
+            app:baseColor="@android:color/white"
+            app:floatingLabel="highlight"
+            app:maxCharacters="12"
+            app:primaryColor="@color/material_drawer_primary"
+            android:layout_weight="1" />
+
+        <com.dd.processbutton.FlatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Request OTP"
+            android:textColor="@android:color/white"
+            custom:pb_colorNormal="@android:color/holo_blue_light"
+            custom:pb_colorPressed="@android:color/holo_blue_dark"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+</LinearLayout>

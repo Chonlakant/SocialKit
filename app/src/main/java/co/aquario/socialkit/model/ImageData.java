@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * Created by matthewlogan on 9/3/14.
  */
-public class SomeData implements Serializable {
+public class ImageData implements Serializable {
 
     @Expose
     public int id;

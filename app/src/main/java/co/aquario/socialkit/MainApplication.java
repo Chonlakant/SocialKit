@@ -4,8 +4,8 @@ import android.app.Application;
 import android.util.Log;
 
 import co.aquario.socialkit.handler.ApiBus;
-import co.aquario.socialkit.handler.ApiHandler;
-import co.aquario.socialkit.handler.ApiService;
+import co.aquario.socialkit.handler.ApiHandlerVM;
+import co.aquario.socialkit.handler.ApiServiceVM;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
@@ -14,18 +14,57 @@ import retrofit.RestAdapter;
  */
 public class MainApplication extends Application {
 
-    private static final String ENDPOINT = "http://wallsplash.lanora.io";
+    //private static final String ENDPOINT = "http://wallsplash.lanora.io";
 
-    private ApiHandler someApiHandler;
+    private static final String ENDPOINT = "http://api.vdomax.com";
+    
+    public static final String APP_ID = "1466320060320782";
+    public static final String APP_NAMESPACE = "pop-rak";
+    public static final String APP_PERMISSIONS = "read_stream,read_friendlists,manage_friendlists,manage_notifications,publish_stream,publish_checkins,offline_access,user_about_me,friends_about_me,user_activities,friends_activities,user_checkins,friends_checkins,user_events,friends_events,user_groups,friends_groups,user_interests,friends_interests,user_likes,friends_likes,user_notes,friends_notes,user_photos,friends_photos,user_status,friends_status,user_videos,friends_videos";
+
+    public static String USER_TOKEN;
+
+    private ApiHandlerVM loginApiHandler;
+
+    @Override
+    public void onLowMemory() {
+        super.onLowMemory();
+    }
+
+    @Override
+    public void onTerminate() {
+        super.onTerminate();
+    }
 
     @Override public void onCreate() {
         super.onCreate();
-        someApiHandler = new ApiHandler(this, buildApi(),
+        loginApiHandler = new ApiHandlerVM(this, buildLoginApi(),
                 ApiBus.getInstance());
-        someApiHandler.registerForEvents();
+        loginApiHandler.registerForEvents();
     }
 
-    ApiService buildApi() {
+
+    ApiServiceVM buildLoginApi() {
+
+        Log.e("HEY!","called after post");
+
+        return new RestAdapter.Builder()
+                .setLogLevel(RestAdapter.LogLevel.FULL)
+                .setEndpoint(ENDPOINT)
+
+                .setRequestInterceptor(new RequestInterceptor() {
+                    @Override public void intercept(RequestFacade request) {
+                        //request.addQueryParam("p1", "var1");
+                        //request.addQueryParam("p2", "");
+                    }
+                })
+
+                .build()
+                .create(ApiServiceVM.class);
+    }
+
+    /*
+    ApiService buildRandomUnsplashImageApi() {
 
         Log.e("HEY!","after post");
 
@@ -43,5 +82,8 @@ public class MainApplication extends Application {
                 .build()
                 .create(ApiService.class);
     }
+    */
+
+
 
 }

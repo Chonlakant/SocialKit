@@ -7,13 +7,13 @@ import java.util.List;
  */
 public class ResponseData {
 
-    private List<SomeData> results;
+    private List<ImageData> results;
 
-    public ResponseData(List<SomeData> results) {
+    public ResponseData(List<ImageData> results) {
         this.results = results;
     }
 
-    public List<SomeData> getResults() {
+    public List<ImageData> getResults() {
         return results;
     }
 }

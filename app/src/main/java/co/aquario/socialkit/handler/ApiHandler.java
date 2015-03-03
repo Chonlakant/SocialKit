@@ -8,13 +8,7 @@ import com.squareup.otto.Subscribe;
 import java.util.HashMap;
 import java.util.Map;
 
-import co.aquario.socialkit.event.FailedEvent;
 import co.aquario.socialkit.event.SomeEvent;
-import co.aquario.socialkit.event.SuccessEvent;
-import co.aquario.socialkit.model.SomeData;
-import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
 
 /**
  * Created by matthewlogan on 9/3/14.
@@ -44,7 +38,7 @@ public class ApiHandler {
         options.put("key1", event.getVar1());
         options.put("key2", Integer.toString(event.getVar2()));
 
-
+    /*
         api.getRandomImage2(options,new Callback<SomeData>() {
             @Override
             public void success(SomeData randomImage, Response response) {
@@ -56,5 +50,6 @@ public class ApiHandler {
                 apiBus.post(new FailedEvent());
             }
         });
+        */
     }
 }
