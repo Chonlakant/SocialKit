@@ -84,6 +84,8 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
+
+
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -121,22 +123,34 @@ public class LoginFragment extends BaseFragment {
                 .ajax(url, JSONObject.class, this, "facebookCb");
     }
 
+    private String facebookToken;
+
     public void facebookCb(String url, JSONObject jo, AjaxStatus status)
             throws JSONException {
         if (jo != null) {
 
-            Log.e("THISJSON", jo.toString());
+            Log.e("FB_JSON", jo.toString());
 
             Gson gson = new Gson();
             profile = gson.fromJson(jo.toString(), FbProfile.class);
+
+            facebookToken = handle.getToken();
+
+            Log.e("FB_AUTHED", handle.authenticated() + "");
 
             Snackbar.with(getActivity().getApplicationContext())
                     .text(profile.id)
                     .show(getActivity());
 
-            getFragmentManager().beginTransaction().replace(R.id.login_container, new ThinkingFragment()).commit();
-            ApiBus.getInstance().post(produceProfileEvent());
+            prefManager
+                    .fbToken().put(facebookToken)
+                    .fbId().put(profile.id).commit();
 
+            getFragmentManager().beginTransaction().add(R.id.login_container, new FbAuthFragment()).commit();
+            //BusProvider.getInstance().post(produceProfileEvent());
+            //BusProvider.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
+            //ApiBus.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
+            //Log.e("POSTED", "SENT POST");
         }
     }
 
@@ -156,6 +170,8 @@ public class LoginFragment extends BaseFragment {
 
         Snackbar.with(getActivity().getApplicationContext()).text(event.getLoginData().token).show(getActivity());
 
+        Log.e("VM_PROFILE",event.getLoginData().user.toString());
+
         Intent main = new Intent(getActivity(),MainActivity.class);
         startActivity(main);
 
@@ -174,13 +190,13 @@ public class LoginFragment extends BaseFragment {
     public void onLoginFailedAuth(LoginFailedAuthEvent event) {
         Log.e("ARAIWA", "onLoginFailedAuth");
         Snackbar.with(getActivity().getApplicationContext()).text("Wrong username or password").show(getActivity());
-        Toast.makeText(getActivity().getApplicationContext(),"Wrong username or password",Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity().getApplicationContext(), "Wrong username or password", Toast.LENGTH_SHORT).show();
 
         //prefManager.clear();
     }
 
     @Produce
     public LoadFbProfileEvent produceProfileEvent() {
-        return new LoadFbProfileEvent(profile);
+        return new LoadFbProfileEvent(profile,facebookToken);
     }
 }

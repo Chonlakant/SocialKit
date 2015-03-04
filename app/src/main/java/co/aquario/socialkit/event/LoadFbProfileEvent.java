@@ -6,7 +6,10 @@ public class LoadFbProfileEvent {
 
     public FbProfile profile;
 
-    public LoadFbProfileEvent(FbProfile profile) {
+    public String facebookToken;
+
+    public LoadFbProfileEvent(FbProfile profile,String facebookToken) {
         this.profile = profile;
+        this.facebookToken = facebookToken;
     }
 }

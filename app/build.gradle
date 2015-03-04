@@ -44,4 +44,5 @@ dependencies {
 
     compile 'com.github.talenguyen:prettysharedpreferences:1.0.2'
     compile 'de.hdodenhof:circleimageview:1.2.2'
+
 }

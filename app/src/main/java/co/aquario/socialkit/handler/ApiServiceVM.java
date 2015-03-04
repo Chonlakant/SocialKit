@@ -5,6 +5,7 @@ import java.util.Map;
 import co.aquario.socialkit.model.LoginData;
 import co.aquario.socialkit.model.RegisterData;
 import retrofit.Callback;
+import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.QueryMap;
 
@@ -16,7 +17,14 @@ public interface ApiServiceVM {
     public void login(@QueryMap Map<String, String> options,
                                 Callback<LoginData> responseJson);
 
-    @POST("/user/login")
+    @POST("/1.0/fbAuth")
+    public void fbLogin(@QueryMap Map<String, String> options,
+                      Callback<LoginData> responseJson);
+
+    @POST("/user/register")
     public void register(@QueryMap Map<String, String> options,
                       Callback<RegisterData> responseJson);
+
+    @GET("/user/otp")
+    public void otp(@QueryMap Map<String, String> options);
 }

@@ -9,12 +9,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import co.aquario.socialkit.event.FailedNetworkEvent;
+import co.aquario.socialkit.event.FbAuthEvent;
 import co.aquario.socialkit.event.LoginEvent;
 import co.aquario.socialkit.event.LoginFailedAuthEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
 import co.aquario.socialkit.event.RegisterEvent;
 import co.aquario.socialkit.event.RegisterFailedEvent;
 import co.aquario.socialkit.event.RegisterSuccessEvent;
+import co.aquario.socialkit.event.RequestOtpEvent;
 import co.aquario.socialkit.model.LoginData;
 import co.aquario.socialkit.model.RegisterData;
 import retrofit.Callback;
@@ -60,7 +62,34 @@ public class ApiHandlerVM {
                 else
                     apiBus.post(new LoginFailedAuthEvent());
 
-                Log.e("POSTBACK","post response back to LoginActivity");
+                Log.e("POSTBACK","post response back to LoginFragment");
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("response",error.getBody().toString());
+                apiBus.post(new FailedNetworkEvent());
+            }
+        });
+    }
+
+    @Subscribe public void onFbLoginEvent(FbAuthEvent event) {
+
+        Map<String, String> options = new HashMap<String, String>();
+        options.put("access_token", event.getFbToken());
+
+        api.fbLogin(options, new Callback<LoginData>() {
+            @Override
+            public void success(LoginData loginData, Response response) {
+                //Log.e("loginData",loginData.apiToken);
+                Log.e("response",response.getBody().toString());
+
+                if(loginData.status.equals("1"))
+                    apiBus.post(new LoginSuccessEvent(loginData));
+                else
+                    apiBus.post(new LoginFailedAuthEvent());
+
+                Log.e("POSTBACK","post response back to LoginFragment");
             }
 
             @Override
@@ -77,21 +106,21 @@ public class ApiHandlerVM {
         options.put("name", event.getName());
         options.put("username", event.getUsername());
         options.put("password", event.getPassword());
-        options.put("email", event.getGender());
-        options.put("gender", event.getEmail());
+        options.put("email", event.getEmail());
+        options.put("gender", event.getGender());
 
         api.register(options, new Callback<RegisterData>() {
             @Override
-            public void success(RegisterData loginData, Response response) {
+            public void success(RegisterData registerData, Response response) {
                 //Log.e("loginData",loginData.apiToken);
-                Log.e("response", response.getBody().toString());
+                Log.e("response", response.getBody().mimeType());
 
-                if (loginData.status.equals("1"))
-                    apiBus.post(new RegisterSuccessEvent(loginData));
-                else
-                    apiBus.post(new RegisterFailedEvent());
-
-                Log.e("POSTBACK", "post response back to LoginActivity");
+                if (registerData.status.equals("1")) {
+                    apiBus.post(new RegisterSuccessEvent(registerData));
+                }
+                else {
+                    apiBus.post(new RegisterFailedEvent(registerData.message));
+                }
             }
 
             @Override
@@ -100,5 +129,14 @@ public class ApiHandlerVM {
                 apiBus.post(new FailedNetworkEvent());
             }
         });
+    }
+
+    @Subscribe public void onRequestOtp(RequestOtpEvent event) {
+        Map<String, String> options = new HashMap<String, String>();
+
+        options.put("mobile", event.getMobile());
+        options.put("message", event.getMessage());
+
+        api.otp(options);
     }
 }

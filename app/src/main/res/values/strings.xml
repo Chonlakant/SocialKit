@@ -12,5 +12,10 @@
     <string name="welcome_message">Welcome to VDOMAX</string>
     <string name="signup_success">Your sign-up has been successful</string>
 
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+
     <string name="start_button">START NOW</string>
+
+
 </resources>
