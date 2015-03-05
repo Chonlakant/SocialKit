@@ -19,6 +19,11 @@ android {
     }
 }
 
+repositories {
+    maven { url 'http://yanzm.github.io/MaterialTabHost/repository' }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile "com.android.support:appcompat-v7:21.0.3"
@@ -36,5 +41,14 @@ dependencies {
     compile 'com.jakewharton:butterknife:6.1.0'
 
     compile 'com.nispok:snackbar:2.9.0'
+    compile 'de.hdodenhof:circleimageview:1.2.2'
+    compile 'com.mikepenz.iconics:library:0.7.5@aar'
+    compile 'com.mikepenz.iconics:meteocons-typeface:1.1.1@aar'
+    compile 'it.neokree:MaterialTabs:0.11'
+    compile 'net.yanzm:mth:1.0.1'
+
+    compile('com.mikepenz.materialdrawer:library:1.5.0.PREVIEW.5-SNAPSHOT@aar') {
+        transitive = true
+    }
 
 }

@@ -3,6 +3,10 @@ package co.aquario.socialkit;
 import android.app.Application;
 import android.util.Log;
 
+import com.mikepenz.google_material_typeface_library.GoogleMaterial;
+import com.mikepenz.iconics.Iconics;
+import com.mikepenz.meteocons_typeface_library.Meteoconcs;
+
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.handler.ApiHandler;
 import co.aquario.socialkit.handler.ApiService;
@@ -23,6 +27,10 @@ public class MainApplication extends Application {
         someApiHandler = new ApiHandler(this, buildApi(),
                 ApiBus.getInstance());
         someApiHandler.registerForEvents();
+
+        Iconics.registerFont(new Meteoconcs());
+        Iconics.registerFont(new GoogleMaterial());
+        //Iconics.registerFont(new CustomFont());
     }
 
     ApiService buildApi() {
