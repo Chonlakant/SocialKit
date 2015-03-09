@@ -16,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
+import co.aquario.socialkit.activity.VideoViewDemo;
 import co.aquario.socialkit.event.UpdateProfileEvent;
 import co.aquario.socialkit.util.EndpointManager;
 import co.aquario.socialkit.util.PrefManager;
@@ -59,6 +60,14 @@ public class MainFragment extends BaseFragment {
             public void onClick(View v) {
                 Log.e("HEYHA!","Logout Clicked");
                 logout();
+            }
+        });
+
+        avatar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent video = new Intent(getActivity(), VideoViewDemo.class);
+                getActivity().startActivity(video);
             }
         });
 
