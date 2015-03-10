@@ -2,6 +2,7 @@ package co.aquario.socialkit.activity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.Toolbar;
@@ -21,6 +22,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.Nameable;
 import com.nispok.snackbar.Snackbar;
 
+import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.fragment.BaseFragment;
 import co.aquario.socialkit.fragment.MainFragment;
@@ -78,6 +80,16 @@ public class MainActivity extends ActionBarActivity {
                         if (drawerItem instanceof Nameable) {
                             Snackbar.with(getApplicationContext()).text(((Nameable) drawerItem).getName()).show(activity);
                         }
+                        if(((Nameable) drawerItem).getName().equals("Log Out")) {
+                            MainApplication.logout();
+                            Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivity(login);
+                            finish();
+                        }
+                        MainApplication.logout();
+                        Intent login = new Intent(MainActivity.this, LoginActivity.class);
+                        startActivity(login);
+                        finish();
                     }
                 }).build();
 

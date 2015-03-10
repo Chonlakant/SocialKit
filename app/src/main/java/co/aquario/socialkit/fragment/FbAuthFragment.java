@@ -6,9 +6,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.squareup.otto.Subscribe;
+
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.FbAuthEvent;
+import co.aquario.socialkit.event.LoadFbProfileEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.util.PrefManager;
 
@@ -33,9 +36,11 @@ public class FbAuthFragment extends BaseFragment {
 
         String fbToken = prefManager.fbToken().getOr("");
 
-        ApiBus.getInstance().post(new FbAuthEvent(fbToken));
+        ApiBus.getInstance().register(this);
+
+
         getActivity().getFragmentManager().beginTransaction().remove(this).commit();
-        //ApiBus.getInstance().register(this);
+
     }
 
 
@@ -47,16 +52,17 @@ public class FbAuthFragment extends BaseFragment {
         return inflater.inflate(R.layout.fragment_thinking, container, false);
     }
 
-    /*
+
 
     @Subscribe
     public void onLoadFbProfileEvent(LoadFbProfileEvent event) {
         Log.e("FB_SEND_VM_API", "START FB LOGIN WITH VM");
         Log.e("FB_SEND_VM_API",event.facebookToken);
         Log.e("FB_SEND_VM_API",event.profile.id);
+        ApiBus.getInstance().post(new FbAuthEvent(event.facebookToken));
     }
 
-    */
+
 
 
 }

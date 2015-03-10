@@ -1,109 +1,100 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:id="@+id/imageView"
-        android:src="@drawable/bg_header" />
-
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/svScroll"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:fillViewport="true">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:id="@+id/fragment_container"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_margin="20dp"
-            android:text="@string/hello_world"
-            android:textColor="#FFFFFF"
-            android:textSize="30sp"
-            android:id="@+id/textView" />
-
-        <FrameLayout
-            android:layout_width="480dp"
-            android:layout_height="320dp"
-            android:layout_marginTop="72dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
-            android:background="#aa252525"
-            android:padding="16px"
-            android:id="@+id/frameLayout">
-
-            <de.hdodenhof.circleimageview.CircleImageView
-
-                android:id="@+id/profile_image"
-                android:layout_width="128dp"
-                android:layout_height="128dp"
-                android:src="@drawable/profile"
-                app:border_width="2dp"
-                app:border_color="#FF000000"
-                android:layout_gravity="center" />
-
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp">
-
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/profile_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_margin="20dp"
-                android:text="@string/hello_world"
-                android:textColor="#FFFFFF"
-                android:textSize="30sp"
-
-                android:layout_gravity="center_horizontal|bottom" />
-
-        </FrameLayout>
-
-        <LinearLayout
-            android:id="@+id/btn_logout"
-            android:orientation="horizontal"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_below="@+id/frameLayout"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:layout_alignRight="@+id/frameLayout"
-            android:layout_alignEnd="@+id/frameLayout"
-            android:layout_marginTop="48dp"
-            android:background="@color/indigo_700">
-
-            <TextView
-                android:id="@+id/tv_fb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Logout"
-
-                android:layout_weight="1"
-                android:gravity="center"
-                android:layout_gravity="center"
-                android:textColor="#eee"
-                android:drawablePadding="5dp"
-                android:layout_marginLeft="42dp"
-                android:layout_marginRight="42dp" />
-        </LinearLayout>
-
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/cardList"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
 
     </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layoutMenu"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true">
+
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/multiple_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+
+            fab:fab_addButtonSize="normal"
+            android:layout_marginBottom="1dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginEnd="1dp">
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="#ffffff"
+                fab:fab_size="mini"
+
+                fab:fab_colorPressed="#ffffff"
+                android:layout_marginBottom="-10dp"
+                fab:fab_title="Youtube" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_e"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="#ffffff"
+                fab:fab_size="mini"
+
+                fab:fab_colorPressed="#ffffff"
+                fab:fab_title="SoundColud" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_f"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="#ffffff"
+                fab:fab_size="mini"
+                android:layout_marginBottom="-10dp"
+
+                fab:fab_colorPressed="#ffffff"
+                fab:fab_title="Image" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_g"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="#ffffff"
+                fab:fab_size="mini"
+
+                fab:fab_colorPressed="#ffffff"
+                android:layout_marginBottom="-10dp"
+                fab:fab_title="Camera" />
+
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:id="@+id/action_h"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                fab:fab_colorNormal="#ffffff"
+                fab:fab_size="mini"
+                android:layout_marginBottom="-10dp"
+
+                fab:fab_colorPressed="#ffffff"
+                fab:fab_title="Write Post" />
+
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+
+    </RelativeLayout>
+
+
 </RelativeLayout>

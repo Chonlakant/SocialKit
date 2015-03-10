@@ -1,6 +1,8 @@
 package co.aquario.socialkit.fragment;
 
 
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,7 +18,6 @@ import com.squareup.picasso.Picasso;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
-import co.aquario.socialkit.activity.VideoViewDemo;
 import co.aquario.socialkit.event.UpdateProfileEvent;
 import co.aquario.socialkit.util.EndpointManager;
 import co.aquario.socialkit.util.PrefManager;
@@ -66,8 +67,18 @@ public class MainFragment extends BaseFragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Fragment mFragment = null;
+                FragmentManager mFragmentManager = getActivity().getFragmentManager();
+                mFragment = new FeedFragment().newInstance("haha");
+
+
+            if (mFragment != null){
+                mFragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
+            }
+                /*
                 Intent video = new Intent(getActivity(), VideoViewDemo.class);
                 getActivity().startActivity(video);
+                */
             }
         });
 
@@ -78,13 +89,11 @@ public class MainFragment extends BaseFragment {
 
     //@OnClick(R.id.btn_logout)
     public void logout() {
-        pref.isLogin().put(false).commit();
-        pref.clear().commit();
+        MainApplication.logout();
         Intent login = new Intent(getActivity(), LoginActivity.class);
         startActivity(login);
         getActivity().finish();
-        boolean isLogin = pref.isLogin().getOr(false);
-        Log.e("isLogin",":::"+isLogin);
+
     }
 
     @Subscribe public void onUpdateProfile(UpdateProfileEvent event) {

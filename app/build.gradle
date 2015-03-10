@@ -46,4 +46,7 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:1.2.2'
     compile 'me.neavo:vitamio:4.2.2'
 
+    compile 'com.getbase:floatingactionbutton:1.8.0'
+    compile 'com.github.navasmdc:MaterialDesign:1.+@aar'
+
 }

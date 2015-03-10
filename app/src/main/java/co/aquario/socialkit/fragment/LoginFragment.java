@@ -23,6 +23,7 @@ import com.squareup.otto.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import co.aquario.socialkit.BusProvider;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.MainActivity;
@@ -145,12 +146,11 @@ public class LoginFragment extends BaseFragment {
             prefManager
                     .fbToken().put(facebookToken)
                     .fbId().put(profile.id).commit();
-
             getFragmentManager().beginTransaction().add(R.id.login_container, new FbAuthFragment()).commit();
-            //BusProvider.getInstance().post(produceProfileEvent());
+            BusProvider.getInstance().post(produceProfileEvent());
             //BusProvider.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
             //ApiBus.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
-            //Log.e("POSTED", "SENT POST");
+            Log.e("POSTED", "SENT POST");
         }
     }
 
