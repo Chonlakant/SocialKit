@@ -10,7 +10,7 @@ import co.aquario.socialkit.model.User;
 /**
  * Created by matthewlogan on 9/3/14.
  */
-public class FriendDataResponse {
+public class FriendListDataResponse {
 
     @Expose
     public String status;
