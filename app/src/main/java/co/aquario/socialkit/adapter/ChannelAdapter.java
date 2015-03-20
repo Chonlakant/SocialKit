@@ -60,7 +60,6 @@ public class ChannelAdapter extends BaseAdapter {
         Channel channel = list.get(position);
 
         name = (TextView) row.findViewById(R.id.name);
-
         liveCover = (ImageView) row.findViewById(R.id.live_cover);
         avatar = (ImageView) row.findViewById(R.id.avatar);
         status = (CircleImageView) row.findViewById(R.id.status);
