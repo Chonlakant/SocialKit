@@ -16,13 +16,11 @@ import com.dd.processbutton.FlatButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.squareup.otto.Subscribe;
 
-import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.RegisterEvent;
 import co.aquario.socialkit.event.RegisterFailedEvent;
 import co.aquario.socialkit.event.RegisterSuccessEvent;
 import co.aquario.socialkit.handler.ApiBus;
-import co.aquario.socialkit.util.PrefManager;
 
 public class RegisterFragment extends BaseFragment {
 
@@ -31,8 +29,6 @@ public class RegisterFragment extends BaseFragment {
 
     private String mParam1;
     private String mParam2;
-
-    public PrefManager prefManager;
 
     public static RegisterFragment newInstance(String param1, String param2) {
         RegisterFragment fragment = new RegisterFragment();
@@ -49,8 +45,7 @@ public class RegisterFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        prefManager = MainApplication.get(getActivity()).getPrefManager();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -156,7 +151,7 @@ public class RegisterFragment extends BaseFragment {
                 .commit();
                 */
 
-        getFragmentManager().beginTransaction().replace(R.id.login_container, new RegisterSuccessFragment(),"REGISTER_SUCCESS").commit();
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.login_container, new RegisterSuccessFragment()).commit();
     }
 
     @Subscribe public void onRegisterFailed(RegisterFailedEvent event) {

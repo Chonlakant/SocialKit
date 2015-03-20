@@ -3,7 +3,7 @@ package co.aquario.socialkit.model;
 /**
  * Created by Mac on 3/12/15.
  */
-public class Video {
+public class Video extends BaseModel {
     private String postId;
     private String title;
     private String desc;
@@ -11,7 +11,6 @@ public class Video {
     private String text;
     private  String timestamp;
     private String view;
-
     private  String pUserId;
     private String pName;
     private  String pAvatar;

@@ -4,24 +4,24 @@ package co.aquario.socialkit.event;
  * Created by Mac on 3/3/15.
  */
 public class LoadFriendListEvent {
-    private int userId;
     private String type;
+    private int userId;
     private int page;
     private int perPage;
 
-    public LoadFriendListEvent(int userId, String type, int page, int perPage) {
-        this.userId = userId;
+    public LoadFriendListEvent(String type, int userId, int page, int perPage) {
         this.type = type;
+        this.userId = userId;
         this.page = page;
         this.perPage = perPage;
     }
 
-    public int getUserId() {
-        return userId;
-    }
-
     public String getType() {
         return type;
+    }
+
+    public int getUserId() {
+        return userId;
     }
 
     public int getPage() {

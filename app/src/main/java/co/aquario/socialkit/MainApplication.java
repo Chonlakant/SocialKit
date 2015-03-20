@@ -51,6 +51,27 @@ public class MainApplication extends Application {
         return (MainApplication) context.getApplicationContext();
     }
 
+    private static Context sContext = null;
+
+    public static Context getAppContext() {
+        return sContext;
+    }
+
+    public static String appName() {
+        return getAppContext().getString(R.string.app_name);
+    }
+
+    @Override public void onCreate() {
+        super.onCreate();
+        sContext = this;
+
+        loginApiHandler = new ApiHandlerVM(this, buildLoginApi(),
+                ApiBus.getInstance());
+        loginApiHandler.registerForEvents();
+
+        prefManager = new PrefManager(getSharedPreferences("App", MODE_PRIVATE));
+    }
+
     public PrefManager getPrefManager() {
         return prefManager;
     }
@@ -72,14 +93,7 @@ public class MainApplication extends Application {
         super.onTerminate();
     }
 
-    @Override public void onCreate() {
-        super.onCreate();
-        loginApiHandler = new ApiHandlerVM(this, buildLoginApi(),
-                ApiBus.getInstance());
-        loginApiHandler.registerForEvents();
 
-        prefManager = new PrefManager(getSharedPreferences("App", MODE_PRIVATE));
-    }
 
 
     ApiServiceVM buildLoginApi() {

@@ -16,23 +16,56 @@
 
 package co.aquario.socialkit.activity;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.util.SparseArray;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.androidquery.AQuery;
+import com.androidquery.callback.AjaxStatus;
+import com.androidquery.util.AQUtility;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
 import com.github.ksoichiro.android.observablescrollview.ScrollState;
 import com.github.ksoichiro.android.observablescrollview.ScrollUtils;
 import com.github.ksoichiro.android.observablescrollview.Scrollable;
 import com.github.ksoichiro.android.observablescrollview.TouchInterceptionFrameLayout;
+import com.mikepenz.materialdrawer.Drawer;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import co.aquario.socialkit.MainApplication;
+import co.aquario.socialkit.R;
+import co.aquario.socialkit.adapter.LiveHistoryListAdapter;
+import co.aquario.socialkit.event.LoadTimelineEvent;
+import co.aquario.socialkit.handler.ApiBus;
+import co.aquario.socialkit.model.Live;
+import co.aquario.socialkit.util.PrefManager;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseActivity implements ObservableScrollViewCallbacks {
 
@@ -46,12 +79,14 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private View mHeaderOverlay;
     private View mHeaderFlexibleSpace;
     private TextView mTitle;
+    private TextView mSubTitle;
     private TextView mToolbarTitle;
     private View mImageView;
     private View mFab;
     private Toolbar mToolbar;
     private S mScrollable;
     private TouchInterceptionFrameLayout mInterceptionLayout;
+    private CircleImageView mProfileImageView;
 
     // Fields that just keep constants like resource values
     private int mActionBarSize;
@@ -80,22 +115,30 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
     private boolean mHeaderIsAtBottom;
     private boolean mHeaderIsNotAtBottom;
 
+    private Activity mActivity;
+    private Drawer.Result result;
+
+    ArrayList<Live> artistList = new ArrayList<Live>();
+
+    public static SparseArray<Bitmap> photoCache = new SparseArray<>(1);
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResId());
 
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
+        mActivity = this;
+
+
 
         setSupportActionBar(mToolbar);
         ViewHelper.setScaleY(mToolbar, 0);
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("");
 
         mToolbarColor = getResources().getColor(R.color.primary);
         mToolbar.setBackgroundColor(Color.TRANSPARENT);
-        mToolbar.setTitle("");
 
         mFlexibleSpaceImageHeight = getResources().getDimensionPixelSize(R.dimen.flexible_space_image_height);
         mIntersectionHeight = getResources().getDimensionPixelSize(R.dimen.intersection_height);
@@ -116,6 +159,14 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
                 slideOnClick();
             }
         });
+        mProfileImageView = (CircleImageView) findViewById(R.id.profile_image);
+        mProfileImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                slideOnClick();
+            }
+        });
+
         mScrollable = createScrollable();
 
         mFab = findViewById(R.id.fab);
@@ -124,9 +175,11 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         mInterceptionLayout = (TouchInterceptionFrameLayout) findViewById(R.id.scroll_wrapper);
         mInterceptionLayout.setScrollInterceptionListener(mInterceptionListener);
         mTitle = (TextView) findViewById(R.id.title);
-        mTitle.setText(getTitle());
+        mSubTitle = (TextView) findViewById(R.id.sub_title);
+        //mTitle.setText(getTitle());
         mToolbarTitle = (TextView) findViewById(R.id.toolbar_title);
         mToolbarTitle.setText(mTitle.getText());
+
         ViewHelper.setAlpha(mToolbarTitle, 0);
         ViewHelper.setTranslationY(mTitle, (mHeaderBarHeight - mActionBarSize) / 2);
 
@@ -144,6 +197,111 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
                 changeSlidingState(mSlidingState, false);
             }
         });
+
+        PrefManager pref = MainApplication.get(this).getPrefManager();
+
+
+
+        String userId = getIntent().getExtras().getString("userId");
+        String avatarUrl = getIntent().getExtras().getString("avatar");
+        String coverUrl = getIntent().getExtras().getString("cover");
+        String name = getIntent().getExtras().getString("name");
+        String username = getIntent().getExtras().getString("username");
+
+        if(userId == null) {
+            userId = pref.userId().getOr("6");
+        }
+
+        if(name == null) {
+            name = pref.name().getOr("");
+        }
+
+        if(username == null) {
+            username = pref.username().getOr("");
+        }
+
+        if(avatarUrl == null) {
+            avatarUrl = pref.avatar().getOr("");
+        }
+
+        if(coverUrl == null) {
+            coverUrl = pref.cover().getOr("");
+        }
+
+        Log.e("userIdProfilePage",userId);
+
+
+        mToolbar.setTitle(name + "");
+        setTitle(name + "");
+        mTitle.setText(name + "");
+        mSubTitle.setText("@"+ username + "");
+
+        Picasso.with(this).load(coverUrl).into((ImageView) mImageView);
+        Picasso.with(this).load(avatarUrl).into(mProfileImageView);
+
+        AQuery aq = new AQuery(this);
+        String url = "http://api.vdomax.com/live/history/" + userId;
+        aq.ajax(url, JSONObject.class, this, "getJson");
+
+        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),"",1,50,false));
+        Log.e("FIREFIRE","FIRE");
+
+        changeSlidingState(SLIDING_STATE_MIDDLE, true);
+
+    }
+
+    public void getJson(String url, JSONObject jo, AjaxStatus status)
+            throws JSONException {
+        AQUtility.debug("jo", jo);
+        if (jo != null) {
+            String nameLive;
+            JSONArray ja = jo.getJSONArray("history");
+            for (int i = 0; i < ja.length(); i++) {
+                JSONObject obj = ja.optJSONObject(i);
+
+                nameLive = obj.optString("name");
+                String urlLive = obj.optString("url");
+                String photoLive = obj.optString("thumb");
+                long timestamp = obj.optLong("date");
+
+                JSONObject media = obj.optJSONObject("duration");
+
+                String hours = media.optString("hours");
+                String minutes = media.optString("minutes");
+                String seconds = media.optString("seconds");
+
+                Live liveList = new Live(urlLive,photoLive,nameLive,hours,minutes,seconds,Long.toString(timestamp));
+                artistList.add(liveList);
+
+            }
+
+            /*
+            ViewPagerFragment fragment = new ViewPagerFragment();
+            FragmentManager manager = getSupportFragmentManager();
+            FragmentTransaction transaction = manager.beginTransaction();
+            transaction.replace(R.id.sub_container, fragment);
+
+            FragmentTransactionExtended fragmentTransactionExtended = new FragmentTransactionExtended(this, transaction, mainFragment, fragment, R.id.sub_container);
+            fragmentTransactionExtended.addTransition(FragmentTransactionExtended.GLIDE);
+            fragmentTransactionExtended.commit();
+
+            transaction.commit();
+            */
+
+
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.list_container,
+                            ListFragment.newInstance(artistList)).commit();
+
+
+
+            //activityLiveHistory.notifyDataSetChanged();
+            AQUtility.debug("done");
+
+        } else {
+            AQUtility.debug("error!");
+        }
     }
 
     @Override
@@ -307,6 +465,7 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
         float imageTranslationScale = imageAnimatableHeight / (imageAnimatableHeight - mImageView.getHeight());
         float imageTranslationY = Math.max(0, imageAnimatableHeight - (imageAnimatableHeight - translationY) * imageTranslationScale);
         ViewHelper.setTranslationY(mImageView, imageTranslationY);
+        ViewHelper.setTranslationY(mProfileImageView, imageTranslationY);
 
         // Show/hide FAB
         if (ViewHelper.getTranslationY(mInterceptionLayout) < mFlexibleSpaceImageHeight) {
@@ -467,5 +626,41 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
     private float getAnchorYImage() {
         return mImageView.getHeight();
+    }
+
+    public static class ListFragment extends Fragment {
+        private static List<Live> artistListinList = new ArrayList<Live>();
+
+        public static ListFragment newInstance(List<Live> artistList) {
+            artistListinList = artistList;
+            return new ListFragment();
+        }
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                                 Bundle savedInstanceState) {
+            final SlidingUpBaseActivity activity = (SlidingUpBaseActivity) getActivity();
+            LiveHistoryListAdapter adapter = new LiveHistoryListAdapter(
+                    activity, artistListinList);
+
+            ListView listView = (ListView) LayoutInflater
+                    .from(activity)
+                    .inflate(R.layout.fragment_listview, container, false);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view,
+                                        int position, long id) {
+                    ImageView coverImage = (ImageView) view.findViewById(R.id.image_live);
+                    ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(activity, coverImage, "cover");
+
+                    Intent watch = new Intent(activity,VideoViewActivity.class);
+                    watch.putExtra("url",artistListinList.get(position).getUrlLive());
+                    activity.startActivity(watch, options.toBundle());
+                    // /activity.showDetails(artistListinList,position);
+                }
+            });
+            return listView;
+        }
     }
 }

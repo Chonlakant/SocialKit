@@ -16,26 +16,38 @@
 
 package co.aquario.socialkit.activity;
 
-import android.content.Context;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableRecyclerView;
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollViewCallbacks;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
+import co.aquario.socialkit.R;
+import co.aquario.socialkit.adapter.FeedAdapter;
+import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
+import co.aquario.socialkit.handler.ApiBus;
+import co.aquario.socialkit.model.PostStory;
+
 public class SlidingUpRecyclerViewActivity extends SlidingUpBaseActivity<ObservableRecyclerView> implements ObservableScrollViewCallbacks {
+
+    public ArrayList<PostStory> list = new ArrayList<>();
+    private FeedAdapter adapter;
 
     @Override
     protected int getLayoutResId() {
-        return R.layout.activity_slidinguprecyclerview;
+        return R.layout.activity_profile2;
     }
+
+    /*
+    @Override
+    public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
+        super.onCreate(savedInstanceState, persistentState);
+
+    }
+    */
 
     @Override
     protected ObservableRecyclerView createScrollable() {
@@ -43,55 +55,30 @@ public class SlidingUpRecyclerViewActivity extends SlidingUpBaseActivity<Observa
         recyclerView.setScrollViewCallbacks(this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(true);
-        recyclerView.setAdapter(new CustomAdapter(this, getDummyData()));
+        adapter = new FeedAdapter(this, list);
+        recyclerView.setAdapter(adapter);
+        ApiBus.getInstance().register(this);
+
+
+        /*
+        ViewPagerFragment fragment = new ViewPagerFragment();
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.replace(R.id.view_pager_container, fragment);
+        transaction.commit();
+
+        */
+
         return recyclerView;
     }
 
-    public static class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
-        private Context mContext;
-        private LayoutInflater mInflater;
-        private ArrayList<String> mItems;
+    @Subscribe
+    public void onLoadTimelineSuccess(LoadTimelineSuccessEvent event) {
+        list.addAll(event.getTimelineData().getPosts());
+        adapter.notifyDataSetChanged();
+        Log.e("itemCountAfterNotify",adapter.getItemCount() + "");
 
-        public CustomAdapter(Context context, ArrayList<String> items) {
-            mContext = context;
-            mInflater = LayoutInflater.from(context);
-            mItems = items;
-        }
 
-        @Override
-        public int getItemCount() {
-            return mItems.size();
-        }
 
-        @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new ViewHolder(mContext, mInflater.inflate(android.R.layout.simple_list_item_1, parent, false));
-        }
-
-        @Override
-        public void onBindViewHolder(ViewHolder viewHolder, int position) {
-            viewHolder.textView.setText(mItems.get(position));
-        }
-
-        static class ViewHolder extends RecyclerView.ViewHolder {
-            TextView textView;
-            Context context;
-
-            public ViewHolder(Context context, View view) {
-                super(view);
-                this.context = context;
-                this.textView = (TextView) view.findViewById(android.R.id.text1);
-                this.textView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        click(getPosition() + 1);
-                    }
-                });
-            }
-
-            private void click(int i) {
-                Toast.makeText(context, "Button " + i + " is clicked", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
 }

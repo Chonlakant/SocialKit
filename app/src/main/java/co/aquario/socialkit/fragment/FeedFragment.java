@@ -4,8 +4,12 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +20,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -27,6 +32,9 @@ import java.util.ArrayList;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
+import co.aquario.socialkit.activity.MainActivity;
+import co.aquario.socialkit.activity.SearchYoutubeActivity;
+import co.aquario.socialkit.activity.TakePhotoActivity;
 import co.aquario.socialkit.adapter.FeedAdapter;
 import co.aquario.socialkit.event.LoadTimelineEvent;
 import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
@@ -34,36 +42,114 @@ import co.aquario.socialkit.event.LogoutEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
 import co.aquario.socialkit.util.PrefManager;
+import co.aquario.socialkit.widget.EndlessRecyclerOnScrollListener;
 
 
 public class FeedFragment extends BaseFragment {
 
     private boolean mSearchCheck;
-    public static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
+    public static final String USER_ID = "USER_ID";
 
-    //String urlMain = "http://ihdmovie.xyz/main_feed.json";
     public ArrayList<PostStory> list = new ArrayList<>();
     public FeedAdapter adapter;
     public RelativeLayout layoutMenu;
+    private int currentPage = 1;
+    private boolean isRefresh = false;
+    private boolean isLoadding = false;
 
-    //public AQuery aq;
-
-	public FeedFragment newInstance(String text){
+    public static FeedFragment newInstance(String userId){
         FeedFragment mFragment = new FeedFragment();
 		Bundle mBundle = new Bundle();
-		mBundle.putString(TEXT_FRAGMENT, text);
+		mBundle.putString(USER_ID, userId);
 		mFragment.setArguments(mBundle);
 		return mFragment;
 	}
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            userId = getArguments().getString(USER_ID);
+        } else {
+            userId = prefManager.userId().getOr("1301");
+        }
+    }
+
+    private SwipeRefreshLayout swipeLayout;
+
+    private FloatingActionButton postPhotoBtn;
+    private FloatingActionButton postVideoBtn;
+    private FloatingActionButton postYoutubeBtn;
+    String userId;
+
+    // home_timeline = including others post
+    // user_timeline = only the user's post
+    private boolean isHomeTimeline = true;
+    private static final String TYPE = "";
+    private static final int PER_PAGE = 20;
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //swipeLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipe_container);
+        /*
+        swipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                isRefresh = true;
+                ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),TYPE,1,PER_PAGE,isHomeTimeline));
+                //String loadMoreUrl = "http://api.vdomax.com/search/channel/a?from=0&limit=10";
+                //aq.ajax(loadMoreUrl, JSONObject.class, fragment, "getJson");
+                //Log.e("5555","onRefresh");
+            }
+        });
+        */
+
+    }
 
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub		
-		View rootView = inflater.inflate(R.layout.fragment_home_timeline, container, false);
+		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        PrefManager pref = MainApplication.get(getActivity()).getPrefManager();
+        userId = pref.userId().getOr("6");
+
+        Log.e("userId",userId);
 
         layoutMenu = (RelativeLayout) rootView.findViewById(R.id.layoutMenu);
+
+        postPhotoBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_photo);
+        postVideoBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_video);
+        postYoutubeBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_youtube);
+
+        postYoutubeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), SearchYoutubeActivity.class);
+                startActivity(i);
+
+            }
+        });
+
+        postPhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //((MainActivity) getActivity()).selectImage();
+                int[] startingLocation = new int[2];
+                v.getLocationOnScreen(startingLocation);
+                startingLocation[0] += v.getWidth() / 2;
+                TakePhotoActivity.startCameraFromLocation(startingLocation, getActivity());
+                //overridePendingTransition(0, 0);
+            }
+        });
+        postVideoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity) getActivity()).selectVideo();
+            }
+        });
 
         //aq = new AQuery(getActivity());
 
@@ -72,7 +158,6 @@ public class FeedFragment extends BaseFragment {
         adapter.SetOnItemClickListener(new FeedAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-
 
             }
         });
@@ -92,14 +177,27 @@ public class FeedFragment extends BaseFragment {
             }
         });
 
-        RecyclerView recList = (RecyclerView) rootView.findViewById(R.id.cardList);
+        RecyclerView recList = (RecyclerView) rootView.findViewById(R.id.scroll);
         recList.setHasFixedSize(true);
-        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-        llm.setOrientation(LinearLayoutManager.VERTICAL);
-        recList.setLayoutManager(llm);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
+        // load more
+        recList.setOnScrollListener(new EndlessRecyclerOnScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page) {
+                currentPage = page;
+                isRefresh = false;
+                if (!isLoadding)
+                    ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId), TYPE, page, PER_PAGE, isHomeTimeline));
+                isLoadding = true;
+                Log.e("thispageis",page + "");
+            }
+        });
 
+        recList.setLayoutManager(linearLayoutManager);
         recList.setAdapter(adapter);
+
         recList.setOnTouchListener(new View.OnTouchListener() {
 
             final int DISTANCE = 3;
@@ -120,10 +218,10 @@ public class FeedFragment extends BaseFragment {
 
                     if ((pxToDp((int) dist) <= -DISTANCE) && !isMenuHide) {
                         isMenuHide = true;
-                        hideMenuBar();
+                        hideFloatingButton();
                     } else if ((pxToDp((int) dist) > DISTANCE) && isMenuHide) {
                         isMenuHide = false;
-                        showMenuBar();
+                        showFloatingButton();
                     }
 
                     if ((isMenuHide && (pxToDp((int) dist) <= -DISTANCE))
@@ -138,20 +236,8 @@ public class FeedFragment extends BaseFragment {
             }
         });
 
-        FloatingActionButton buttonWritePost = (FloatingActionButton) rootView.findViewById(R.id.action_h);
-        buttonWritePost.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
 
-            }
-        });
-
-        PrefManager pref = MainApplication.get(getActivity()).getPrefManager();
-        String userId = pref.userId().getOr("6");
-
-        Log.e("userId",userId);
-
-        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),"photo",1,50));
+        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),TYPE,1,PER_PAGE,isHomeTimeline));
         //ApiBus.getInstance().post(new LoadTimelineEvent(32,"photo",1,50));
         //aq.ajax(urlMain, JSONObject.class, this, "getJson");
 
@@ -159,15 +245,35 @@ public class FeedFragment extends BaseFragment {
 		return rootView;		
 	}
 
-    @Subscribe public void onLoadTimelineSuccess(LoadTimelineSuccessEvent event) {
-        Log.e("yes status:",event.getTimelineData().getStatus().toString());
+    /**
+     * Save Fragment's State here
+     */
+    @Override
+    protected void onSaveState(Bundle outState) {
+        super.onSaveState(outState);
+        // For example:
+        //outState.putString("text", tvSample.getText().toString());
+    }
 
+    /**
+     * Restore Fragment's State here
+     */
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+        super.onRestoreState(savedInstanceState);
+        // For example:
+        //tvSample.setText(savedInstanceState.getString("text"));
+    }
+
+    @Subscribe public void onLoadTimelineSuccess(LoadTimelineSuccessEvent event) {
+        if(isRefresh)
+            list.clear();
+        isRefresh = false;
         list.addAll(event.getTimelineData().getPosts());
-        Log.e("yes debug",list.get(0).getPostId());
-        //Log.e("yes debug",list.get(1).getPostId());
-        Log.e("itemCount",adapter.getItemCount() + "");
         adapter.notifyDataSetChanged();
-        Log.e("itemCountAfterNotify",adapter.getItemCount() + "");
+        //swipeLayout.setRefreshing(false);
+        isLoadding = false;
+
     }
 
     @Subscribe public void onLogout(LogoutEvent event) {
@@ -200,42 +306,32 @@ public class FeedFragment extends BaseFragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// TODO Auto-generated method stub
 		super.onCreateOptionsMenu(menu, inflater);
-        /*
+
 		inflater.inflate(R.menu.menu, menu);
 
         SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
-        searchView.setQueryHint("search");
+        searchView.setQueryHint("Search friends,tags,videos");
 
         ((EditText)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
                 .setHintTextColor(getResources().getColor(android.R.color.white));
         searchView.setOnQueryTextListener(onQuerySearchView);
 
-		menu.findItem(R.id.menu_add).setVisible(true);
+		//menu.findItem(R.id.menu_add).setVisible(true);
 		menu.findItem(R.id.menu_search).setVisible(true);
-  	    
 		mSearchCheck = false;
-		*/
+
 	}	
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// TODO Auto-generated method stub
-		
+
 		switch (item.getItemId()) {
-
-		case R.id.menu_add:
-
-			break;				
-		
 		case R.id.menu_search:
 			mSearchCheck = true;
-
 			break;
 		}		
 		return true;
 	}
-
-    /*
 
    private SearchView.OnQueryTextListener onQuerySearchView = new SearchView.OnQueryTextListener() {
        @Override
@@ -251,90 +347,6 @@ public class FeedFragment extends BaseFragment {
            return false;
        }
    };
-   */
-
-    /*
-
-    public void getJson(String url, JSONObject jo, AjaxStatus status)
-            throws JSONException {
-        AQUtility.debug("jo", jo);
-        if (jo != null) {
-            JSONArray ja = jo.optJSONArray("posts");
-            for (int i = 0; i < ja.length(); i++) {
-                JSONObject obj = ja.optJSONObject(i);
-
-                JSONObject media = obj.optJSONObject("media");
-                String avatarId = media.optString("id");
-                String imagePhotoUrl = media.optString("url");
-                String extension = media.optString("extension");
-
-                String imagePhotoFullUrl = "https://www.vdomax.com/" + imagePhotoUrl + "." + extension + "";
-                Log.i(".......", imagePhotoFullUrl);
-
-                String imageAvatarUrl = "https://graph.facebook.com/v2.1/" + avatarId + "/picture?type=large";
-
-
-                JSONObject author = obj.optJSONObject("author");
-                String name = author.optString("name");
-
-                //Log.d("Check",obj.toString());
-
-                String name_title = obj.optString("type1");
-                String loveCount = obj.optString("love_count");
-                String number2 = obj.optString("follow_count");
-                String commentCount = obj.optString("comment_count");
-                String viewCount = obj.optString("view");
-                String message = obj.optString("text");
-                String date = obj.optString("timestamp");
-
-                int commentNuber = Integer.parseInt(viewCount.toString());
-                int num_comment = 0;
-
-                if (commentNuber > 1000)
-                    num_comment = commentNuber / 1000;
-                String num_comment2 = num_comment + "k";
-
-                String shortMessage;
-                if (message.length() > 200)
-                    shortMessage = message.substring(0, 199);
-                else
-                    shortMessage = message;
-
-
-                ArrayList<Comment> comments = new ArrayList<>();
-                if (Integer.parseInt(commentCount) > 0) {
-                    JSONArray commentJsonArray = obj.optJSONArray("comment");
-
-                    for (int a = 0; a < commentJsonArray.length(); a++) {
-                        JSONObject commentJsonObject = commentJsonArray.optJSONObject(a);
-                        String commentText = commentJsonObject.optString("text");
-                        JSONObject accountJsonObject = commentJsonObject.optJSONObject("account");
-                        String commentId = accountJsonObject.optString("id");
-                        String commentName = accountJsonObject.optString("name");
-
-                        //Comment comment = new Comment(null, commentName, null, null, commentText, commentId);
-                        //comments.add(comment);
-                    }
-
-                }
-
-                // Use view_count instead of share_count (share_count data is empty now)
-                Post post = new Post(imageAvatarUrl, name, date, loveCount, commentCount, num_comment2
-                        , message, shortMessage, viewCount, imagePhotoFullUrl);
-               // post.setComments(comments);
-
-                list.add(post);
-            }
-            list.add(post);
-            adapter.notifyDataSetChanged();
-
-            AQUtility.debug("done");
-
-        } else {
-            AQUtility.debug("error!");
-        }
-    }
-    */
 
     public int pxToDp(int px) {
         DisplayMetrics dm = this.getResources().getDisplayMetrics();
@@ -343,7 +355,7 @@ public class FeedFragment extends BaseFragment {
         return dp;
     }
 
-    public void showMenuBar() {
+    public void showFloatingButton() {
         AnimatorSet animSet = new AnimatorSet();
 
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(layoutMenu
@@ -354,7 +366,7 @@ public class FeedFragment extends BaseFragment {
         animSet.start();
     }
 
-    public void hideMenuBar() {
+    public void hideFloatingButton() {
         AnimatorSet animSet = new AnimatorSet();
 
         ObjectAnimator anim1 = ObjectAnimator.ofFloat(layoutMenu

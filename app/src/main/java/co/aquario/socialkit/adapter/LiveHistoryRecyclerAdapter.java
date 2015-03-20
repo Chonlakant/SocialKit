@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Random;
+
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.model.Live;
 
@@ -43,11 +43,9 @@ public class LiveHistoryRecyclerAdapter extends RecyclerView.Adapter<LiveHistory
         Live item = list.get(position);
 
         holder.title_live_name.setText(item.getNameLive());
-        holder.title_detail_name.setText(item.getMinutes());
+        holder.title_date_name.setText(item.getMinutes());
         holder.text_time_name.setText(item.getHours());
         holder.text_duration_name.setText(item.getHours());
-
-
 
         Picasso.with(context)
                 .load(item.getPhotoLive())
@@ -64,7 +62,7 @@ public class LiveHistoryRecyclerAdapter extends RecyclerView.Adapter<LiveHistory
 
 
         TextView title_live_name;
-        TextView title_detail_name;
+        TextView title_date_name;
         TextView text_time_name;
         TextView text_duration_name;
 
@@ -73,16 +71,11 @@ public class LiveHistoryRecyclerAdapter extends RecyclerView.Adapter<LiveHistory
         public ViewHolder(View view) {
             super(view);
             title_live_name = (TextView) view.findViewById(R.id.title_live_name);
-            title_detail_name = (TextView) view.findViewById(R.id.title_detail_name);
+            title_date_name = (TextView) view.findViewById(R.id.title_date_name);
             text_time_name = (TextView) view.findViewById(R.id.text_time_name);
             text_duration_name = (TextView) view.findViewById(R.id.text_duration_name);
 
             image_live = (ImageView) view.findViewById(R.id.image_live);
-
-
-
-
-
             image_live.setOnClickListener(this);
 
             view.setOnClickListener(this);
@@ -92,7 +85,7 @@ public class LiveHistoryRecyclerAdapter extends RecyclerView.Adapter<LiveHistory
         public void onClick(View v) {
 
             switch (v.getId()) {
-                case R.id.image_center:
+                case R.id.thumb:
                     if (mItemClickListener != null) {
                         mItemClickListener.onItemClick(v, getPosition());
                     }
@@ -110,16 +103,5 @@ public class LiveHistoryRecyclerAdapter extends RecyclerView.Adapter<LiveHistory
     public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
-
-
-    /*
-     * Snippet from http://stackoverflow.com/a/363692/1008278
-     */
-    public static int randInt(int min, int max) {
-        final Random rand = new Random();
-        return rand.nextInt((max - min) + 1) + min;
-    }
-
-    /* ==========This Part is not necessary========= */
 
 }

@@ -17,5 +17,16 @@
 
     <string name="start_button">START NOW</string>
 
+    <string name="post">POSTS</string>
+    <string name="following">FOLLOWING</string>
+    <string name="follower">FOLLOWER</string>
+    <string name="friend">FRIEND</string>
 
+    <string name="add_attention">Follow</string>
+    <string name="user_post">POSTS</string>
+    <string name="user_book">MY BOOK</string>
+    <string name="user_name">MY NAME</string>
+    <string name="user_des">MY DESC DESC DESC</string>
+    <string name="user_recommend_tip">MY TIP</string>
+    <string name="title_activity_post_youtube">PostYoutubeActivity</string>
 </resources>

@@ -14,15 +14,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
-import br.liveo.model.Video;
-import br.liveo.navigationviewpagerliveo.R;
-import br.liveo.widget.RoundedTransformation;
+import co.aquario.socialkit.R;
+import co.aquario.socialkit.model.Video;
+import co.aquario.socialkit.widget.RoundedTransformation;
 
 
 public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickListener {
 
-    Context context;
-    OnItemClickListener mItemClickListener;
+    private Context context;
+    private OnItemClickListener mItemClickListener;
 
     public ArrayList<Video> list = new ArrayList<Video>();
 
@@ -46,14 +46,7 @@ public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickList
         return 0;
     }
 
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent)  {
-        LayoutInflater mInflater =
-                (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        View row = mInflater.inflate(R.layout.item_videos, parent, false);
-        TextView title;
-        TextView detail;
+    public class ViewHolder {
 
         ImageView avatar;
         TextView profileName;
@@ -64,45 +57,76 @@ public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickList
 
         TextView view;
 
-        Video item = list.get(position);
-        videoTitle = (TextView) row.findViewById(R.id.video_title);
-        videoDesc = (TextView) row.findViewById(R.id.video_desc);
-        videoThumb = (ImageView) row.findViewById(R.id.video_thumb);
-        view = (TextView) row.findViewById(R.id.view);
+        public ViewHolder(View row) {
+            videoTitle = (TextView) row.findViewById(R.id.video_title);
+            videoDesc = (TextView) row.findViewById(R.id.video_desc);
+            videoThumb = (ImageView) row.findViewById(R.id.video_thumb);
+            view = (TextView) row.findViewById(R.id.view);
 
-        avatar = (ImageView) row.findViewById(R.id.avatar);
-        profileName = (TextView) row.findViewById(R.id.profile_name);
-
-        videoTitle.setText(item.getTitle());
-        videoDesc.setText(Html.fromHtml(item.getDesc().substring(0,60)));
-        view.setText(Html.fromHtml("<b>" + item.getView() + "+ views</b>"));
-
-        profileName.setText(item.getpName());
-
-
-        //http://img.youtube.com/vi/QPjgMkx5KyY/0.jpg
-        //http://img.youtube.com/vi/QPjgMkx5KyY/maxresdefault
-        Picasso.with(context)
-                .load("http://img.youtube.com/vi/" + item.getYoutubeId() + "/0.jpg")
-                .into(videoThumb);
-
-        Picasso.with(context)
-                .load(item.getpAvatar())
-                .transform(new RoundedTransformation(50, 4))
-                .resize(100, 100)
-                .into(avatar);
-
-        videoThumb.setOnClickListener(this);
-
-
-        return row;
+            avatar = (ImageView) row.findViewById(R.id.avatar);
+            profileName = (TextView) row.findViewById(R.id.profile_name);
+        }
     }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent)  {
+
+
+        ViewHolder mViewHolder = null;
+
+        if(convertView == null) {
+
+
+
+            LayoutInflater mInflater =
+                    (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+            convertView = mInflater.inflate(R.layout.item_videos,parent,false);
+
+            mViewHolder = new ViewHolder(convertView);
+
+            Video item = list.get(position);
+
+
+            String viewCount = item.getView();
+            if(viewCount.equals(""))
+                viewCount = "0";
+
+            mViewHolder.videoTitle.setText(item.getTitle());
+            mViewHolder.videoDesc.setText(Html.fromHtml(item.getDesc().substring(0, 60)));
+            mViewHolder.view.setText(Html.fromHtml("<b>" + viewCount + "+ views</b>"));
+
+            mViewHolder.profileName.setText(item.getpName());
+
+
+            //http://img.youtube.com/vi/QPjgMkx5KyY/0.jpg
+            //http://img.youtube.com/vi/QPjgMkx5KyY/maxresdefault
+            Picasso.with(context)
+                    .load("http://img.youtube.com/vi/" + item.getYoutubeId() + "/0.jpg")
+                    .into(mViewHolder.videoThumb);
+
+            Picasso.with(context)
+                    .load(item.getpAvatar())
+                    .transform(new RoundedTransformation(50, 4))
+                    .resize(100, 100)
+                    .into(mViewHolder.avatar);
+
+            mViewHolder.videoThumb.setOnClickListener(this);
+
+        } else {
+            mViewHolder = (ViewHolder) convertView.getTag();
+        }
+
+        return convertView;
+    }
+
+
 
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.image_title:
+            case R.id.video_thumb:
                 if (mItemClickListener != null) {
                     mItemClickListener.onItemClick(view);
                 }

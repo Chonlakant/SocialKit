@@ -31,7 +31,8 @@
                 android:text="Large Text"
                 android:id="@+id/profile_name"
                 android:layout_marginLeft="@dimen/padding_size_layout_medium"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:textColor="#252525" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -92,7 +93,9 @@
             android:orientation="horizontal"
             android:layout_marginTop="@dimen/margin_size_layout_medium"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:gravity="bottom|end"
+            android:layout_gravity="bottom">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -100,7 +103,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="3"
                 android:gravity="center"
-                android:textColor="#000000"
+                android:textColor="#555"
                 android:layout_marginLeft="@dimen/margin_size_layout_medium"
                 android:id="@+id/number1"
                 android:textSize="@dimen/text_size_medium" />
@@ -108,7 +111,7 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:background="@drawable/favorite"
+
                 android:id="@+id/imageView2" />
 
             <TextView
@@ -116,7 +119,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="2"
-                android:textColor="#000000"
+                android:textColor="#555"
                 android:id="@+id/number2"
                 android:gravity="center"
                 android:layout_marginLeft="@dimen/margin_size_layout_small"
@@ -125,7 +128,7 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:background="@drawable/answer"
+
                 android:id="@+id/imageView3" />
 
             <TextView
@@ -133,7 +136,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="0"
-                android:textColor="#000000"
+                android:textColor="#555"
                 android:gravity="center"
                 android:id="@+id/number3"
                 android:layout_marginLeft="@dimen/margin_size_layout_small"
@@ -142,7 +145,7 @@
             <ImageView
                 android:layout_width="16dp"
                 android:layout_height="16dp"
-                android:background="@drawable/ic_send_black_24dp"
+
                 android:id="@+id/imageView4" />
 
             <TextView
@@ -150,7 +153,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="view"
-                android:textColor="#000000"
+                android:textColor="#555"
                 android:gravity="right"
                 android:layout_marginLeft="@dimen/margin_size_layout_small"
                 android:textSize="@dimen/text_size_medium"

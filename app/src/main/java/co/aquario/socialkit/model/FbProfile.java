@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 /**
  * Created by Mac on 2/14/15.
  */
-public class FbProfile {
+public class FbProfile extends BaseModel {
     @Expose public String id;
     @Expose public String bio;
 

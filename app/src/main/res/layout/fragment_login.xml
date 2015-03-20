@@ -2,14 +2,15 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    >
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:id="@+id/imageView"
-        android:src="@drawable/bg_header" />
+        android:src="@drawable/bg_login" />
 
 
     <RelativeLayout
@@ -31,12 +32,11 @@
         <FrameLayout
             android:layout_width="480dp"
             android:layout_height="220dp"
-            android:layout_marginTop="72dp"
-            android:layout_marginLeft="16dp"
-            android:layout_marginRight="16dp"
             android:background="#aa252525"
             android:padding="16px"
-            android:id="@+id/frameLayout">
+            android:id="@+id/frameLayout"
+            android:layout_below="@+id/textView"
+            android:layout_centerHorizontal="true">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -111,15 +111,14 @@
         <LinearLayout
             android:id="@+id/btn_fb"
             android:orientation="horizontal"
-            android:layout_width="fill_parent"
+            android:layout_width="480dp"
             android:layout_height="60dp"
+            android:layout_marginTop="67dp"
+            android:background="@color/indigo_700"
             android:layout_below="@+id/frameLayout"
-            android:layout_alignLeft="@+id/textView"
-            android:layout_alignStart="@+id/textView"
-            android:layout_alignRight="@+id/frameLayout"
-            android:layout_alignEnd="@+id/frameLayout"
-            android:layout_marginTop="48dp"
-            android:background="@color/indigo_700">
+            android:layout_centerHorizontal="true"
+            android:layout_marginRight="62dp"
+            android:layout_marginLeft="62dp">
 
             <TextView
                 android:id="@+id/tv_fb"

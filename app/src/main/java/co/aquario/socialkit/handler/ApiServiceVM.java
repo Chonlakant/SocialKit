@@ -2,7 +2,8 @@ package co.aquario.socialkit.handler;
 
 import java.util.Map;
 
-import co.aquario.socialkit.event.FriendDataResponse;
+import co.aquario.socialkit.event.FriendListDataResponse;
+import co.aquario.socialkit.event.StoryDataResponse;
 import co.aquario.socialkit.event.TimelineDataResponse;
 import co.aquario.socialkit.event.UserInfoDataResponse;
 import co.aquario.socialkit.model.LoginData;
@@ -46,16 +47,26 @@ public interface ApiServiceVM {
 
     @POST("/1.0/followers/{id}")
     public void getFollower(@Path("id") int id,@QueryMap Map<String, String> options,
-                            Callback<FriendDataResponse> responseJson);
+                            Callback<FriendListDataResponse> responseJson);
 
     @POST("/1.0/followings/{id}")
     public void getFollowing(@Path("id") int id,@QueryMap Map<String, String> options,
-                            Callback<FriendDataResponse> responseJson);
+                            Callback<FriendListDataResponse> responseJson);
 
     @POST("/1.0/friends/{id}")
     public void getFriend(@Path("id") int id,@QueryMap Map<String, String> options,
-                            Callback<FriendDataResponse> responseJson);
+                            Callback<FriendListDataResponse> responseJson);
 
+    @GET("/story/{id}")
+    public void getStory(@Path("id") int id,
+                         Callback<StoryDataResponse> responseJson);
+
+    /*
+    @Multipart
+    @POST("https://www.vdomax.com/ajax.php?t=post&a=new&user_id=6&token=123456&user_pass=039a726ac0aeec3dde33e45387a7d4ac")
+    void uploadImage(@Part("File") TypedFile file,
+                     Callback<Response> callback);
+                     */
 
 
 }

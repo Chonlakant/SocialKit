@@ -1,12 +1,11 @@
 package co.aquario.socialkit.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.Window;
 import android.view.WindowManager;
 
 import co.aquario.socialkit.MainApplication;
@@ -17,7 +16,7 @@ import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.UserProfile;
 import co.aquario.socialkit.util.PrefManager;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends ActionBarActivity {
 
     public PrefManager prefManager;
     public boolean isLogin;
@@ -25,7 +24,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         prefManager = MainApplication.get(this).getPrefManager();
@@ -33,21 +32,19 @@ public class LoginActivity extends Activity {
 
         isLogin = prefManager.isLogin().getOr(false);
 
-
         //prefManager.isLogin().put(false).commit();
-        Log.e("isLogin","::"+isLogin);
+        Log.e("isLogin/LoginActivity","::"+isLogin);
 
         if (savedInstanceState == null && !isLogin) {
-            getFragmentManager().beginTransaction().add(R.id.login_container, new LoginFragment(),"LOGIN").commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.login_container, new LoginFragment()).commit();
         } else {
             Intent main = new Intent(LoginActivity.this,MainActivity.class);
             startActivity(main);
+            // Updrate drawer
             ApiBus.getInstance().post(new UpdateProfileEvent(new UserProfile()));
         }
 
     }
-
-
 
 
     @Override

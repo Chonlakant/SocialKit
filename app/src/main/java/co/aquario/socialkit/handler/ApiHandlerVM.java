@@ -10,6 +10,11 @@ import java.util.Map;
 
 import co.aquario.socialkit.event.FailedNetworkEvent;
 import co.aquario.socialkit.event.FbAuthEvent;
+import co.aquario.socialkit.event.FriendListDataResponse;
+import co.aquario.socialkit.event.GetStoryEvent;
+import co.aquario.socialkit.event.GetStorySuccessEvent;
+import co.aquario.socialkit.event.LoadFriendListEvent;
+import co.aquario.socialkit.event.LoadFriendListSuccessEvent;
 import co.aquario.socialkit.event.LoadTimelineEvent;
 import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
 import co.aquario.socialkit.event.LoginEvent;
@@ -20,6 +25,7 @@ import co.aquario.socialkit.event.RegisterEvent;
 import co.aquario.socialkit.event.RegisterFailedEvent;
 import co.aquario.socialkit.event.RegisterSuccessEvent;
 import co.aquario.socialkit.event.RequestOtpEvent;
+import co.aquario.socialkit.event.StoryDataResponse;
 import co.aquario.socialkit.event.TimelineDataResponse;
 import co.aquario.socialkit.model.LoginData;
 import co.aquario.socialkit.model.RegisterData;
@@ -71,7 +77,8 @@ public class ApiHandlerVM {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e("response",error.getBody().toString());
+                //Log.e("response",error.getBody().toString());
+                Log.e("failedNetwork","failedNetworkEvent");
                 apiBus.post(new FailedNetworkEvent());
             }
         });
@@ -98,7 +105,7 @@ public class ApiHandlerVM {
 
             @Override
             public void failure(RetrofitError error) {
-                Log.e("response",error.getBody().toString());
+                //Log.e("response",error.getBody().toString());
                 apiBus.post(new FailedNetworkEvent());
             }
         });
@@ -144,6 +151,25 @@ public class ApiHandlerVM {
         api.otp(options);
     }
 
+    @Subscribe public void onGetStory(GetStoryEvent event) {
+
+        api.getStory(Integer.parseInt(event.getPostId()), new Callback<StoryDataResponse>() {
+            @Override
+            public void success(StoryDataResponse storyDataResponse, Response response) {
+                GetStorySuccessEvent event = new GetStorySuccessEvent(storyDataResponse.getPost());
+                ApiBus.getInstance().post(event);
+
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("error", error.toString());
+            }
+
+        });
+
+    }
+
     @Subscribe public void onHomeTimelineRequestEvent(LoadTimelineEvent event) {
         Map<String, String> options = new HashMap<String, String>();
 
@@ -151,27 +177,131 @@ public class ApiHandlerVM {
         options.put("page", Integer.toString(event.getPage()));
         options.put("per_page",Integer.toString(event.getPerPage()));
 
-        api.getHomeTimeline(event.getUserId(),options,new Callback<TimelineDataResponse>() {
-            @Override
-            public void success(TimelineDataResponse timelineDataResponse, Response response) {
-                Log.e("timelineDataResponse",timelineDataResponse.getStatus().toString());
-                if(timelineDataResponse.getStatus().equals("1")) {
-                    Log.e("timelineDataResponse",response.getBody().toString());
-                    ApiBus.getInstance().post(new LoadTimelineSuccessEvent(timelineDataResponse));
+        if(event.getIsHome()) {
+            api.getHomeTimeline(event.getUserId(),options,new Callback<TimelineDataResponse>() {
+                @Override
+                public void success(TimelineDataResponse timelineDataResponse, Response response) {
+                    Log.e("timelineDataResponse",timelineDataResponse.getStatus().toString());
+                    if(timelineDataResponse.getStatus().equals("1")) {
+                        Log.e("timelineDataResponse",response.getBody().toString());
+                        ApiBus.getInstance().post(new LoadTimelineSuccessEvent(timelineDataResponse));
 
-                } else {
-                    //MainApplication.get(this).getPrefManager().isLogin().put(false);
-                    Log.e("LOGOUT!","LOG OUT LAEW");
-                    ApiBus.getInstance().post(new LogoutEvent());
+                    } else {
+                        //MainApplication.get(this).getPrefManager().isLogin().put(false);
+                        Log.e("LOGOUT!","LOG OUT LAEW");
+                        ApiBus.getInstance().post(new LogoutEvent());
+                    }
+
                 }
 
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("error",error.toString());
+                }
+            });
+        } else {
+            api.getUserTimeline(event.getUserId(),options,new Callback<TimelineDataResponse>() {
+                @Override
+                public void success(TimelineDataResponse timelineDataResponse, Response response) {
+                    Log.e("timelineDataResponse",timelineDataResponse.getStatus().toString());
+                    if(timelineDataResponse.getStatus().equals("1")) {
+                        Log.e("timelineDataResponse",response.getBody().toString());
+                        ApiBus.getInstance().post(new LoadTimelineSuccessEvent(timelineDataResponse));
 
-            }
+                    } else {
+                        //MainApplication.get(this).getPrefManager().isLogin().put(false);
+                        Log.e("LOGOUT!","LOG OUT LAEW");
+                        ApiBus.getInstance().post(new LogoutEvent());
+                    }
 
-            @Override
-            public void failure(RetrofitError error) {
-                Log.e("error",error.toString());
-            }
-        });
+                }
+
+                @Override
+                public void failure(RetrofitError error) {
+                    Log.e("error",error.toString());
+                }
+            });
+        }
+
+
+    }
+
+    @Subscribe public void onLoadFriendListEvent(final LoadFriendListEvent event) {
+        Map<String, String> options = new HashMap<String, String>();
+
+        //options.put("type", event.getType());
+        options.put("page", Integer.toString(event.getPage()));
+        options.put("per_page",Integer.toString(event.getPerPage()));
+
+        switch (event.getType()) {
+            case "FOLLOWING":
+                api.getFollowing(event.getUserId(), options, new Callback<FriendListDataResponse>() {
+                    @Override
+                    public void success(FriendListDataResponse friendListDataResponse, Response response) {
+                        Log.e("friendListDataResponse", friendListDataResponse.status);
+                        if (friendListDataResponse.status.equals("1")) {
+                            //Log.e("timelineDataResponse", response.getBody().toString());
+                            ApiBus.getInstance().post(new LoadFriendListSuccessEvent(friendListDataResponse,event.getType()));
+
+                        } else {
+                            //MainApplication.get(this).getPrefManager().isLogin().put(false);
+                            Log.e("LOGOUT!", "LOG OUT LAEW");
+                            ApiBus.getInstance().post(new LogoutEvent());
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("error", error.toString());
+                    }
+                });
+                break;
+            case "FOLLOWER":
+                api.getFollower(event.getUserId(), options, new Callback<FriendListDataResponse>() {
+                    @Override
+                    public void success(FriendListDataResponse friendListDataResponse, Response response) {
+                        Log.e("friendListDataResponse", friendListDataResponse.status);
+                        if (friendListDataResponse.status.equals("1")) {
+                            //Log.e("timelineDataResponse", response.getBody().toString());
+                            ApiBus.getInstance().post(new LoadFriendListSuccessEvent(friendListDataResponse,event.getType()));
+
+                        } else {
+                            //MainApplication.get(this).getPrefManager().isLogin().put(false);
+                            Log.e("LOGOUT!", "LOG OUT LAEW");
+                            ApiBus.getInstance().post(new LogoutEvent());
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("error", error.toString());
+                    }
+                });
+                break;
+            case "FRIEND":
+                api.getFriend(event.getUserId(), options, new Callback<FriendListDataResponse>() {
+                    @Override
+                    public void success(FriendListDataResponse friendListDataResponse, Response response) {
+                        Log.e("friendListDataResponse", friendListDataResponse.status);
+                        if (friendListDataResponse.status.equals("1")) {
+                            //Log.e("timelineDataResponse", response.getBody().toString());
+                            ApiBus.getInstance().post(new LoadFriendListSuccessEvent(friendListDataResponse,event.getType()));
+
+                        } else {
+                            //MainApplication.get(this).getPrefManager().isLogin().put(false);
+                            Log.e("LOGOUT!", "LOG OUT LAEW");
+                            ApiBus.getInstance().post(new LogoutEvent());
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("error", error.toString());
+                    }
+                });
+                break;
+        }
+
+
     }
 }

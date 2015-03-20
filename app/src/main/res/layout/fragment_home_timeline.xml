@@ -57,7 +57,7 @@
             android:paddingLeft="@dimen/margin_standard"
             android:paddingStart="@dimen/margin_standard">
 
-            <de.hdodenhof.circleimageview.CircleImageView
+            <ImageView
                 android:id="@+id/profile_image"
                 android:layout_width="128dp"
                 android:layout_height="128dp"

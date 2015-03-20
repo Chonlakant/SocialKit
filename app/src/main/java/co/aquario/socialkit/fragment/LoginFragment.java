@@ -1,9 +1,12 @@
 package co.aquario.socialkit.fragment;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +26,8 @@ import com.squareup.otto.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import co.aquario.socialkit.BusProvider;
+import java.util.regex.Pattern;
+
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.MainActivity;
@@ -33,6 +37,7 @@ import co.aquario.socialkit.event.LoginEvent;
 import co.aquario.socialkit.event.LoginFailedAuthEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
 import co.aquario.socialkit.event.UpdateProfileEvent;
+import co.aquario.socialkit.handler.ActivityResultBus;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.FbProfile;
 import co.aquario.socialkit.model.UserProfile;
@@ -85,7 +90,14 @@ public class LoginFragment extends BaseFragment {
             }
         });
 
-
+        Pattern emailPattern = Patterns.EMAIL_ADDRESS; // API level 8+
+        Account[] accounts = AccountManager.get(getActivity()).getAccounts();
+        for (Account account : accounts) {
+            if (emailPattern.matcher(account.name).matches()) {
+                String possibleEmail = account.name;
+                //userEt.setText(possibleEmail);
+            }
+        }
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +159,7 @@ public class LoginFragment extends BaseFragment {
                     .fbToken().put(facebookToken)
                     .fbId().put(profile.id).commit();
             getFragmentManager().beginTransaction().add(R.id.login_container, new FbAuthFragment()).commit();
-            BusProvider.getInstance().post(produceProfileEvent());
+            ActivityResultBus.getInstance().post(produceProfileEvent());
             //BusProvider.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
             //ApiBus.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
             Log.e("POSTED", "SENT POST");
@@ -160,6 +172,7 @@ public class LoginFragment extends BaseFragment {
         Log.e("ARAIWA",MainApplication.USER_TOKEN);
 
         prefManager
+                .name().put(event.getLoginData().user.name)
                 .username().put(event.getLoginData().user.username)
                 .userId().put(event.getLoginData().user.id)
                 .token().put(event.getLoginData().token)

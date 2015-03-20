@@ -1,16 +1,18 @@
 package co.aquario.socialkit.event;
 
+import co.aquario.socialkit.model.PostStory;
+
 /**
  * Created by Mac on 3/3/15.
  */
 public class GetStorySuccessEvent {
-    private TimelineDataResponse timelineData;
+    private PostStory post;
 
-    public GetStorySuccessEvent(TimelineDataResponse timelineData) {
-        this.timelineData = timelineData;
+    public GetStorySuccessEvent(PostStory post) {
+        this.post = post;
     }
 
-    public TimelineDataResponse getTimelineData() {
-        return timelineData;
+    public PostStory getPost() {
+        return post;
     }
 }

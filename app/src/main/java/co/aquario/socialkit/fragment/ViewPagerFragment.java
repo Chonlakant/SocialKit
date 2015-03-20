@@ -11,19 +11,38 @@ import com.astuetz.PagerSlidingTabStrip;
 import java.util.ArrayList;
 import java.util.List;
 
-import co.aquario.socialkit.adapter.TabPagerItem;
-import co.aquario.socialkit.adapter.ViewPagerAdapter;
+import co.aquario.socialkit.R;
+import co.aquario.socialkit.adapter.view.TabPagerItem;
+import co.aquario.socialkit.adapter.view.ViewPagerAdapter;
 
 public class ViewPagerFragment extends BaseFragment {
 	private List<TabPagerItem> mTabs = new ArrayList<>();
 
+    private static final String USER_ID = "USER_ID";
+
+    private String userId = "";
+
+    public static ViewPagerFragment newInstance(String userId){
+        ViewPagerFragment mFragment = new ViewPagerFragment();
+        Bundle mBundle = new Bundle();
+        mBundle.putString(USER_ID,userId);
+        mFragment.setArguments(mBundle);
+        return mFragment;
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTabs.add(new TabPagerItem(0, getString(R.string.posts)));
-        mTabs.add(new TabPagerItem(1, getString(R.string.follower)));
-        mTabs.add(new TabPagerItem(2, getString(R.string.following)));
-        mTabs.add(new TabPagerItem(3, getString(R.string.friends)));
+        if (getArguments() != null) {
+            userId = getArguments().getString(USER_ID);
+        } else {
+            userId = prefManager.userId().getOr("1301");
+        }
+
+        mTabs.add(new TabPagerItem(0, getString(R.string.post),userId));
+        mTabs.add(new TabPagerItem(1, getString(R.string.follower),userId));
+        mTabs.add(new TabPagerItem(2, getString(R.string.following),userId));
+        mTabs.add(new TabPagerItem(3, getString(R.string.friend),userId));
     }
 
     @Override
@@ -43,7 +62,7 @@ public class ViewPagerFragment extends BaseFragment {
         mViewPager.setAdapter(new ViewPagerAdapter(getChildFragmentManager(), mTabs));
 
         PagerSlidingTabStrip mSlidingTabLayout = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
-        mSlidingTabLayout.setTextColorResource(R.color.nliveo_white);
+        mSlidingTabLayout.setTextColorResource(R.color.white);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 }

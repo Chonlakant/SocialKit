@@ -1,9 +1,19 @@
 package co.aquario.socialkit.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import com.google.api.services.youtube.YouTube;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class PostStory {
+import org.ocpsoft.prettytime.PrettyTime;
+
+import java.util.Date;
+import java.util.List;
+
+public class PostStory extends BaseModel implements Parcelable{
+
     @Expose
     public String id;
     @Expose
@@ -37,22 +47,22 @@ public class PostStory {
     @Expose
     public int followCount;
     @Expose
-    public Follow[] follow;
+    public List<Follow> follow;
     @Expose
     public int loveCount;
     @Expose
-    public Love[] love;
+    public List<Love> love;
     @SerializedName("comment_count")
     @Expose
     public int commentCount;
     @Expose
-    public Comment[] comment;
+    public List<CommentStory> comment;
     @SerializedName("share_count")
     @Expose
     public int shareCount;
     @Expose
-    public Share[] share;
-    @SerializedName("media_type")
+    public List<Share> share;
+    @SerializedName("post_type")
     @Expose
     public String type;
     @Expose
@@ -68,107 +78,81 @@ public class PostStory {
         return id;
     }
 
-    public String getActive() {
-        return active;
+    public String getAgoText() {
+        PrettyTime p = new PrettyTime();
+        long agoLong = Integer.parseInt(time);
+        Date timeAgo = new java.util.Date(agoLong * 1000);
+        return p.format(timeAgo);
     }
 
-    public Author getAuthor() {
-        return author;
+    @Override
+    public boolean equals(Object obj){
+        if(obj instanceof PostStory){
+            return ((PostStory) obj).getId().equals(id);
+        }
+        return false;
     }
 
-    public String getGoogle_map_name() {
-        return google_map_name;
+    @Override
+    public int hashCode(){
+        return Integer.parseInt(id);
     }
 
-    public String getPostId() {
-        return postId;
+    public PostStory(Parcel in) {
+
+        id = in.readString();
+        active = in.readString();
+        author = (Author) in.readParcelable(Author.class.getClassLoader());
+
+        google_map_name = in.readString();
+        postId = in.readString();
+        recipient_id = in.readString();
+        seen = in.readString();
+
+        text = in.readString();
+        time = in.readString();
+        timeline_id = in.readString();
+        timestamp = in.readString();
+        type1 = in.readString();
+        type2 = in.readString();
+        view = in.readString();
+        followCount = in.readInt();
+        loveCount = in.readInt();
+        commentCount = in.readInt();
+        shareCount = in.readInt();
+
+        in.readList(follow, Follow.class.getClassLoader());
+        in.readList(comment, Comment.class.getClassLoader());
+        in.readList(share, Share.class.getClassLoader());
+
+        type = in.readString();
+        media = (Media) in.readParcelable(Media.class.getClassLoader());
+        clip = (Clip) in.readParcelable(Clip.class.getClassLoader());
+        soundCloud = (SoundCloud) in.readParcelable(SoundCloud.class.getClassLoader());
+        youtube = (Youtube) in.readParcelable(YouTube.class.getClassLoader());
+
     }
 
-    public String getRecipient_id() {
-        return recipient_id;
+    @Override
+    public int describeContents() {
+        return 0;
     }
 
-    public String getSeen() {
-        return seen;
+    public static final Parcelable.Creator<PostStory> CREATOR = new Parcelable.Creator<PostStory>() {
+        public PostStory createFromParcel(Parcel in) {
+            return new PostStory(in);
+        }
+
+        public PostStory[] newArray(int size) {
+            return new PostStory[size];
+        }
+    };
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+
     }
 
-    public String getText() {
-        return text;
-    }
 
-    public String getTime() {
-        return time;
-    }
-
-    public String getTimeline_id() {
-        return timeline_id;
-    }
-
-    public String getTimestamp() {
-        return timestamp;
-    }
-
-    public String getType1() {
-        return type1;
-    }
-
-    public String getType2() {
-        return type2;
-    }
-
-    public String getView() {
-        return view;
-    }
-
-    public int getFollowCount() {
-        return followCount;
-    }
-
-    public Follow[] getFollow() {
-        return follow;
-    }
-
-    public int getLoveCount() {
-        return loveCount;
-    }
-
-    public Love[] getLove() {
-        return love;
-    }
-
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public Comment[] getComment() {
-        return comment;
-    }
-
-    public int getShareCount() {
-        return shareCount;
-    }
-
-    public Share[] getShare() {
-        return share;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public Media getMedia() {
-        return media;
-    }
-
-    public Clip getClip() {
-        return clip;
-    }
-
-    public SoundCloud getSoundCloud() {
-        return soundCloud;
-    }
-
-    public Youtube getYoutube() {
-        return youtube;
-    }
 }

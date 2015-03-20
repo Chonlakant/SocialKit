@@ -7,10 +7,6 @@
 
         app:showAsAction="ifRoom|collapseActionView"
         android:title="Search"/>
-    <item
-        android:id="@+id/menu_add"
 
-        app:showAsAction="ifRoom"
-        android:title="Add"/>
 
 </menu>

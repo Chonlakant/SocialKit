@@ -19,6 +19,10 @@ public class PrefManager extends PrettySharedPreferences<PrefManager> {
         super(sharedPreferences);
     }
 
+    public StringEditor<PrefManager> name() {
+        return getStringEditor("name");
+    }
+
     public StringEditor<PrefManager> username() {
         return getStringEditor("username");
     }

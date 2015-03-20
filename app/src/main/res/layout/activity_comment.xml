@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:fillViewport="true"
     android:background="#ffffff"
@@ -13,28 +12,23 @@
         android:layout_height="match_parent">
 
         <include
+            android:id="@+id/feed_detail_group"
             layout="@layout/item_feed_detail"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
         <include
-            layout="@layout/button"
-            android:layout_width="match_parent"
+            android:id="@+id/feed_button_group"
+            layout="@layout/item_social_buttons"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content" />
 
 
-        <LinearLayout
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/comment_list"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-
-        </LinearLayout>
+        <include
+            android:id="@+id/feed_comments_list_group"
+            layout="@layout/item_comments_list"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" />
 
         <LinearLayout
             android:orientation="horizontal"

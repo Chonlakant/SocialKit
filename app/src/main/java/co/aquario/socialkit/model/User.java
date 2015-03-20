@@ -3,12 +3,16 @@ package co.aquario.socialkit.model;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import co.aquario.socialkit.util.EndpointManager;
+
 /**
  * Created by Mac on 3/10/15.
  */
-public class User {
+public class User extends BaseModel {
     @Expose
     public String id;
+    @Expose
+    public String username;
     @Expose
     public String about;
     @Expose
@@ -36,4 +40,12 @@ public class User {
     public String avatar;
     @Expose
     public String cover;
+
+    public String getAvatarUrl() {
+        return EndpointManager.getPath(avatar);
+    }
+
+    public String getCoverUrl() {
+        return EndpointManager.getPath(cover);
+    }
 }

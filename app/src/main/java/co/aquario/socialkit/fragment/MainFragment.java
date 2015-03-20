@@ -1,8 +1,5 @@
 package co.aquario.socialkit.fragment;
 
-
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,12 +15,15 @@ import com.squareup.picasso.Picasso;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
+import co.aquario.socialkit.activity.SlidingUpRecyclerViewActivity;
 import co.aquario.socialkit.event.UpdateProfileEvent;
 import co.aquario.socialkit.util.EndpointManager;
 import co.aquario.socialkit.util.PrefManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainFragment extends BaseFragment {
+
+    public static final String TEXT_FRAGMENT = "TEXT_FRAGMENT";
 
     //@InjectView(R.id.profile_image)
     public CircleImageView avatar;
@@ -36,6 +36,14 @@ public class MainFragment extends BaseFragment {
 
     public MainFragment() {
 
+    }
+
+    public static MainFragment newInstance(String text){
+        MainFragment mFragment = new MainFragment();
+        Bundle mBundle = new Bundle();
+        mBundle.putString(TEXT_FRAGMENT, text);
+        mFragment.setArguments(mBundle);
+        return mFragment;
     }
 
     private PrefManager pref;
@@ -67,24 +75,36 @@ public class MainFragment extends BaseFragment {
         avatar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Fragment mFragment = null;
-                FragmentManager mFragmentManager = getActivity().getFragmentManager();
-                mFragment = new FeedFragment().newInstance("haha");
 
-
-            if (mFragment != null){
-                mFragmentManager.beginTransaction().replace(R.id.container, mFragment).commit();
-            }
-                /*
-                Intent video = new Intent(getActivity(), VideoViewDemo.class);
+                Intent video = new Intent(getActivity(), SlidingUpRecyclerViewActivity.class);
                 getActivity().startActivity(video);
-                */
+
             }
         });
 
         updateProfileView();
 
         return rootView;
+    }
+
+    /**
+     * Save Fragment's State here
+     */
+    @Override
+    protected void onSaveState(Bundle outState) {
+        super.onSaveState(outState);
+        // For example:
+        //outState.putString("text", tvSample.getText().toString());
+    }
+
+    /**
+     * Restore Fragment's State here
+     */
+    @Override
+    protected void onRestoreState(Bundle savedInstanceState) {
+        super.onRestoreState(savedInstanceState);
+        // For example:
+        //tvSample.setText(savedInstanceState.getString("text"));
     }
 
     //@OnClick(R.id.btn_logout)
@@ -112,8 +132,7 @@ public class MainFragment extends BaseFragment {
         if(!avatarPath.equals(""))
             Picasso.with(getActivity().getApplicationContext()).load(avatarPath).into(avatar);
         else
-            Log.e("HEYHA!","Can't get avatar path");
-
+            Log.e("HEYHA!","Can't get avatar path 555");
         name.setText(username);
     }
 

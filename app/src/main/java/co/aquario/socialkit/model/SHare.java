@@ -2,14 +2,9 @@ package co.aquario.socialkit.model;
 
 import com.google.gson.annotations.Expose;
 
-/**
- * Created by root1 on 2/22/15.
- */
-public class SHare {
-
+public class Share {
     @Expose
     private String id;
     @Expose
     private String name;
-
 }

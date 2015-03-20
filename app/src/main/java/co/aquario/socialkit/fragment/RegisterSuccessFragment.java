@@ -1,7 +1,6 @@
 package co.aquario.socialkit.fragment;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +13,7 @@ import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.MainActivity;
 
 
-public class RegisterSuccessFragment extends Fragment {
+public class RegisterSuccessFragment extends BaseFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";

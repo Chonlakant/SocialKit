@@ -39,7 +39,7 @@ public class FbAuthFragment extends BaseFragment {
         ApiBus.getInstance().register(this);
 
 
-        getActivity().getFragmentManager().beginTransaction().remove(this).commit();
+        getActivity().getSupportFragmentManager().beginTransaction().remove(this).commit();
 
     }
 
