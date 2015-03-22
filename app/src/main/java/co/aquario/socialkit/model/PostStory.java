@@ -69,6 +69,7 @@ public class PostStory extends BaseModel implements Parcelable{
     public Media media;
     @Expose
     public Clip clip;
+    @SerializedName("soundcloud")
     @Expose
     public SoundCloud soundCloud;
     @Expose

@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -38,12 +39,14 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.List;
 
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.adapter.view.TimelinePagerAdapter;
 import co.aquario.socialkit.event.ActivityResultEvent;
-
 import co.aquario.socialkit.fragment.MainFragment;
 import co.aquario.socialkit.fragment.ViewPagerFragment;
 import co.aquario.socialkit.fragment.main.ChannelFragment;
@@ -175,7 +178,7 @@ public class MainActivity extends ActionBarActivity {
             */
 
 
-            Snackbar.with(this).text("this is main social section").show(this);
+            //Snackbar.with(this).text("this is main social section").show(this);
             //ApiBus.getInstance().post(new SomeEvent("var1",
               //      2));
         }
@@ -479,6 +482,25 @@ public class MainActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    List<WeakReference<Fragment>> fragList = new ArrayList<WeakReference<Fragment>>();
+    @Override
+    public void onAttachFragment (Fragment fragment) {
+        fragList.add(new WeakReference(fragment));
+    }
+
+    public List<Fragment> getActiveFragments() {
+        ArrayList<Fragment> ret = new ArrayList<Fragment>();
+        for(WeakReference<Fragment> ref : fragList) {
+            Fragment f = ref.get();
+            if(f != null) {
+                if(f.isVisible()) {
+                    ret.add(f);
+                }
+            }
+        }
+        return ret;
     }
 
 

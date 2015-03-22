@@ -2,6 +2,7 @@ package co.aquario.socialkit.activity;
 
 import android.app.Activity;
 import android.content.res.Configuration;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -11,8 +12,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.squareup.picasso.Picasso;
 
@@ -21,17 +24,10 @@ import co.aquario.socialkit.R;
 import co.aquario.socialkit.util.EndpointManager;
 import co.aquario.socialkit.util.PrefManager;
 import de.hdodenhof.circleimageview.CircleImageView;
-import io.vov.vitamio.LibsChecker;
-import io.vov.vitamio.MediaPlayer;
-import io.vov.vitamio.widget.MediaController;
-import io.vov.vitamio.widget.VideoView;
 
-public class VideoViewActivity extends Activity {
 
-    /**
-     * TODO: Set the path variable to a streaming video URL or a local media file
-     * path.
-     */
+public class VideoViewNativeActivity extends Activity {
+
     private String path = "";
     private VideoView mVideoView;
     private EditText mEditText;
@@ -43,11 +39,18 @@ public class VideoViewActivity extends Activity {
     private TextView mProfileNameTextView;
     private ImageView mLogo;
 
+    private MediaPlayer mediaPlayer;
+
+    String vidAddress = "https://archive.org/download/ksnn_compilation_master_the_internet/ksnn_compilation_master_the_internet_512kb.mp4";
+
+
+    boolean loaded = false;
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        if (!LibsChecker.checkVitamioLibs(this))
-            return;
+        //if (!LibsChecker.checkVitamioLibs(this))
+          //  return;
 
         if(getIntent() != null)
             path = getIntent().getExtras().getString("url");
@@ -56,11 +59,8 @@ public class VideoViewActivity extends Activity {
 
         Log.e("myurl",path);
 
-        setContentView(R.layout.activity_video_view);
-        //mEditText = (EditText) findViewById(R.id.url);
+        setContentView(R.layout.activity_video_view_native);
         mVideoView = (VideoView) findViewById(R.id.surface_view);
-        //button1 = (Button) findViewById(R.id.button1);
-        //start = (Button) findViewById(R.id.start);
 
         mImageView = (ImageView) findViewById(R.id.image);
         mImageView.setOnClickListener(new View.OnClickListener() {
@@ -108,6 +108,17 @@ public class VideoViewActivity extends Activity {
         Picasso.with(this).load(EndpointManager.getPath(avatarUrl)).into(mProfileImageView);
 
 
+        mVideoView.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+            @Override
+            public boolean onError(MediaPlayer mp, int what, int extra) {
+
+                path = path.replace("_ori.mp4",".mp4");
+                if(!loaded)
+                    openVideo(path);
+                loaded = true;
+                return false;
+            }
+        });
 
         if (path == "") {
             // Tell the user to provide a media file URL/path.
@@ -121,7 +132,7 @@ public class VideoViewActivity extends Activity {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     // optional need Vitamio 4.0
-                    mediaPlayer.setPlaybackSpeed(1.0f);
+                    //mediaPlayer.setPlaybackSpeed(1.0f);
                 }
             });
 
@@ -141,7 +152,7 @@ public class VideoViewActivity extends Activity {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     // optional need Vitamio 4.0
-                    mediaPlayer.setPlaybackSpeed(1.0f);
+                    //mediaPlayer.setPlaybackSpeed(1.0f);
                 }
             });
         }
@@ -192,5 +203,6 @@ public class VideoViewActivity extends Activity {
     public void openVideo(String mypath) {
         mVideoView.setVideoPath(mypath);
     }
+
 
 }

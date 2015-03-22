@@ -3,6 +3,10 @@ package co.aquario.socialkit.fragment;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.MenuItemCompat;
@@ -10,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,12 +26,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.squareup.otto.Subscribe;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import co.aquario.socialkit.MainApplication;
@@ -34,6 +42,7 @@ import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
 import co.aquario.socialkit.activity.MainActivity;
 import co.aquario.socialkit.activity.SearchYoutubeActivity;
+import co.aquario.socialkit.activity.SoundCloudActivity;
 import co.aquario.socialkit.activity.TakePhotoActivity;
 import co.aquario.socialkit.adapter.FeedAdapter;
 import co.aquario.socialkit.event.LoadTimelineEvent;
@@ -41,6 +50,7 @@ import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
 import co.aquario.socialkit.event.LogoutEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
+import co.aquario.socialkit.soundcloud.SoundCloudService;
 import co.aquario.socialkit.util.PrefManager;
 import co.aquario.socialkit.widget.EndlessRecyclerOnScrollListener;
 
@@ -80,6 +90,7 @@ public class FeedFragment extends BaseFragment {
     private FloatingActionButton postPhotoBtn;
     private FloatingActionButton postVideoBtn;
     private FloatingActionButton postYoutubeBtn;
+    private FloatingActionButton postSoundCloudBtn;
     String userId;
 
     // home_timeline = including others post
@@ -107,6 +118,60 @@ public class FeedFragment extends BaseFragment {
 
     }
 
+    private Toolbar mPlayerToolbar;
+    private MediaPlayer mMediaPlayer;
+    private ImageView mPlayerStateButton;
+    private ProgressBar mProgressBar;
+
+    private void toggleSongState() {
+        if (mMediaPlayer.isPlaying()){
+            mMediaPlayer.pause();
+            mPlayerStateButton.setImageResource(R.drawable.ic_play);
+        }else{
+            mMediaPlayer.start();
+            toggleProgressBar();
+            mPlayerStateButton.setImageResource(R.drawable.ic_pause);
+        }
+    }
+
+    private void toggleProgressBar() {
+        if (mMediaPlayer.isPlaying()){
+            mProgressBar.setVisibility(View.INVISIBLE);
+            mPlayerStateButton.setVisibility(View.VISIBLE);
+        }else{
+            mProgressBar.setVisibility(View.VISIBLE);
+            mPlayerStateButton.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void playTrack(String uri,String title) {
+        //mPlayerToolbar.setVisibility(View.VISIBLE);
+        if (mMediaPlayer.isPlaying()){
+            mMediaPlayer.stop();
+        }
+        mMediaPlayer.reset();
+        toggleProgressBar();
+
+        try {
+            mMediaPlayer.setDataSource(uri + "?client_id=" + SoundCloudService.CLIENT_ID);
+            mMediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if(mMediaPlayer != null){
+            if(mMediaPlayer.isPlaying()){
+                mMediaPlayer.stop();
+            }
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
+    }
+
     @Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -119,10 +184,52 @@ public class FeedFragment extends BaseFragment {
         Log.e("userId",userId);
 
         layoutMenu = (RelativeLayout) rootView.findViewById(R.id.layoutMenu);
+        mPlayerToolbar = (Toolbar) rootView.findViewById(R.id.player_toolbar);
+        mPlayerStateButton = (ImageView)rootView.findViewById(R.id.player_state);
+        mProgressBar = (ProgressBar) rootView.findViewById(R.id.player_progress);
+        mProgressBar.getIndeterminateDrawable().setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+        mPlayerStateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleSongState();
+            }
+        });
+
+        mPlayerToolbar.setVisibility(View.GONE);
+
+        mMediaPlayer = new MediaPlayer();
+
+        //toggleProgressBar();
+        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                toggleSongState();
+            }
+        });
+        mMediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mPlayerStateButton.setImageResource(R.drawable.ic_play);
+            }
+        });
+
+
+        //playTrack("https://api.soundcloud.com/tracks/140000410/stream");
+
 
         postPhotoBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_photo);
         postVideoBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_video);
         postYoutubeBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_youtube);
+        postSoundCloudBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_soundcloud);
+
+        postSoundCloudBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), SoundCloudActivity.class);
+                startActivity(i);
+            }
+        });
 
         postYoutubeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,7 +260,7 @@ public class FeedFragment extends BaseFragment {
 
         //aq = new AQuery(getActivity());
 
-        adapter = new FeedAdapter(getActivity(), list);
+        adapter = new FeedAdapter(getActivity(), list,this);
 
         adapter.SetOnItemClickListener(new FeedAdapter.OnItemClickListener() {
             @Override
@@ -376,4 +483,6 @@ public class FeedFragment extends BaseFragment {
         animSet.setDuration(300);
         animSet.start();
     }
+
+
 }

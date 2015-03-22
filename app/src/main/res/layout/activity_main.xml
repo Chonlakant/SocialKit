@@ -16,7 +16,7 @@
 
     <FrameLayout  android:id="@+id/sub_container"
         android:layout_width="match_parent" android:layout_height="match_parent"
-        tools:context=".MainActivity" tools:ignore="MergeRootFrame"
+        tools:mActivity=".MainActivity" tools:ignore="MergeRootFrame"
         android:layout_below="@+id/toolbar" />
 </LinearLayout>
 

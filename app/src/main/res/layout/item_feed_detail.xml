@@ -66,17 +66,9 @@
             android:layout_marginLeft="@dimen/margin_size_layout_small"
             android:id="@+id/number1"
             android:textSize="@dimen/size_text_icon"
-            android:drawableRight="@drawable/ic_love"/>
+            android:drawableRight="@drawable/ic_love"
+            android:drawablePadding="6dp"/>
 
-
-
-
-        <ImageView
-            android:layout_width="@dimen/size_icon"
-            android:layout_height="@dimen/size_icon"
-
-            android:layout_marginLeft="@dimen/size_text"
-            android:id="@+id/imageView2" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -88,14 +80,8 @@
             android:gravity="center"
             android:layout_marginLeft="@dimen/margin_size_layout_small"
             android:textSize="@dimen/size_text_icon"
-            android:drawableRight="@drawable/ic_comment"/>
-
-        <ImageView
-            android:layout_width="@dimen/size_icon"
-            android:layout_height="@dimen/size_icon"
-
-            android:layout_marginLeft="@dimen/size_text"
-            android:id="@+id/imageView3" />
+            android:drawableRight="@drawable/ic_comment"
+            android:drawablePadding="6dp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -107,14 +93,9 @@
             android:id="@+id/number3"
             android:layout_marginLeft="@dimen/margin_size_layout_small"
             android:textSize="@dimen/size_text_icon"
-            android:drawableRight="@drawable/ic_share"/>
+            android:drawableRight="@drawable/ic_share"
+            android:drawablePadding="6dp"/>
 
-        <ImageView
-            android:layout_width="@dimen/size_icon"
-            android:layout_height="@dimen/size_icon"
-
-            android:layout_marginLeft="@dimen/size_text"
-            android:id="@+id/imageView4" />
     </LinearLayout>
 
 
@@ -161,7 +142,8 @@
     <RelativeLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:id="@+id/feed_thumb_group">
 
 
         <ImageView
@@ -173,7 +155,8 @@
             android:src="@color/material_drawer_dark_hint_text"/>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/feed_image_height">
+            android:layout_height="@dimen/feed_image_height"
+            android:id="@+id/media_group">
 
             <ImageView
                 android:id="@+id/ic_type"
@@ -195,6 +178,41 @@
                 android:layout_alignParentRight="true"
                 android:id="@+id/view" />
 
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/feed_image_height"
+            android:id="@+id/soundcloud_group"
+            android:visibility="visible">
+
+            <RelativeLayout
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/row_height">
+
+                <TextView
+                    android:id="@+id/track_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                    android:text="Cool Track Title"
+                    android:textSize="18dp"
+                    android:textColor="#252525"
+                    android:drawableLeft="@drawable/ic_soundcloud_small"
+                    android:drawablePadding="6dp"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="6dp" />
+            </RelativeLayout>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_track_play"
+                android:src="@drawable/ic_play"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
     </RelativeLayout>

@@ -63,6 +63,7 @@ public class SocialFragment extends BaseFragment {
 
         PagerSlidingTabStrip mSlidingTabLayout = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
         mSlidingTabLayout.setTextColorResource(R.color.white);
+        mSlidingTabLayout.setShouldExpand(true);
         mSlidingTabLayout.setViewPager(mViewPager);
     }
 }
