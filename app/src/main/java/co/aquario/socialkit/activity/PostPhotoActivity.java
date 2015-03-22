@@ -52,6 +52,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -511,10 +512,12 @@ public class PostPhotoActivity extends Activity implements OnClickListener {
                 String userId = pref.userId().getOr("1301");
 
 
+                Charset chars = Charset.forName("UTF-8");
+
                 entity.addPart("timeline_id", new StringBody(userId));
                 entity.addPart("recipient_id", new StringBody(""));
                 entity.addPart("text",
-                        new StringBody(statusText));
+                        new StringBody(statusText,chars));
                 entity.addPart("photos[]", new FileBody(sourceFile));
 
                 totalSize = entity.getContentLength();

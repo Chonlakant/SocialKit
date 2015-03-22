@@ -50,6 +50,8 @@ import co.aquario.socialkit.event.ActivityResultEvent;
 import co.aquario.socialkit.fragment.MainFragment;
 import co.aquario.socialkit.fragment.ViewPagerFragment;
 import co.aquario.socialkit.fragment.main.ChannelFragment;
+import co.aquario.socialkit.fragment.main.PhotoFragment;
+import co.aquario.socialkit.fragment.main.PhotoFragmentOld;
 import co.aquario.socialkit.fragment.main.SocialFragment;
 import co.aquario.socialkit.handler.ActivityResultBus;
 import co.aquario.socialkit.handler.ApiBus;
@@ -135,7 +137,11 @@ public class MainActivity extends ActionBarActivity {
                             Intent login = new Intent(MainActivity.this, VideoActivity.class);
                             startActivity(login);
                         } else if(((Nameable) drawerItem).getName().equals("Photos")) {
-
+                            PhotoFragmentOld fragment = new PhotoFragmentOld();
+                            FragmentManager manager = getSupportFragmentManager();
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            transaction.replace(R.id.sub_container, fragment);
+                            transaction.commit();
                         }
                         else if(((Nameable) drawerItem).getName().equals("Home")) {
 

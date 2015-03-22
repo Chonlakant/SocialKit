@@ -37,7 +37,7 @@ import co.aquario.socialkit.R;
 import co.aquario.socialkit.util.AndroidMultiPartEntity;
 
 
-public class UploadActivity extends Activity {
+public class UploadClipReviewActivity extends Activity {
 	// LogCat tag
 	private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -93,6 +93,7 @@ public class UploadActivity extends Activity {
 
 			@Override
 			public void onClick(View v) {
+                btnUpload.setEnabled(false);
 				// uploading the file to server
                 //btnUpload.setProgress(30);
 				new UploadFileToServer().execute();
@@ -243,9 +244,8 @@ public class UploadActivity extends Activity {
                 e.printStackTrace();
             }
 
-
             showAlert("อัพโหลดสำเร็จแล้ว");
-            Intent intent = new Intent(UploadActivity.this,
+            Intent intent = new Intent(UploadClipReviewActivity.this,
                     MainActivity.class);
             startActivity(intent);
 

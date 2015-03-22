@@ -41,6 +41,7 @@ import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
 import co.aquario.socialkit.activity.MainActivity;
+import co.aquario.socialkit.activity.PostStatusActivity;
 import co.aquario.socialkit.activity.SearchYoutubeActivity;
 import co.aquario.socialkit.activity.SoundCloudActivity;
 import co.aquario.socialkit.activity.TakePhotoActivity;
@@ -91,6 +92,7 @@ public class FeedFragment extends BaseFragment {
     private FloatingActionButton postVideoBtn;
     private FloatingActionButton postYoutubeBtn;
     private FloatingActionButton postSoundCloudBtn;
+    private FloatingActionButton postStatusBtn;
     String userId;
 
     // home_timeline = including others post
@@ -222,6 +224,7 @@ public class FeedFragment extends BaseFragment {
         postVideoBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_video);
         postYoutubeBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_youtube);
         postSoundCloudBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_soundcloud);
+        postStatusBtn = (FloatingActionButton) layoutMenu.findViewById(R.id.action_write_post);
 
         postSoundCloudBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -257,6 +260,16 @@ public class FeedFragment extends BaseFragment {
                 ((MainActivity) getActivity()).selectVideo();
             }
         });
+
+        postStatusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getActivity(), PostStatusActivity.class);
+                startActivity(i);
+
+            }
+        });
+
 
         //aq = new AQuery(getActivity());
 

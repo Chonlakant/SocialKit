@@ -13,7 +13,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ButtonFlat;
 import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -34,7 +33,7 @@ import co.aquario.socialkit.model.PostStory;
 import co.aquario.socialkit.widget.RoundedTransformation;
 
 
-public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
+public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> {
 
     private ArrayList<PostStory> list = new ArrayList<>();
     private static Activity mActivity;
@@ -45,14 +44,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
     private FeedFragment mFragment;
 
-    public FeedAdapter(Activity mActivity, ArrayList<PostStory> list) {
+    public PhotoAdapter(Activity mActivity, ArrayList<PostStory> list) {
         this.mActivity = mActivity;
         this.list = list;
 
         ApiBus.getInstance().register(this);
     }
 
-    public FeedAdapter(Activity mActivity, ArrayList<PostStory> list, FeedFragment fragment) {
+    public PhotoAdapter(Activity mActivity, ArrayList<PostStory> list, FeedFragment fragment) {
         this.mActivity = mActivity;
         this.list = list;
         mFragment = fragment;
@@ -64,7 +63,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Log.e("FeedAdapter.viewType", viewType + "");
         final LayoutInflater mInflater = LayoutInflater.from(parent.getContext());
-        final View sView = mInflater.inflate(R.layout.item_feed, parent, false);
+        final View sView = mInflater.inflate(R.layout.item_feed_photo, parent, false);
         return new ViewHolder(sView);
     }
 
@@ -85,7 +84,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
         PrettyTime p = new PrettyTime();
         long agoLong = Integer.parseInt(item.time);
-        Date timeAgo = new java.util.Date(agoLong * 1000);
+        Date timeAgo = new Date(agoLong * 1000);
         String ago = p.format(timeAgo);
 
         holder.name.setText(item.author.name);
@@ -201,9 +200,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         TextView nView;
         ImageView typeIcon;
 
-        ButtonFlat btnLove;
-        ButtonFlat btnComment;
-        ButtonFlat btnShare;
+
 
         RelativeLayout mediaLayout;
         RelativeLayout soundCloudLayout;
@@ -225,9 +222,6 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             nView = (TextView) view.findViewById(R.id.view);
             typeIcon = (ImageView) view.findViewById(R.id.ic_type);
 
-            btnComment = (ButtonFlat) view.findViewById(R.id.btn_comment);
-            btnLove = (ButtonFlat) view.findViewById(R.id.btn_love);
-            btnShare = (ButtonFlat) view.findViewById(R.id.btn_share);
 
             mediaLayout = (RelativeLayout) view.findViewById(R.id.media_group);
             soundCloudLayout = (RelativeLayout) view.findViewById(R.id.soundcloud_group);
@@ -239,9 +233,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
             thumb.setOnClickListener(this);
             avatar.setOnClickListener(this);
-            btnComment.setOnClickListener(this);
-            btnLove.setOnClickListener(this);
-            btnShare.setOnClickListener(this);
+
             view.setOnClickListener(this);
         }
 

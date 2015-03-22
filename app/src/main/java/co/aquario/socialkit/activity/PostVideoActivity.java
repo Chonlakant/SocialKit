@@ -92,7 +92,7 @@ public class PostVideoActivity extends Activity {
 	}
 
     private void launchUploadActivity(boolean isImage){
-        Intent i = new Intent(PostVideoActivity.this, UploadActivity.class);
+        Intent i = new Intent(PostVideoActivity.this, UploadClipReviewActivity.class);
         i.putExtra("filePath", getRealPathFromURI(mFileUri));
         i.putExtra("isImage", isImage);
         i.putExtra("title", statusText.toString());
