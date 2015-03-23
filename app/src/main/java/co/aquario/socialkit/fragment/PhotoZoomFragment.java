@@ -13,9 +13,6 @@ import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.PhotoLoadEvent;
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
 
-/**
- * Created by Mac on 3/12/15.
- */
 public class PhotoZoomFragment extends BaseFragment {
     Context context;
     ImageViewTouch imageFeedBig;

@@ -28,7 +28,7 @@ import co.aquario.socialkit.widget.EndlessRecyclerOnScrollListener;
 /**
  * Created by Mac on 3/10/15.
  */
-public class PhotoFragmentOld extends BaseFragment {
+public class PhotoFragmentGrid extends BaseFragment {
     private static final String LOAD_TYPE = "TYPE";
     private static final String USER_ID = "USER_ID";
 
@@ -46,8 +46,8 @@ public class PhotoFragmentOld extends BaseFragment {
     private String TYPE = "photo";
     private static final int PER_PAGE = 20;
 
-    public static PhotoFragmentOld newInstance(String text,String userId){
-        PhotoFragmentOld mFragment = new PhotoFragmentOld();
+    public static PhotoFragmentGrid newInstance(String text,String userId){
+        PhotoFragmentGrid mFragment = new PhotoFragmentGrid();
         Bundle mBundle = new Bundle();
         mBundle.putString(LOAD_TYPE, text);
         mBundle.putString(USER_ID,userId);

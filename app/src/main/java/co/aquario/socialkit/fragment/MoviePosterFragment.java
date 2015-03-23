@@ -8,8 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.github.ksoichiro.android.observablescrollview.ObservableScrollView;
@@ -21,6 +19,7 @@ import butterknife.ButterKnife;
 import butterknife.InjectView;
 import butterknife.OnClick;
 import co.aquario.socialkit.R;
+import co.aquario.socialkit.fragment.main.VideoListFragment;
 
 /**
  * Fragment implementation created to show a poster inside an ImageView widget.

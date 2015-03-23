@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -73,25 +72,11 @@ public class CommentActivity extends ActionBarActivity {
 
     @Subscribe
     public void onGetCommentData(GetStorySuccessEvent event) {
-        //Log.e("DEBUGCOMMENT",event.getPost().comment.get(0).user.name);
         PostStory item = event.getPost();
         if(event.getPost().commentCount > 0) {
-            Log.e("555","in>");
             list.addAll(event.getPost().comment);
-            Log.e("itemCount",adapterComment.getItemCount() + "");
             adapterComment.notifyDataSetChanged();
-            Log.e("itemCountAfterNotify",adapterComment.getItemCount() + "");
         }
-
-        Log.e("yes",item.toJson());
-        //event.getPost().author.name;
-
-        Log.e("yes2",item.postId);
-        Log.e("yes3",item.author.avatarPath);
-
-
-        Log.e("avatar",item.author.getAvatarPath());
-        //Log.e("thumb",item.media.getThumbUrl());
 
         if(checkNull(item.media))
             Picasso.with(context)

@@ -62,8 +62,8 @@ public class FriendFragment extends BaseFragment {
         }
         if(!type.equals("")) {
             if(userId.equals(""))
-                userId = prefManager.userId().getOr("1301");
-            ApiBus.getInstance().post(new LoadFriendListEvent(type,Integer.parseInt(userId),1,15));
+                userId = prefManager.userId().getOr("6");
+            ApiBus.getInstance().post(new LoadFriendListEvent(type,Integer.parseInt(userId),1,100));
         }
     }
 
@@ -81,7 +81,7 @@ public class FriendFragment extends BaseFragment {
             public void onLoadMore(int current_page) {
                 Log.e("scrollBottom","laew na");
                 refresh = true;
-                ApiBus.getInstance().post(new LoadFriendListEvent(type,Integer.parseInt(userId),current_page,15));
+                ApiBus.getInstance().post(new LoadFriendListEvent(type,Integer.parseInt(userId),current_page,100));
             }
         });
 

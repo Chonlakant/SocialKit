@@ -5,14 +5,12 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -50,11 +48,12 @@ import co.aquario.socialkit.event.ActivityResultEvent;
 import co.aquario.socialkit.fragment.MainFragment;
 import co.aquario.socialkit.fragment.ViewPagerFragment;
 import co.aquario.socialkit.fragment.main.ChannelFragment;
-import co.aquario.socialkit.fragment.main.PhotoFragment;
-import co.aquario.socialkit.fragment.main.PhotoFragmentOld;
+import co.aquario.socialkit.fragment.main.PhotoFragmentGrid;
 import co.aquario.socialkit.fragment.main.SocialFragment;
+import co.aquario.socialkit.fragment.main.VideoListFragment;
 import co.aquario.socialkit.handler.ActivityResultBus;
 import co.aquario.socialkit.handler.ApiBus;
+import co.aquario.socialkit.util.PathManager;
 
 
 public class MainActivity extends ActionBarActivity {
@@ -64,11 +63,6 @@ public class MainActivity extends ActionBarActivity {
     private Activity activity;
 
     private TimelinePagerAdapter timelinePagerAdapter;
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,27 +114,52 @@ public class MainActivity extends ActionBarActivity {
                         if(((Nameable) drawerItem).getName().equals("Channels")) {
 
                             ChannelFragment fragment = new ChannelFragment();
+                            /*
                             FragmentManager manager = getSupportFragmentManager();
                             FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.replace(R.id.sub_container, fragment);
+                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
                             transaction.commit();
+                            */
+
+                            getSupportFragmentManager().beginTransaction().replace(R.id.sub_container, fragment,"CHANNEL_MAIN").addToBackStack(null).commit();
 
                         } else if(((Nameable) drawerItem).getName().equals("Social")) {
 
                             SocialFragment fragment = new SocialFragment();
+                            /*
                             FragmentManager manager = getSupportFragmentManager();
                             FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.replace(R.id.sub_container, fragment);
+                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
                             transaction.commit();
+                            */
+
+                            getSupportFragmentManager().beginTransaction().replace(R.id.sub_container, fragment,"SOCIAL_MAIN").addToBackStack(null).commit();
 
                         } else if(((Nameable) drawerItem).getName().equals("Videos")) {
-                            Intent login = new Intent(MainActivity.this, VideoActivity.class);
-                            startActivity(login);
-                        } else if(((Nameable) drawerItem).getName().equals("Photos")) {
-                            PhotoFragmentOld fragment = new PhotoFragmentOld();
+
+
+                            VideoListFragment fragment = new VideoListFragment();
+                             /*
                             FragmentManager manager = getSupportFragmentManager();
                             FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.replace(R.id.sub_container, fragment);
+                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
+                            transaction.commit();
+                            */
+
+                            getSupportFragmentManager().beginTransaction().replace(R.id.sub_container, fragment,"VIDEO_MAIN").addToBackStack(null).commit();
+
+                        } else if(((Nameable) drawerItem).getName().equals("Photos")) {
+                            PhotoFragmentGrid fragment = new PhotoFragmentGrid();
+                            /*
+                            FragmentManager manager = getSupportFragmentManager();
+                            FragmentTransaction transaction = manager.beginTransaction();
+                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
+                            transaction.commit();
+                            */
+
+                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.sub_container, fragment,"PHOTO_MAIN");
+                            transaction.addToBackStack(null);
                             transaction.commit();
                         }
                         else if(((Nameable) drawerItem).getName().equals("Home")) {
@@ -196,6 +215,16 @@ public class MainActivity extends ActionBarActivity {
     private static final int RESULT_PICK_VIDEO = 4;
     private static final int RESULT_VIDEO_CAP = 5;
     private Uri mFileURI = null;
+
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if(fragList.size() == 0)
+            finish();
+
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -259,7 +288,7 @@ public class MainActivity extends ActionBarActivity {
 
                 Uri selectedImageUri = data.getData();
 
-                String path = getRealPathFromURI2(context, selectedImageUri);
+                String path = PathManager.getRealPathFromURIForKitKat(context, selectedImageUri);
 
                 int rotate = getCameraPhotoOrientation(path);
                 Intent postPhotoIntent = new Intent(this,
@@ -273,7 +302,6 @@ public class MainActivity extends ActionBarActivity {
 
             } else if (requestCode == RESULT_PICK_VIDEO) {
 
-
                     mFileURI = data.getData();
                     if (mFileURI != null) {
                         Intent intent = new Intent(context,
@@ -281,11 +309,9 @@ public class MainActivity extends ActionBarActivity {
                         intent.setData(mFileURI);
                         startActivity(intent);
                     }
-
 
             } else if (requestCode == RESULT_VIDEO_CAP) {
 
-
                     mFileURI = data.getData();
                     if (mFileURI != null) {
                         Intent intent = new Intent(context,
@@ -293,7 +319,6 @@ public class MainActivity extends ActionBarActivity {
                         intent.setData(mFileURI);
                         startActivity(intent);
                     }
-
 
             }
         }
@@ -320,9 +345,6 @@ public class MainActivity extends ActionBarActivity {
                     // intent.putExtra("crop", "true");
                     startActivityForResult(intent, REQUEST_TAKE_PHOTO);
                 } else if (items[item].equals("Choose from Library")) {
-
-
-
 
                     Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
                     intent.setDataAndType(
@@ -408,53 +430,7 @@ public class MainActivity extends ActionBarActivity {
         return rotate;
     }
 
-    public String getRealPathFromURI(Context context, Uri contentUri) {
-        Cursor cursor = null;
-        try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri, proj, null,
-                    null, null);
-            int column_index = cursor
-                    .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-            cursor.moveToFirst();
-            return cursor.getString(column_index);
-        } finally {
-            if (cursor != null) {
-                cursor.close();
-            }
-        }
-    }
 
-    public String getRealPathFromURI2(Context context,Uri uri) {
-        // Will return "image:x*"
-        String wholeID = DocumentsContract.getDocumentId(uri);
-
-// Split at colon, use second item in the array
-        String id = wholeID.split(":")[1];
-
-        String[] column = { MediaStore.Images.Media.DATA };
-
-// where id is equal to
-        String sel = MediaStore.Images.Media._ID + "=?";
-
-        Cursor cursor = context.getContentResolver().
-                query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                        column, sel, new String[]{ id }, null);
-
-        String filePath = "";
-
-        int columnIndex = cursor.getColumnIndex(column[0]);
-
-        if (cursor.moveToFirst()) {
-            filePath = cursor.getString(columnIndex);
-            cursor.close();
-            return filePath;
-        } else {
-            return getRealPathFromURI(context,uri);
-        }
-
-
-    }
 
     @Override public void onResume() {
         super.onResume();
@@ -508,7 +484,5 @@ public class MainActivity extends ActionBarActivity {
         }
         return ret;
     }
-
-
 
 }

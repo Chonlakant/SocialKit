@@ -37,7 +37,6 @@ import co.aquario.socialkit.event.LoginEvent;
 import co.aquario.socialkit.event.LoginFailedAuthEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
 import co.aquario.socialkit.event.UpdateProfileEvent;
-import co.aquario.socialkit.handler.ActivityResultBus;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.FbProfile;
 import co.aquario.socialkit.model.UserProfile;
@@ -73,8 +72,7 @@ public class LoginFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = null;
-        rootView = inflater.inflate(R.layout.fragment_login, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_login, container, false);
 
         userEt = (MaterialEditText) rootView.findViewById(R.id.et_user);
         passEt = (MaterialEditText) rootView.findViewById(R.id.et_pass);
@@ -106,7 +104,7 @@ public class LoginFragment extends BaseFragment {
                     ApiBus.getInstance().post(new LoginEvent(userEt.getText().toString().trim(),
                         passEt.getText().toString().trim()));
                 else
-                    Toast.makeText(getActivity().getApplicationContext(),"Please input user/pass",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity().getApplicationContext(),getResources().getString(R.string.empty_input),Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -114,8 +112,7 @@ public class LoginFragment extends BaseFragment {
         registerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getFragmentManager().beginTransaction().add(R.id.login_container, new RegisterFragment(),"REGISTER").commit();
-                //ApiBus.getInstance().post(new RegisterEvent());
+                getFragmentManager().beginTransaction().add(R.id.login_container, new RegisterFragment(),"REGISTER").addToBackStack(null).commit();
             }
         });
 
@@ -143,25 +140,23 @@ public class LoginFragment extends BaseFragment {
         if (jo != null) {
 
             Log.e("FB_JSON", jo.toString());
-
             Gson gson = new Gson();
             profile = gson.fromJson(jo.toString(), FbProfile.class);
-
             facebookToken = handle.getToken();
-
             Log.e("FB_AUTHED", handle.authenticated() + "");
 
+            /*
             Snackbar.with(getActivity().getApplicationContext())
                     .text(profile.id)
                     .show(getActivity());
+            */
 
             prefManager
                     .fbToken().put(facebookToken)
                     .fbId().put(profile.id).commit();
             getFragmentManager().beginTransaction().add(R.id.login_container, new FbAuthFragment()).commit();
-            ActivityResultBus.getInstance().post(produceProfileEvent());
-            //BusProvider.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
-            //ApiBus.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
+            ApiBus.getInstance().post(new LoadFbProfileEvent(profile,facebookToken));
+
             Log.e("POSTED", "SENT POST");
         }
     }

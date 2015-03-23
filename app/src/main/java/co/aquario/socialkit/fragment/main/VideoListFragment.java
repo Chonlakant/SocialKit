@@ -1,4 +1,4 @@
-package co.aquario.socialkit.fragment;
+package co.aquario.socialkit.fragment.main;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -26,8 +26,10 @@ import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.YoutubeActivity;
 import co.aquario.socialkit.activity.YoutubeSampleActivity;
 import co.aquario.socialkit.adapter.VideoAdapter;
+import co.aquario.socialkit.fragment.BaseFragment;
 import co.aquario.socialkit.model.Video;
 import co.aquario.socialkit.util.PrefManager;
+import co.aquario.socialkit.widget.EndlessListOnScrollListener;
 
 public class VideoListFragment extends BaseFragment {
 
@@ -42,6 +44,8 @@ public class VideoListFragment extends BaseFragment {
     public VideoListFragment() {
 
     }
+
+    char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
     public static VideoListFragment newInstance(String text){
         VideoListFragment mFragment = new VideoListFragment();
@@ -58,6 +62,9 @@ public class VideoListFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         pref = MainApplication.get(getActivity().getApplicationContext()).getPrefManager();
     }
+
+    private static final String TAG = "ARAISCROLL";
+    VideoListFragment fragment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -77,6 +84,21 @@ public class VideoListFragment extends BaseFragment {
             }
         });
         */
+
+        fragment = this;
+
+
+        listview.setOnScrollListener(new EndlessListOnScrollListener() {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                //Random generator = new Random();
+                //int i = alphabet.length - generator.nextInt(alphabet.length) - 1;
+                String loadmoreUrl = "http://api.vdomax.com/search/video/"+alphabet[page]+"?from=0&limit=20";
+                Log.e("loadmoreurl",loadmoreUrl);
+                aq.ajax(loadmoreUrl, JSONObject.class, fragment, "getjson");
+            }
+        });
+
 
 
 
@@ -162,7 +184,7 @@ public class VideoListFragment extends BaseFragment {
                 }
             }
             adapterVideos.notifyDataSetChanged();
-            setListViewHeightBasedOnChildren(listview);
+           // setListViewHeightBasedOnChildren(listview);
 
             AQUtility.debug("done");
 

@@ -24,6 +24,7 @@ import java.util.Date;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.CommentActivity;
 import co.aquario.socialkit.activity.PhotoActivity;
+import co.aquario.socialkit.activity.VideoViewActivity;
 import co.aquario.socialkit.activity.VideoViewNativeActivity;
 import co.aquario.socialkit.activity.YoutubeActivity;
 import co.aquario.socialkit.event.PhotoLoadEvent;
@@ -169,12 +170,23 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             //Picasso.with(mActivity).load(R.drawable.ic_sound).into(holder.typeIcon);
 
 
-        } else if(!checkNull(item.soundCloud) && !checkNull(item.clip) && !checkNull(item.youtube) && !checkNull(item.media)) {
+        }  else if(!checkNull(item.soundCloud) && !checkNull(item.clip) && !checkNull(item.youtube) && !checkNull(item.media)) {
             holder.nView.setVisibility(View.GONE);
             holder.thumb.setVisibility(View.GONE);
             holder.mediaLayout.setVisibility(View.GONE);
             holder.soundCloudLayout.setVisibility(View.GONE);
             holder.msg.setTextSize(18);
+        }
+
+        if(item.type.equals("live")){
+            holder.thumb.setVisibility(View.VISIBLE);
+            holder.mediaLayout.setVisibility(View.VISIBLE);
+            holder.msg.setTextSize(18);
+            Picasso.with(mActivity)
+                    .load(item.author.liveCover)
+                    .error(R.drawable.offline)
+                    .fit().centerCrop()
+                    .into(holder.thumb);
         }
 
     }
@@ -276,6 +288,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
 
                         Intent i = new Intent(mActivity, VideoViewNativeActivity.class);
                         i.putExtra("url", post.clip.url);
+                        i.putExtra("userId", post.author.id);
+                        i.putExtra("avatar", post.author.getAvatarPath());
+                        i.putExtra("cover", post.author.getCoverPath());
+                        i.putExtra("name", post.author.name);
+                        i.putExtra("username", post.author.username);
                         mActivity.startActivity(i);
 
                     } else if (postType.equals("youtube")) {
@@ -294,6 +311,15 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                             mFragment.playTrack(post.soundCloud.streamUrl,post.soundCloud.title);
                             Log.e("heysoundcloud", post.soundCloud.streamUrl);
                         }
+                    } else if(postType.equals("live")) {
+                        Intent i = new Intent(mActivity,VideoViewActivity.class);
+                        i.putExtra("url", post.author.liveUrl);
+                        i.putExtra("userId", post.author.id);
+                        i.putExtra("avatar", post.author.getAvatarPath());
+                        i.putExtra("cover", post.author.getCoverPath());
+                        i.putExtra("name", post.author.name);
+                        i.putExtra("username", post.author.username);
+                        mActivity.startActivity(i);
                     }
                     if (mItemClickListener != null) {
                         mItemClickListener.onItemClick(v, getPosition());

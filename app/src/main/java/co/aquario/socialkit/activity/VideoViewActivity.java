@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -18,7 +17,6 @@ import com.squareup.picasso.Picasso;
 
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.util.EndpointManager;
 import co.aquario.socialkit.util.PrefManager;
 import de.hdodenhof.circleimageview.CircleImageView;
 import io.vov.vitamio.LibsChecker;
@@ -53,8 +51,6 @@ public class VideoViewActivity extends Activity {
             path = getIntent().getExtras().getString("url");
         else
             path = "";
-
-        Log.e("myurl",path);
 
         setContentView(R.layout.activity_video_view);
         //mEditText = (EditText) findViewById(R.id.url);
@@ -97,15 +93,36 @@ public class VideoViewActivity extends Activity {
 
         PrefManager pref = MainApplication.get(this).getPrefManager();
 
-        String avatarUrl = pref.avatar().getOr("");
-        String coverUrl = pref.cover().getOr("");
-        String name = pref.name().getOr("");
-        String userId = pref.userId().getOr("6");
+        String userId = getIntent().getExtras().getString("userId");
+        String avatarUrl = getIntent().getExtras().getString("avatar");
+        String coverUrl = getIntent().getExtras().getString("cover");
+        String name = getIntent().getExtras().getString("name");
+        String username = getIntent().getExtras().getString("username");
+
+        if(userId == null) {
+            userId = pref.userId().getOr("6");
+        }
+
+        if(name == null) {
+            name = pref.name().getOr("");
+        }
+
+        if(username == null) {
+            username = pref.username().getOr("");
+        }
+
+        if(avatarUrl == null) {
+            avatarUrl = pref.avatar().getOr("");
+        }
+
+        if(coverUrl == null) {
+            coverUrl = pref.cover().getOr("");
+        }
 
         setTitle(name);
-        //mTitle.setText(name);
-        Picasso.with(this).load(EndpointManager.getPath(coverUrl)).into((ImageView) mImageView);
-        Picasso.with(this).load(EndpointManager.getPath(avatarUrl)).into(mProfileImageView);
+        mProfileNameTextView.setText(name);
+        Picasso.with(this).load(coverUrl).into(mImageView);
+        Picasso.with(this).load(avatarUrl).into(mProfileImageView);
 
 
 

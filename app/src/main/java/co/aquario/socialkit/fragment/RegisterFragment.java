@@ -45,7 +45,7 @@ public class RegisterFragment extends BaseFragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
+        super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -135,22 +135,7 @@ public class RegisterFragment extends BaseFragment {
     }
 
     @Subscribe public void onRegisterSuccess(RegisterSuccessEvent event) {
-
         Toast.makeText(getActivity().getApplicationContext(),"Register Success",Toast.LENGTH_SHORT).show();
-
-        Log.e("DEBUG_REGISTER",event.getRegisterData().user.toString());
-
-        /*
-        prefManager
-                .username().put(event.getRegisterData().user.username)
-                .userId().put(event.getRegisterData().user.id)
-                //.token().put(event.getRegisterData().token)
-                .cover().put(event.getRegisterData().user.cover)
-                .avatar().put(event.getRegisterData().user.avatar)
-                .isLogin().put(true)
-                .commit();
-                */
-
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.login_container, new RegisterSuccessFragment()).commit();
     }
 

@@ -46,7 +46,9 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginLeft="24dp"
-                    android:background="@drawable/btn_default_light" />
+                    android:background="@drawable/btn_default_light"
+                    android:src="@drawable/ic_camera_rear_white_24dp"
+                    android:id="@+id/btnFrontCamera" />
             </LinearLayout>
 
             <LinearLayout
@@ -145,7 +147,8 @@
                         android:layout_height="48dp"
                         android:layout_gravity="center"
                         android:background="@drawable/btn_capture_options"
-                        android:src="@drawable/ic_collections_white_24dp" />
+                        android:src="@drawable/ic_collections_white_24dp"
+                        android:id="@+id/btnChoosePhoto" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -171,7 +174,8 @@
                         android:layout_height="48dp"
                         android:layout_gravity="center"
                         android:background="@drawable/btn_capture_options"
-                        android:src="@drawable/ic_videocam_white_24dp" />
+                        android:src="@drawable/ic_videocam_white_24dp"
+                        android:id="@+id/btnRecordVideo" />
                 </FrameLayout>
             </LinearLayout>
 

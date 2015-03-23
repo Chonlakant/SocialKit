@@ -38,12 +38,12 @@ public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickList
 
     @Override
     public Object getItem(int position) {
-        return null;
+        return list.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        return 0;
+        return Long.parseLong(list.get(position).getPostId());
     }
 
     public class ViewHolder {
@@ -76,8 +76,6 @@ public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickList
 
         if(convertView == null) {
 
-
-
             LayoutInflater mInflater =
                     (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -92,8 +90,17 @@ public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickList
             if(viewCount.equals(""))
                 viewCount = "0";
 
+            if (item.getDesc() != null) {
+                if (item.getDesc().trim().length() < 60)
+                    mViewHolder.videoDesc.setText(Html.fromHtml("" + item.getDesc() + ""));
+                else
+                    mViewHolder.videoDesc.setText(Html.fromHtml("" + item.getDesc().substring(0, 60) + " ..." + ""));
+            } else {
+                mViewHolder.videoDesc.setVisibility(View.GONE);
+            }
+
             mViewHolder.videoTitle.setText(item.getTitle());
-            mViewHolder.videoDesc.setText(Html.fromHtml(item.getDesc().substring(0, 60)));
+            //mViewHolder.videoDesc.setText(Html.fromHtml(item.getDesc().substring(0, 60)));
             mViewHolder.view.setText(Html.fromHtml("<b>" + viewCount + "+ views</b>"));
 
             mViewHolder.profileName.setText(item.getpName());
@@ -119,6 +126,8 @@ public class VideoAdapter extends BaseAdapter implements AdapterView.OnClickList
 
         return convertView;
     }
+
+
 
 
 

@@ -250,7 +250,14 @@ public class FeedFragment extends BaseFragment {
                 int[] startingLocation = new int[2];
                 v.getLocationOnScreen(startingLocation);
                 startingLocation[0] += v.getWidth() / 2;
-                TakePhotoActivity.startCameraFromLocation(startingLocation, getActivity());
+                TakePhotoActivity.startCameraFromLocation(startingLocation, getActivity(),false);
+                /*
+                TakePhotoFragmentUseless fragment = TakePhotoFragmentUseless.newInstance(startingLocation, getActivity());
+                FragmentManager manager = getActivity().getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.add(R.id.sub_container, fragment).addToBackStack(null);
+                transaction.commit();
+                */
                 //overridePendingTransition(0, 0);
             }
         });

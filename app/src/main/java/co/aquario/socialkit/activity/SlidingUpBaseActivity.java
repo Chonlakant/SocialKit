@@ -17,6 +17,7 @@
 package co.aquario.socialkit.activity;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -241,7 +242,19 @@ public abstract class SlidingUpBaseActivity<S extends Scrollable> extends BaseAc
 
         AQuery aq = new AQuery(this);
         String url = "http://api.vdomax.com/live/history/" + userId;
-        aq.ajax(url, JSONObject.class, this, "getJson");
+
+        ProgressDialog dialog = new ProgressDialog(this);
+        dialog.setIndeterminate(true);
+        dialog.setCancelable(false);
+        dialog.setInverseBackgroundForced(false);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.setTitle("Downloading live history");
+        dialog.setMessage("กำลังดาวน์โหลดประวัติการถ่ายทอดสด..");
+        dialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        dialog.setIndeterminate(false);
+        dialog.setMax(100);
+
+        aq.progress(dialog).ajax(url, JSONObject.class, this, "getJson");
 
         ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),"",1,50,false));
         Log.e("FIREFIRE","FIRE");

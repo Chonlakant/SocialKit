@@ -3,6 +3,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
 
+    <!-- Login Fragment -->
+    <string name="empty_input">Please input username/password</string>
+
     <string name="drawer_item_home">Home</string>
     <string name="drawer_item_free_play">Free Play</string>
 

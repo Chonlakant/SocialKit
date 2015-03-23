@@ -12,7 +12,7 @@ import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.UpdateProfileEvent;
 import co.aquario.socialkit.fragment.LoginFragment;
-import co.aquario.socialkit.handler.ApiBus;
+import co.aquario.socialkit.handler.ActivityResultBus;
 import co.aquario.socialkit.model.UserProfile;
 import co.aquario.socialkit.util.PrefManager;
 
@@ -24,7 +24,6 @@ public class LoginActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         prefManager = MainApplication.get(this).getPrefManager();
@@ -32,8 +31,8 @@ public class LoginActivity extends ActionBarActivity {
 
         isLogin = prefManager.isLogin().getOr(false);
 
-        //prefManager.isLogin().put(false).commit();
         Log.e("isLogin/LoginActivity","::"+isLogin);
+
 
         if (savedInstanceState == null && !isLogin) {
             getSupportFragmentManager().beginTransaction().add(R.id.login_container, new LoginFragment()).commit();
@@ -41,7 +40,9 @@ public class LoginActivity extends ActionBarActivity {
             Intent main = new Intent(LoginActivity.this,MainActivity.class);
             startActivity(main);
             // Updrate drawer
-            ApiBus.getInstance().post(new UpdateProfileEvent(new UserProfile()));
+            ActivityResultBus.getInstance().postQueue(new UpdateProfileEvent(new UserProfile()));
+            finish();
+
         }
 
     }

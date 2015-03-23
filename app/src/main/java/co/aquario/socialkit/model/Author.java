@@ -17,14 +17,23 @@ public class Author {
     @Expose
     public String name;
     @Expose
-    @SerializedName("avatar_id")
-    public String avatarId;
-    @Expose
     @SerializedName("avatar")
     public String avatarPath;
+    @Expose
+    @SerializedName("cover")
+    public String coverPath;
+    @Expose
+    @SerializedName("live_cover")
+    public String liveCover;
+    @Expose
+    @SerializedName("live_url")
+    public String liveUrl;
 
     public String getAvatarPath() {
         return EndpointManager.getPath(avatarPath);
+    }
+    public String getCoverPath() {
+        return EndpointManager.getPath(coverPath);
     }
 
 }
