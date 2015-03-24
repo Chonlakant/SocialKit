@@ -156,6 +156,17 @@
             android:label="Write Post"
             android:theme="@style/AppTheme2" >
         </activity>
+
+        <activity
+            android:name=".activity.ProfileDetailActivity"
+            android:label="Write Post"
+            android:theme="@style/AppTheme2" >
+        </activity>
+
+        <activity
+            android:name=".activity.CommentsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.TransparentActivity" />
     </application>
 
 </manifest>

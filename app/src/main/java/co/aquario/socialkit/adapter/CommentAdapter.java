@@ -29,7 +29,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ContactV
 
     @Override
     public ContactViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment_old, parent, false);
 
 
 

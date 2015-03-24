@@ -38,7 +38,7 @@ public class CommentActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment);
+        setContentView(R.layout.activity_comment_old);
 
         context = this;
         adapterComment = new CommentAdapter(this, list);

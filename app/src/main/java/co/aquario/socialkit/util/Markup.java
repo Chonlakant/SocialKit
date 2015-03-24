@@ -8,7 +8,7 @@ import java.net.URLDecoder;
 
 public class Markup {
     public static String getLink(String text) throws UnsupportedEncodingException {
-        String link_search = "/[a](.*?)[/a]/i";
+        String link_search = "\\[a(=(.*?))?\\](.*?)\\[\\/a\\]";
 
         String[] matches = Pcre.preg_match_all(link_search, text);
         if (matches != null) {

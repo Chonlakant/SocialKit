@@ -1,0 +1,97 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <!--header-->
+            <RelativeLayout
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:scaleType="centerCrop"
+                    android:id="@+id/cover"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:background="@drawable/example" />
+
+                <RelativeLayout
+                    android:id="@+id/image_poster_cardview"
+                    android:layout_below="@+id/cover"
+                    android:transitionName="cover"
+                    android:layout_width="@dimen/content_details_portrait_thumb_width"
+                    android:layout_height="110dp"
+                    android:layout_marginLeft="@dimen/content_details_baseline_margin"
+                    android:layout_marginBottom="@dimen/content_details_baseline_margin"
+                    android:layout_marginTop="@dimen/content_details_portrait_thumb_negative_margin">
+
+                    <com.mikepenz.materialdrawer.view.CircularImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/image_title_detail"
+                        android:scaleType="centerCrop" />
+
+                </RelativeLayout>
+
+                <!-- title-->
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/cover"
+                    android:layout_toRightOf="@+id/image_poster_cardview"
+                    android:layout_marginTop="@dimen/content_details_title_margin_top"
+                    android:padding="@dimen/content_details_baseline_margin"
+                    android:id="@+id/linearLayout"
+                    android:layout_gravity="top|center|bottom">
+
+                    <TextView
+                        android:id="@+id/name_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:attr/textAppearanceLarge"
+                        android:maxLines="3"
+                        android:ellipsize="end"
+                        android:textColor="#000000"
+                        android:textSize="15sp" />
+
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <!--details-->
+
+            <RelativeLayout
+                android:id="@+id/fragment_container"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/scroll"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+</LinearLayout>

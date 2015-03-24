@@ -77,4 +77,27 @@
     <dimen name="row_height">72dp</dimen>
     <dimen name="player_toolbar">56dp</dimen>
 
+    <!--profile details-->
+    <dimen name="movie_detail_fanart_height">224dp</dimen>
+    <dimen name="content_details_portrait_thumb_width">100dp</dimen>
+    <dimen name="content_details_portrait_thumb_height">150dp</dimen>
+    <dimen name="content_details_baseline_margin">16dp</dimen>
+    <dimen name="content_details_portrait_thumb_negative_margin">-32dp</dimen>
+    <dimen name="content_details_title_margin_top">-12dp</dimen>
+    <dimen name="content_details_title">28sp</dimen>
+    <dimen name="content_details_small_margin">4dp</dimen>
+    <dimen name="content_details_subheader">18sp</dimen>
+    <dimen name="content_details_very_small_margin">0dp</dimen>
+    <dimen name="content_details_large_margin">48dp</dimen>
+    <dimen name="content_details_area_subheader">12sp</dimen>
+    <dimen name="content_details_area_header">16sp</dimen>
+    <dimen name="content_details_body_text">16sp</dimen>
+    <dimen name="details_padding">16dp</dimen>
+
+    <!-- InstaMaterial -->
+    <dimen name="default_elevation">8dp</dimen>
+    <dimen name="comment_avatar_size">56dp</dimen>
+    <dimen name="user_profile_avatar_size">88dp</dimen>
+    <dimen name="global_menu_avatar_size">64dp</dimen>
+
 </resources>

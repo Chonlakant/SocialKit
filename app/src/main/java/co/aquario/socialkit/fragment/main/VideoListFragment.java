@@ -184,6 +184,7 @@ public class VideoListFragment extends BaseFragment {
                 }
             }
             adapterVideos.notifyDataSetChanged();
+            Log.v("list.size()",list.size() + "");
            // setListViewHeightBasedOnChildren(listview);
 
             AQUtility.debug("done");

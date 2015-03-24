@@ -2,6 +2,9 @@ package co.aquario.socialkit.adapter;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -22,14 +25,12 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.activity.CommentActivity;
-import co.aquario.socialkit.activity.PhotoActivity;
+import co.aquario.socialkit.activity.CommentsActivity;
 import co.aquario.socialkit.activity.VideoViewActivity;
 import co.aquario.socialkit.activity.VideoViewNativeActivity;
 import co.aquario.socialkit.activity.YoutubeActivity;
-import co.aquario.socialkit.event.PhotoLoadEvent;
-import co.aquario.socialkit.event.TimelineDataEvent;
 import co.aquario.socialkit.fragment.FeedFragment;
+import co.aquario.socialkit.fragment.PhotoZoomFragment;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
 import co.aquario.socialkit.widget.RoundedTransformation;
@@ -268,21 +269,28 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                 case R.id.thumb:
                     if (postType.equals("photo")) {
                         String url = list.get(getPosition()).media.getThumbUrl();
+                        String name = list.get(getPosition()).author.name;
+                        String text = list.get(getPosition()).text;
                         //PhotoZoomFragment fragment = new PhotoZoomFragment();
-                        /*
-                        PhotoZoomFragment fragment = new PhotoZoomFragment().newInstance(url);
+
+                        if(text == null)
+                            text = "";
+
+                        PhotoZoomFragment fragment = new PhotoZoomFragment().newInstance(url,name,text);
                         FragmentManager manager = ((ActionBarActivity) mActivity).getSupportFragmentManager();
                         FragmentTransaction transaction = manager.beginTransaction();
-                        transaction.replace(R.id.sub_container, fragment);
+                        transaction.replace(R.id.sub_container, fragment).addToBackStack(null);
                         transaction.commit();
-                        */
 
+                        /*
                         Intent i = new Intent(mActivity, PhotoActivity.class);
                         i.putExtra("url", url);
+                        i.putExtra("name", name);
+                        i.putExtra("desc", text);
                         mActivity.startActivity(i);
+                        */
 
-                        PhotoLoadEvent event = new PhotoLoadEvent(url);
-                        ApiBus.getInstance().post(event);
+
 
                     } else if (postType.equals("clip")) {
 
@@ -327,12 +335,21 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                     break;
                 case R.id.btn_comment:
 
+                    final Intent intent = new Intent(mActivity, CommentsActivity.class);
+                    int[] startingLocation = new int[2];
+                    v.getLocationOnScreen(startingLocation);
+                    intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION, startingLocation[1]);
+                    mActivity.startActivity(intent);
+                    mActivity.overridePendingTransition(0, 0);
+
+                    /*
                     TimelineDataEvent event = new TimelineDataEvent(list.get(getPosition()));
                     ApiBus.getInstance().post(event);
 
                     Intent i = new Intent(mActivity, CommentActivity.class);
                     i.putExtra("postId", list.get(getPosition()).postId);
                     mActivity.startActivity(i);
+                    */
                     break;
                 case R.id.profile_name:
                 case R.id.avatar:

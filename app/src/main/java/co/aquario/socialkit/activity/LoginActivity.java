@@ -8,12 +8,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 
+import java.io.UnsupportedEncodingException;
+
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.event.UpdateProfileEvent;
 import co.aquario.socialkit.fragment.LoginFragment;
 import co.aquario.socialkit.handler.ActivityResultBus;
 import co.aquario.socialkit.model.UserProfile;
+import co.aquario.socialkit.util.Markup;
 import co.aquario.socialkit.util.PrefManager;
 
 public class LoginActivity extends ActionBarActivity {
@@ -32,7 +35,11 @@ public class LoginActivity extends ActionBarActivity {
         isLogin = prefManager.isLogin().getOr(false);
 
         Log.e("isLogin/LoginActivity","::"+isLogin);
-
+        try {
+            Log.v("preg_match", Markup.getLink("[a]https://www.vdomax.com[/a]"));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
         if (savedInstanceState == null && !isLogin) {
             getSupportFragmentManager().beginTransaction().add(R.id.login_container, new LoginFragment()).commit();

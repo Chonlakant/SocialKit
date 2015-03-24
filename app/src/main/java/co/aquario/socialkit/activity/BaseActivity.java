@@ -21,12 +21,9 @@ import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 
 import butterknife.ButterKnife;
-import butterknife.InjectView;
-import butterknife.Optional;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.handler.ActivityResultBus;
@@ -38,32 +35,18 @@ public abstract class BaseActivity extends ActionBarActivity {
     private static final int NUM_OF_ITEMS_FEW = 3;
     private PrefManager pref;
 
-    @Optional
-    @InjectView(R.id.toolbar)
-    Toolbar toolbar;
-
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
         ButterKnife.inject(this);
-        setupToolbar();
         if (shouldInstallDrawer()) {
             //setupDrawer();
-        }
-    }
-
-    protected void setupToolbar() {
-        if (toolbar != null) {
-            setSupportActionBar(toolbar);
-            toolbar.setNavigationIcon(R.drawable.ic_fb_sm);
         }
     }
 
     protected boolean shouldInstallDrawer() {
         return true;
     }
-
-
 
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {

@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.activity.SlidingUpRecyclerViewActivity;
+import co.aquario.socialkit.activity.ProfileDetailActivity;
 import co.aquario.socialkit.model.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,7 +39,8 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
         return new ViewHolder(sView,new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent i = new Intent(context, SlidingUpRecyclerViewActivity.class);
+                //Intent i = new Intent(context, SlidingUpRecyclerViewActivity.class);
+                Intent i = new Intent(context, ProfileDetailActivity.class);
                 i.putExtra("userId",list.get(position).id);
                 i.putExtra("avatar",list.get(position).getAvatarUrl());
                 i.putExtra("cover",list.get(position).getCoverUrl());
