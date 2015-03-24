@@ -5,7 +5,7 @@ import java.util.Map;
 import co.aquario.socialkit.event.FriendListDataResponse;
 import co.aquario.socialkit.event.StoryDataResponse;
 import co.aquario.socialkit.event.TimelineDataResponse;
-import co.aquario.socialkit.event.UserInfoDataResponse;
+import co.aquario.socialkit.event.UserProfileDataResponse;
 import co.aquario.socialkit.model.LoginData;
 import co.aquario.socialkit.model.RegisterData;
 import retrofit.Callback;
@@ -38,9 +38,7 @@ public interface ApiServiceVM {
     public void getUserTimeline(@Path("id") int id,@QueryMap Map<String, String> options,
                                 Callback<TimelineDataResponse> responseJson);
 
-    @POST("/1.0/user/{id}")
-    public void getUserInfo(@Path("id") int id,@QueryMap Map<String, String> options,
-                                Callback<UserInfoDataResponse> responseJson);
+
 
     @POST("/1.0/followers/{id}")
     public void getFollower(@Path("id") int id,@QueryMap Map<String, String> options,
@@ -57,6 +55,10 @@ public interface ApiServiceVM {
     @GET("/story/{id}")
     public void getStory(@Path("id") int id,
                          Callback<StoryDataResponse> responseJson);
+
+    @GET("/1.0/user/{id}")
+    public void getProfile(@Path("id") int id,
+                           Callback<UserProfileDataResponse> responseJson);
 
     /*
     @Multipart

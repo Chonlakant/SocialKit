@@ -1,7 +1,9 @@
 package co.aquario.socialkit.adapter;
 
-import android.content.Context;
-import android.content.Intent;
+import android.app.Activity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,21 +16,21 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.activity.ProfileDetailActivity;
+import co.aquario.socialkit.fragment.ProfileDetailFragment;
 import co.aquario.socialkit.model.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAdapter.ViewHolder> {
 
-    public Context context;
+    private static Activity mActivity;
 
     public ArrayList<User> list = new ArrayList<User>();
 
     public OnItemClickListener mItemClickListener;
 
-    public FriendRecyclerAdapter(Context context, ArrayList<User> list) {
-        this.context = context;
+    public FriendRecyclerAdapter(Activity mActivity, ArrayList<User> list) {
+        this.mActivity = mActivity;
         this.list = list;
     }
 
@@ -40,13 +42,21 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
             @Override
             public void onItemClick(View view, int position) {
                 //Intent i = new Intent(context, SlidingUpRecyclerViewActivity.class);
-                Intent i = new Intent(context, ProfileDetailActivity.class);
+                /*
+                Intent i = new Intent(context, ProfileDetailFragment.class);
                 i.putExtra("userId",list.get(position).id);
                 i.putExtra("avatar",list.get(position).getAvatarUrl());
                 i.putExtra("cover",list.get(position).getCoverUrl());
                 i.putExtra("name",list.get(position).name);
                 i.putExtra("username",list.get(position).username);
                 context.startActivity(i);
+                */
+
+                ProfileDetailFragment fragment = new ProfileDetailFragment().newInstance(list.get(position).id);
+                FragmentManager manager = ((ActionBarActivity) mActivity).getSupportFragmentManager();
+                FragmentTransaction transaction = manager.beginTransaction();
+                transaction.replace(R.id.sub_container, fragment).addToBackStack(null);
+                transaction.commit();
             }
 
             @Override
@@ -78,7 +88,7 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
         User user = list.get(position);
         holder.name.setText(user.name);
 
-        Picasso.with(context)
+        Picasso.with(mActivity)
                 .load(user.getAvatarUrl())
                 .fit().centerCrop()
                 .into(holder.avatar);

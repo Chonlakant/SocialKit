@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
-import co.aquario.socialkit.adapter.FriendAdapter;
 import co.aquario.socialkit.adapter.FriendRecyclerAdapter;
 import co.aquario.socialkit.event.LoadFriendListEvent;
 import co.aquario.socialkit.event.LoadFriendListSuccessEvent;
@@ -37,7 +36,7 @@ public class FriendFragment extends BaseFragment {
     private String userId = "";
 
     ArrayList<User> list = new ArrayList<>();
-    FriendAdapter adapter;
+    //FriendAdapter adapter;
     FriendRecyclerAdapter adapter2;
     ObservableGridView gridView;
     RecyclerView recyclerView;

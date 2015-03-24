@@ -158,7 +158,7 @@
         </activity>
 
         <activity
-            android:name=".activity.ProfileDetailActivity"
+            android:name=".fragment.ProfileDetailFragment"
             android:label="Write Post"
             android:theme="@style/AppTheme2" >
         </activity>

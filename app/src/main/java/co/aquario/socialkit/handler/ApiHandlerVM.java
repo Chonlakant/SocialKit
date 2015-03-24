@@ -13,6 +13,8 @@ import co.aquario.socialkit.event.FbAuthEvent;
 import co.aquario.socialkit.event.FriendListDataResponse;
 import co.aquario.socialkit.event.GetStoryEvent;
 import co.aquario.socialkit.event.GetStorySuccessEvent;
+import co.aquario.socialkit.event.GetUserProfileEvent;
+import co.aquario.socialkit.event.GetUserProfileSuccessEvent;
 import co.aquario.socialkit.event.LoadFriendListEvent;
 import co.aquario.socialkit.event.LoadFriendListSuccessEvent;
 import co.aquario.socialkit.event.LoadTimelineEvent;
@@ -27,6 +29,7 @@ import co.aquario.socialkit.event.RegisterSuccessEvent;
 import co.aquario.socialkit.event.RequestOtpEvent;
 import co.aquario.socialkit.event.StoryDataResponse;
 import co.aquario.socialkit.event.TimelineDataResponse;
+import co.aquario.socialkit.event.UserProfileDataResponse;
 import co.aquario.socialkit.model.LoginData;
 import co.aquario.socialkit.model.RegisterData;
 import retrofit.Callback;
@@ -159,6 +162,24 @@ public class ApiHandlerVM {
                 GetStorySuccessEvent event = new GetStorySuccessEvent(storyDataResponse.getPost());
                 ApiBus.getInstance().post(event);
 
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+                Log.e("error", error.toString());
+            }
+
+        });
+
+    }
+
+    @Subscribe public void onGetUserProfile(GetUserProfileEvent event) {
+
+        api.getProfile(Integer.parseInt(event.getUserId()), new Callback<UserProfileDataResponse>() {
+            @Override
+            public void success(UserProfileDataResponse userProfileDataResponse, Response response) {
+                GetUserProfileSuccessEvent event = new GetUserProfileSuccessEvent(userProfileDataResponse.user,userProfileDataResponse.count);
+                ApiBus.getInstance().post(event);
             }
 
             @Override

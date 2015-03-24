@@ -14,7 +14,6 @@ public class StoryDataResponse {
     }
 
     public StoryDataResponse(PostStory post) {
-
         this.post = post;
     }
 }
