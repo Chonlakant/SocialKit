@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 
 import org.ocpsoft.prettytime.PrettyTime;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class PostStory extends BaseModel implements Parcelable{
     @Expose
     public int commentCount;
     @Expose
-    public List<CommentStory> comment;
+    public ArrayList<CommentStory> comment;
     @SerializedName("share_count")
     @Expose
     public int shareCount;

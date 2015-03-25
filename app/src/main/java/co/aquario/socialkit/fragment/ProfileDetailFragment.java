@@ -13,7 +13,6 @@ import android.widget.TextView;
 
 import com.mikepenz.materialdrawer.view.CircularImageView;
 import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -132,6 +131,7 @@ public class ProfileDetailFragment extends BaseFragment {
 
     @Subscribe
     public void onLoadProfile(GetUserProfileSuccessEvent event) {
+        /*
         titleTv.setText(event.getUser().name);
         usernameTv.setText("@" + event.getUser().username);
 
@@ -143,6 +143,7 @@ public class ProfileDetailFragment extends BaseFragment {
         Picasso.with(getActivity())
                 .load(event.getUser().getAvatarUrl())
                 .into(avatar);
+                */
 
     }
 

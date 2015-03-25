@@ -53,7 +53,7 @@ public class ProfileActivity extends ActionBarActivity implements PullScrollView
         mScrollView = (PullScrollView) findViewById(R.id.scroll_view);
         mHeadImg = (ImageView) findViewById(R.id.background_img);
 
-        mMainLayout = (TableLayout) findViewById(R.id.table_layout);
+        //mMainLayout = (TableLayout) findViewById(R.id.table_layout);
 
         mScrollView.setHeader(mHeadImg);
         mScrollView.setOnTurnListener(this);

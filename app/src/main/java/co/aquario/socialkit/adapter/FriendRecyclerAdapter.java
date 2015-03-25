@@ -52,7 +52,7 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
                 context.startActivity(i);
                 */
 
-                ProfileDetailFragment fragment = new ProfileDetailFragment().newInstance(list.get(position).id);
+                ProfileDetailFragment fragment = new ProfileDetailFragment().newInstance(list.get(position).getId());
                 FragmentManager manager = ((ActionBarActivity) mActivity).getSupportFragmentManager();
                 FragmentTransaction transaction = manager.beginTransaction();
                 transaction.replace(R.id.sub_container, fragment).addToBackStack(null);
@@ -86,7 +86,7 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
     public void onBindViewHolder(ViewHolder holder, int position) {
 
         User user = list.get(position);
-        holder.name.setText(user.name);
+        holder.name.setText(user.getName());
 
         Picasso.with(mActivity)
                 .load(user.getAvatarUrl())

@@ -339,6 +339,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                     int[] startingLocation = new int[2];
                     v.getLocationOnScreen(startingLocation);
                     intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION, startingLocation[1]);
+                    intent.putParcelableArrayListExtra(CommentsActivity.ARG_COMMENT_LIST,post.comment);
                     mActivity.startActivity(intent);
                     mActivity.overridePendingTransition(0, 0);
 

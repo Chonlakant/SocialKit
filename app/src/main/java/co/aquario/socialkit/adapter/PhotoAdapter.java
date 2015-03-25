@@ -21,12 +21,11 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import co.aquario.socialkit.R;
-import co.aquario.socialkit.activity.CommentActivity;
+import co.aquario.socialkit.activity.CommentsActivity;
 import co.aquario.socialkit.activity.PhotoActivity;
 import co.aquario.socialkit.activity.VideoViewNativeActivity;
 import co.aquario.socialkit.activity.YoutubeActivity;
 import co.aquario.socialkit.event.PhotoLoadEvent;
-import co.aquario.socialkit.event.TimelineDataEvent;
 import co.aquario.socialkit.fragment.FeedFragment;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
@@ -293,12 +292,14 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.ViewHolder> 
                     break;
                 case R.id.btn_comment:
 
-                    TimelineDataEvent event = new TimelineDataEvent(list.get(getPosition()));
-                    ApiBus.getInstance().post(event);
+                    final Intent intent = new Intent(mActivity, CommentsActivity.class);
+                    int[] startingLocation = new int[2];
+                    v.getLocationOnScreen(startingLocation);
+                    intent.putExtra(CommentsActivity.ARG_DRAWING_START_LOCATION, startingLocation[1]);
+                    intent.putParcelableArrayListExtra(CommentsActivity.ARG_COMMENT_LIST,post.comment);
+                    mActivity.startActivity(intent);
+                    mActivity.overridePendingTransition(0, 0);
 
-                    Intent i = new Intent(mActivity, CommentActivity.class);
-                    i.putExtra("postId", list.get(getPosition()).postId);
-                    mActivity.startActivity(i);
                     break;
                 case R.id.profile_name:
                 case R.id.avatar:

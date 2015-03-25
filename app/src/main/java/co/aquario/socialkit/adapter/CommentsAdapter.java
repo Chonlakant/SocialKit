@@ -13,9 +13,13 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 import butterknife.InjectView;
 import co.aquario.socialkit.R;
+import co.aquario.socialkit.model.CommentStory;
+import co.aquario.socialkit.model.User;
 import co.aquario.socialkit.widget.RoundedTransformation;
 
 
@@ -32,8 +36,11 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private boolean animationsLocked = false;
     private boolean delayEnterAnimation = true;
 
-    public CommentsAdapter(Context context) {
+    ArrayList<CommentStory> mList = new ArrayList<CommentStory>();
+
+    public CommentsAdapter(Context context,ArrayList<CommentStory> mList) {
         this.context = context;
+        this.mList = mList;
         avatarSize = context.getResources().getDimensionPixelSize(R.dimen.comment_avatar_size);
     }
 
@@ -45,22 +52,16 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
+
+        CommentStory comment = mList.get(position);
+
         runEnterAnimation(viewHolder.itemView, position);
         CommentViewHolder holder = (CommentViewHolder) viewHolder;
-        switch (position % 3) {
-            case 0:
-                holder.tvComment.setText("Lorem ipsum dolor sit amet, consectetur adipisicing elit.");
-                break;
-            case 1:
-                holder.tvComment.setText("Cupcake ipsum dolor sit amet bear claw.");
-                break;
-            case 2:
-                holder.tvComment.setText("Cupcake ipsum dolor sit. Amet gingerbread cupcake. Gummies ice cream dessert icing marzipan apple pie dessert sugar plum.");
-                break;
-        }
+        holder.tvComment.setText(comment.getText());
+        holder.tvName.setText(comment.getUser().getName());
 
         Picasso.with(context)
-                .load(R.drawable.profile)
+                .load(comment.getUser().getAvatarUrl())
                 .centerCrop()
                 .resize(avatarSize, avatarSize)
                 .transform(new RoundedTransformation(avatarSize/2,4))
@@ -91,15 +92,22 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public int getItemCount() {
-        return itemsCount;
+        return mList.size();
     }
 
     public void updateItems() {
-        itemsCount = 10;
+        itemsCount = mList.size();
         notifyDataSetChanged();
     }
 
-    public void addItem() {
+    public void addItem(String mCommentText,String avatar, String name) {
+        CommentStory comment = new CommentStory();
+        comment.setText(mCommentText);
+        User user = new User();
+        user.setAvatar(avatar);
+        user.setName(name);
+        comment.setUser(user);
+        mList.add(comment);
         itemsCount++;
         notifyItemInserted(itemsCount - 1);
     }
@@ -117,6 +125,8 @@ public class CommentsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ImageView ivUserAvatar;
         @InjectView(R.id.tvComment)
         TextView tvComment;
+        @InjectView(R.id.tvName)
+        TextView tvName;
 
         public CommentViewHolder(View view) {
             super(view);
