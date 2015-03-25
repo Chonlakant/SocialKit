@@ -3,6 +3,7 @@ package co.aquario.socialkit.handler;
 import java.util.Map;
 
 import co.aquario.socialkit.event.FriendListDataResponse;
+import co.aquario.socialkit.event.PostCommentDataResponse;
 import co.aquario.socialkit.event.StoryDataResponse;
 import co.aquario.socialkit.event.TimelineDataResponse;
 import co.aquario.socialkit.event.UserProfileDataResponse;
@@ -59,6 +60,11 @@ public interface ApiServiceVM {
     @GET("/1.0/user/{id}")
     public void getProfile(@Path("id") int id,
                            Callback<UserProfileDataResponse> responseJson);
+
+    @POST("/1.0/posts/{id}/comment")
+    public void postComment(@Path("id") int postId,@QueryMap Map<String, String> options,Callback<PostCommentDataResponse> responseCallback);
+
+
 
     /*
     @Multipart

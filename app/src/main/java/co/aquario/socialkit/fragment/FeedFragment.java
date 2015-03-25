@@ -49,6 +49,7 @@ import co.aquario.socialkit.adapter.FeedAdapter;
 import co.aquario.socialkit.event.LoadTimelineEvent;
 import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
 import co.aquario.socialkit.event.LogoutEvent;
+import co.aquario.socialkit.event.RefreshEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
 import co.aquario.socialkit.soundcloud.SoundCloudService;
@@ -371,6 +372,11 @@ public class FeedFragment extends BaseFragment {
 		rootView.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
 		return rootView;		
 	}
+
+    @Subscribe public void onRefreshFeed(RefreshEvent event) {
+        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),TYPE,1,PER_PAGE,isHomeTimeline));
+        Log.e("onRefreshFeed","true");
+    }
 
     /**
      * Save Fragment's State here

@@ -16,6 +16,9 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
+
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 
@@ -25,6 +28,12 @@ import butterknife.Optional;
 import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.adapter.CommentsAdapter;
+import co.aquario.socialkit.event.GetStoryEvent;
+import co.aquario.socialkit.event.GetStorySuccessEvent;
+import co.aquario.socialkit.event.PostCommentEvent;
+import co.aquario.socialkit.event.PostCommentSuccessEvent;
+import co.aquario.socialkit.event.RefreshEvent;
+import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.CommentStory;
 import co.aquario.socialkit.util.PrefManager;
 import co.aquario.socialkit.util.Utils;
@@ -57,30 +66,36 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     private CommentsAdapter commentsAdapter;
     private int drawingStartLocation;
 
-    ArrayList<CommentStory> commentList = new ArrayList<CommentStory>();
+    ArrayList<CommentStory> commentList;
 
     PrefManager pref;
     String avatar;
     String name;
+    String postId;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
         ButterKnife.inject(this);
+        ApiBus.getInstance().register(this);
 
-        commentList = getIntent().getParcelableArrayListExtra(ARG_COMMENT_LIST);
+        postId = getIntent().getStringExtra("POST_ID");
+        ApiBus.getInstance().post(new GetStoryEvent(postId));
+        //commentList = getIntent().getParcelableArrayListExtra(ARG_COMMENT_LIST);
         pref = MainApplication.get(this).getPrefManager();
+        userId = pref.userId().getOr("3");
         avatar = pref.avatar().getOr("TEST");
         name = pref.name().getOr("TEST");
+
+        if(commentList == null)
+            commentList  = new ArrayList<CommentStory>();
 
         setupComments();
         setupSendCommentButton();
 
 
-
-
-        //Log.e("sizena",commentList.get(0).getText() + "");
 
         drawingStartLocation = getIntent().getIntExtra(ARG_DRAWING_START_LOCATION, 0);
         if (savedInstanceState == null) {
@@ -143,6 +158,7 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
                 .setInterpolator(new DecelerateInterpolator())
                 .setDuration(200)
                 .start();
+
     }
 
     @Override
@@ -166,14 +182,38 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     public void onSendClickListener(View v) {
 
         if (validateComment()) {
-            commentsAdapter.addItem(etComment.getText().toString(),avatar,name);
+
+            String commentText = etComment.getText().toString();
+
+            ApiBus.getInstance().post(new PostCommentEvent(commentText,userId,postId));
+
+            commentsAdapter.addItem(commentText,avatar,name);
             commentsAdapter.setAnimationsLocked(false);
             commentsAdapter.setDelayEnterAnimation(false);
-            rvComments.smoothScrollBy(0, rvComments.getChildAt(0).getHeight() * commentsAdapter.getItemCount());
+
+            int someHeight;
+            if(rvComments.getChildAt(0) == null)
+                someHeight = 0;
+            else
+                someHeight = rvComments.getChildAt(0).getHeight();
+
+            rvComments.smoothScrollBy(0, someHeight * commentsAdapter.getItemCount());
 
             etComment.setText(null);
             btnSendComment.setCurrentState(SendCommentButton.STATE_DONE);
         }
+    }
+
+    @Subscribe public void onPostCommentSuccess(PostCommentSuccessEvent event) {
+        ApiBus.getInstance().post(new RefreshEvent());
+        Toast.makeText(getApplicationContext(),"Success comment",Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe public void onGetStorySuccess(GetStorySuccessEvent event) {
+        commentList.addAll(event.getPost().comment);
+        startIntroAnimation();
+        //commentsAdapter.notifyDataSetChanged();
+
     }
 
     private boolean validateComment() {

@@ -23,6 +23,9 @@ import co.aquario.socialkit.event.LoginEvent;
 import co.aquario.socialkit.event.LoginFailedAuthEvent;
 import co.aquario.socialkit.event.LoginSuccessEvent;
 import co.aquario.socialkit.event.LogoutEvent;
+import co.aquario.socialkit.event.PostCommentDataResponse;
+import co.aquario.socialkit.event.PostCommentEvent;
+import co.aquario.socialkit.event.PostCommentSuccessEvent;
 import co.aquario.socialkit.event.RegisterEvent;
 import co.aquario.socialkit.event.RegisterFailedEvent;
 import co.aquario.socialkit.event.RegisterSuccessEvent;
@@ -171,6 +174,25 @@ public class ApiHandlerVM {
 
         });
 
+    }
+
+    @Subscribe public void onPostComment(PostCommentEvent event) {
+        Map<String, String> options = new HashMap<String, String>();
+
+        options.put("timeline_id", event.getUserId());
+        options.put("text", event.getPostText());
+
+        api.postComment(Integer.parseInt(event.getPostId()),options,new Callback<PostCommentDataResponse>() {
+            @Override
+            public void success(PostCommentDataResponse postCommentDataResponse, Response response) {
+                ApiBus.getInstance().post(new PostCommentSuccessEvent());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
     }
 
     @Subscribe public void onGetUserProfile(GetUserProfileEvent event) {
@@ -325,4 +347,6 @@ public class ApiHandlerVM {
 
 
     }
+
+
 }
