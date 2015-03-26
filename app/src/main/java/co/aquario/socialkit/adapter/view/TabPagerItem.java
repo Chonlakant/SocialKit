@@ -21,7 +21,8 @@ public class TabPagerItem {
                 new FeedFragment().newInstance(title.toString()),
                 new FriendFragment().newInstance("FOLLOWER",userId),
                 new FriendFragment().newInstance("FOLLOWING",userId),
-                new FriendFragment().newInstance("FRIEND",userId)};
+                new FriendFragment().newInstance("FRIEND",userId),
+                new FeedFragment().newInstance(title.toString())};
 
     }
 

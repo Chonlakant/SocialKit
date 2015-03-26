@@ -207,8 +207,11 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     }
 
     @Subscribe public void onGetStorySuccess(GetStorySuccessEvent event) {
-        commentList.addAll(event.getPost().comment);
-        animateContent();
+        if(event.getPost().comment != null) {
+            commentList.addAll(event.getPost().comment);
+            animateContent();
+        }
+
         //commentsAdapter.notifyDataSetChanged();
     }
 
