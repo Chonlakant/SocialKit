@@ -24,6 +24,7 @@
     <string name="following">FOLLOWING</string>
     <string name="follower">FOLLOWER</string>
     <string name="friend">FRIEND</string>
+    <string name="page">PAGE</string>
 
     <string name="add_attention">Follow</string>
     <string name="user_post">POSTS</string>

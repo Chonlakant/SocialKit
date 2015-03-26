@@ -53,6 +53,10 @@ public interface ApiServiceVM {
     public void getFriend(@Path("id") int id,@QueryMap Map<String, String> options,
                             Callback<FriendListDataResponse> responseJson);
 
+    @POST("/1.0/pages/{id}")
+    public void getPage(@Path("id") int id,@QueryMap Map<String, String> options,
+                          Callback<FriendListDataResponse> responseJson);
+
     @GET("/story/{id}")
     public void getStory(@Path("id") int id,
                          Callback<StoryDataResponse> responseJson);

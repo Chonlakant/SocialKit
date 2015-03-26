@@ -45,7 +45,7 @@ public class ViewPagerFragment extends BaseFragment {
         mTabs.add(new TabPagerItem(1, getString(R.string.follower),userId));
         mTabs.add(new TabPagerItem(2, getString(R.string.following),userId));
         mTabs.add(new TabPagerItem(3, getString(R.string.friend),userId));
-        mTabs.add(new TabPagerItem(4, getString(R.string.post),userId));
+        mTabs.add(new TabPagerItem(4, getString(R.string.page),userId));
 
     }
 

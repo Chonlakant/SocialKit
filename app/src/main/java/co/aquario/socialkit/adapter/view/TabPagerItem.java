@@ -22,7 +22,7 @@ public class TabPagerItem {
                 new FriendFragment().newInstance("FOLLOWER",userId),
                 new FriendFragment().newInstance("FOLLOWING",userId),
                 new FriendFragment().newInstance("FRIEND",userId),
-                new FeedFragment().newInstance(title.toString())};
+                new FriendFragment().newInstance("PAGE",userId)};
 
     }
 

@@ -385,6 +385,28 @@ public class ApiHandlerVM {
                     }
                 });
                 break;
+            case "PAGE":
+                api.getPage(event.getUserId(), options, new Callback<FriendListDataResponse>() {
+                    @Override
+                    public void success(FriendListDataResponse friendListDataResponse, Response response) {
+                        Log.e("friendListDataResponse", friendListDataResponse.status);
+                        if (friendListDataResponse.status.equals("1")) {
+                            //Log.e("timelineDataResponse", response.getBody().toString());
+                            ApiBus.getInstance().post(new LoadFriendListSuccessEvent(friendListDataResponse,event.getType()));
+
+                        } else {
+                            //MainApplication.get(this).getPrefManager().isLogin().put(false);
+                            Log.e("LOGOUT!", "LOG OUT LAEW");
+                            ApiBus.getInstance().post(new LogoutEvent());
+                        }
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Log.e("error", error.toString());
+                    }
+                });
+                break;
         }
 
 
