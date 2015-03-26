@@ -26,6 +26,10 @@ import co.aquario.socialkit.event.LogoutEvent;
 import co.aquario.socialkit.event.PostCommentDataResponse;
 import co.aquario.socialkit.event.PostCommentEvent;
 import co.aquario.socialkit.event.PostCommentSuccessEvent;
+import co.aquario.socialkit.event.PostLoveEvent;
+import co.aquario.socialkit.event.PostLoveSuccessEvent;
+import co.aquario.socialkit.event.PostShareEvent;
+import co.aquario.socialkit.event.PostShareSuccessEvent;
 import co.aquario.socialkit.event.RegisterEvent;
 import co.aquario.socialkit.event.RegisterFailedEvent;
 import co.aquario.socialkit.event.RegisterSuccessEvent;
@@ -186,6 +190,44 @@ public class ApiHandlerVM {
             @Override
             public void success(PostCommentDataResponse postCommentDataResponse, Response response) {
                 ApiBus.getInstance().post(new PostCommentSuccessEvent());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe public void onPostShare(PostShareEvent event) {
+        Map<String, String> options = new HashMap<String, String>();
+
+        options.put("timeline_id", event.getUserId());
+        //options.put("text", event.getPostText());
+
+        api.postShare(Integer.parseInt(event.getPostId()), options, new Callback<PostCommentDataResponse>() {
+            @Override
+            public void success(PostCommentDataResponse postCommentDataResponse, Response response) {
+                ApiBus.getInstance().post(new PostShareSuccessEvent());
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
+    @Subscribe public void onPostLove(PostLoveEvent event) {
+        Map<String, String> options = new HashMap<String, String>();
+
+        options.put("timeline_id", event.getUserId());
+        //options.put("text", event.getPostText());
+
+        api.postLove(Integer.parseInt(event.getPostId()), options, new Callback<PostCommentDataResponse>() {
+            @Override
+            public void success(PostCommentDataResponse postCommentDataResponse, Response response) {
+                ApiBus.getInstance().post(new PostLoveSuccessEvent());
             }
 
             @Override

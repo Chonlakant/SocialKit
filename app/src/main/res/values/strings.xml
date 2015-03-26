@@ -32,4 +32,8 @@
     <string name="user_des">MY DESC DESC DESC</string>
     <string name="user_recommend_tip">MY TIP</string>
     <string name="title_activity_post_youtube">PostYoutubeActivity</string>
+
+    <string name="name">Cool Name</string>
+    <string name="title_activity_profile_activity_test">ProfileActivity</string>
+
 </resources>

@@ -64,6 +64,12 @@ public interface ApiServiceVM {
     @POST("/1.0/posts/{id}/comment")
     public void postComment(@Path("id") int postId,@QueryMap Map<String, String> options,Callback<PostCommentDataResponse> responseCallback);
 
+    @POST("/1.0/posts/{id}/love")
+    public void postLove(@Path("id") int postId,@QueryMap Map<String, String> options,Callback<PostCommentDataResponse> responseCallback);
+
+    @POST("/1.0/posts/{id}/share")
+    public void postShare(@Path("id") int postId,@QueryMap Map<String, String> options,Callback<PostCommentDataResponse> responseCallback);
+
 
 
     /*

@@ -16,7 +16,7 @@ import android.widget.Toast;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.fragment.FeedFragment;
 import co.aquario.socialkit.fragment.ViewPagerFragment;
-import co.aquario.socialkit.widget.PullScrollView;
+import co.aquario.socialkit.view.PullScrollView;
 
 
 /**

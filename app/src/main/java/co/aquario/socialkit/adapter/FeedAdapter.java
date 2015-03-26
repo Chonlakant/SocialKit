@@ -1,5 +1,6 @@
 package co.aquario.socialkit.adapter;
 
+import android.animation.AnimatorSet;
 import android.app.Activity;
 import android.content.Intent;
 import android.support.v4.app.FragmentManager;
@@ -23,6 +24,8 @@ import org.ocpsoft.prettytime.PrettyTime;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.CommentsActivity;
@@ -31,12 +34,17 @@ import co.aquario.socialkit.activity.VideoViewNativeActivity;
 import co.aquario.socialkit.activity.YoutubeActivity;
 import co.aquario.socialkit.fragment.FeedFragment;
 import co.aquario.socialkit.fragment.PhotoZoomFragment;
+import co.aquario.socialkit.fragment.ProfileDetailFragment;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
 import co.aquario.socialkit.widget.RoundedTransformation;
 
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
+
+    private final Map<Integer, Integer> likesCount = new HashMap<>();
+    private final Map<RecyclerView.ViewHolder, AnimatorSet> likeAnimations = new HashMap<>();
+    private final ArrayList<Integer> likedPositions = new ArrayList<>();
 
     private ArrayList<PostStory> list = new ArrayList<>();
     private static Activity mActivity;
@@ -355,10 +363,14 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
                     break;
                 case R.id.profile_name:
                 case R.id.avatar:
-                    //Intent intent = new Intent(mActivity, MainProfileFriends.class);
-                    //mActivity.startActivity(intent);
+                    ProfileDetailFragment fragment = new ProfileDetailFragment().newInstance(post.author.id);
+                    FragmentManager manager = ((ActionBarActivity) mActivity).getSupportFragmentManager();
+                    FragmentTransaction transaction = manager.beginTransaction();
+                    transaction.replace(R.id.sub_container, fragment).addToBackStack(null);
+                    transaction.commit();
                     break;
                 case R.id.btn_love:
+
                     if (mItemLove != null) {
                         mItemLove.onItemClick(v, getPosition());
                     }
@@ -381,6 +393,71 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         }
 
     }
+
+    /*
+
+    private void updateLikesCounter(ViewHolder holder, boolean animated) {
+        holder.getPosition()
+        int currentLikesCount = Integer.parseInt() + 1
+        String likesCountText = context.getResources().getQuantityString(
+                R.plurals.likes_count, currentLikesCount, currentLikesCount
+        );
+
+        if (animated) {
+            holder.tsLikesCounter.setText(likesCountText);
+        } else {
+            holder.tsLikesCounter.setCurrentText(likesCountText);
+        }
+
+        likesCount.put(holder.getPosition(), currentLikesCount);
+    }
+
+    private void updateHeartButton(final ViewHolder holder, boolean animated) {
+        if (animated) {
+            if (!likeAnimations.containsKey(holder)) {
+                AnimatorSet animatorSet = new AnimatorSet();
+                likeAnimations.put(holder, animatorSet);
+
+                ObjectAnimator rotationAnim = ObjectAnimator.ofFloat(holder.btnLike, "rotation", 0f, 360f);
+                rotationAnim.setDuration(300);
+                rotationAnim.setInterpolator(ACCELERATE_INTERPOLATOR);
+
+                ObjectAnimator bounceAnimX = ObjectAnimator.ofFloat(holder.btnLike, "scaleX", 0.2f, 1f);
+                bounceAnimX.setDuration(300);
+                bounceAnimX.setInterpolator(OVERSHOOT_INTERPOLATOR);
+
+                ObjectAnimator bounceAnimY = ObjectAnimator.ofFloat(holder.btnLike, "scaleY", 0.2f, 1f);
+                bounceAnimY.setDuration(300);
+                bounceAnimY.setInterpolator(OVERSHOOT_INTERPOLATOR);
+                bounceAnimY.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationStart(Animator animation) {
+                        holder.btnLike.setImageResource(R.drawable.ic_heart_red);
+                    }
+                });
+
+                animatorSet.play(rotationAnim);
+                animatorSet.play(bounceAnimX).with(bounceAnimY).after(rotationAnim);
+
+                animatorSet.addListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        resetLikeAnimationState(holder);
+                    }
+                });
+
+                animatorSet.start();
+            }
+        } else {
+            if (likedPositions.contains(holder.getPosition())) {
+                holder.btnLike.setImageResource(R.drawable.ic_heart_red);
+            } else {
+                holder.btnLike.setImageResource(R.drawable.ic_heart_outline_grey);
+            }
+        }
+    }
+
+    */
 
 
     public interface OnItemClickListener {

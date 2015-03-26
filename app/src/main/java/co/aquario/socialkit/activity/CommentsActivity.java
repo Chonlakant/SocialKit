@@ -3,11 +3,9 @@ package co.aquario.socialkit.activity;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -32,7 +30,6 @@ import co.aquario.socialkit.event.GetStoryEvent;
 import co.aquario.socialkit.event.GetStorySuccessEvent;
 import co.aquario.socialkit.event.PostCommentEvent;
 import co.aquario.socialkit.event.PostCommentSuccessEvent;
-import co.aquario.socialkit.event.RefreshEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.CommentStory;
 import co.aquario.socialkit.util.PrefManager;
@@ -45,12 +42,12 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     public static final String ARG_COMMENT_LIST = "arg_comment_list";
 
     @Optional
-    @InjectView(R.id.toolbar)
-    Toolbar toolbar;
+    //@InjectView(R.id.toolbar)
+    //Toolbar toolbar;
 
-    public Toolbar getToolbar() {
-        return toolbar;
-    }
+    //public Toolbar getToolbar() {
+        //return toolbar;
+    //}
 
     @InjectView(R.id.contentRoot)
     LinearLayout contentRoot;
@@ -133,7 +130,7 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     }
 
     private void startIntroAnimation() {
-        ViewCompat.setElevation(getToolbar(), 0);
+        //ViewCompat.setElevation(getToolbar(), 0);
         contentRoot.setScaleY(0.1f);
         contentRoot.setPivotY(drawingStartLocation);
         llAddComment.setTranslationY(200);
@@ -145,7 +142,7 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
                 .setListener(new AnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(Animator animation) {
-                        ViewCompat.setElevation(getToolbar(), Utils.dpToPx(8));
+                        //ViewCompat.setElevation(getToolbar(), Utils.dpToPx(8));
                         animateContent();
                     }
                 })
@@ -164,7 +161,7 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     @Override
     public void onBackPressed() {
 
-        ViewCompat.setElevation(getToolbar(), 0);
+        //ViewCompat.setElevation(getToolbar(), 0);
         contentRoot.animate()
                 .translationY(Utils.getScreenHeight(this))
                 .setDuration(200)
@@ -205,15 +202,14 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
     }
 
     @Subscribe public void onPostCommentSuccess(PostCommentSuccessEvent event) {
-        ApiBus.getInstance().post(new RefreshEvent());
+        //ApiBus.getInstance().post(new RefreshEvent());
         Toast.makeText(getApplicationContext(),"Success comment",Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe public void onGetStorySuccess(GetStorySuccessEvent event) {
         commentList.addAll(event.getPost().comment);
-        startIntroAnimation();
+        animateContent();
         //commentsAdapter.notifyDataSetChanged();
-
     }
 
     private boolean validateComment() {
@@ -221,7 +217,6 @@ public class CommentsActivity extends ActionBarActivity implements SendCommentBu
             btnSendComment.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake_error));
             return false;
         }
-
         return true;
     }
 }

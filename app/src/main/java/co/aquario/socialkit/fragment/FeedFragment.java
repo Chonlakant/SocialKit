@@ -49,12 +49,18 @@ import co.aquario.socialkit.adapter.FeedAdapter;
 import co.aquario.socialkit.event.LoadTimelineEvent;
 import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
 import co.aquario.socialkit.event.LogoutEvent;
+import co.aquario.socialkit.event.PostCommentSuccessEvent;
+import co.aquario.socialkit.event.PostLoveEvent;
+import co.aquario.socialkit.event.PostLoveSuccessEvent;
+import co.aquario.socialkit.event.PostShareEvent;
+import co.aquario.socialkit.event.PostShareSuccessEvent;
 import co.aquario.socialkit.event.RefreshEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
 import co.aquario.socialkit.soundcloud.SoundCloudService;
 import co.aquario.socialkit.util.PrefManager;
 import co.aquario.socialkit.widget.EndlessRecyclerOnScrollListener;
+import jp.wasabeef.recyclerview.animators.ScaleInBottomAnimator;
 
 
 public class FeedFragment extends BaseFragment {
@@ -101,6 +107,8 @@ public class FeedFragment extends BaseFragment {
     private boolean isHomeTimeline = true;
     private static final String TYPE = "";
     private static final int PER_PAGE = 20;
+
+    PrefManager pref;
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
@@ -181,7 +189,7 @@ public class FeedFragment extends BaseFragment {
 		// TODO Auto-generated method stub		
 		View rootView = inflater.inflate(R.layout.fragment_feed, container, false);
 
-        PrefManager pref = MainApplication.get(getActivity()).getPrefManager();
+        pref = MainApplication.get(getActivity()).getPrefManager();
         userId = pref.userId().getOr("6");
 
         Log.e("userId",userId);
@@ -294,19 +302,29 @@ public class FeedFragment extends BaseFragment {
         adapter.OnItemLoveClick(new FeedAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(),"Love",Toast.LENGTH_SHORT).show();
+
+                ApiBus.getInstance().post(new PostLoveEvent(pref.userId().getOr("6"),list.get(position).postId));
             }
         });
 
         adapter.OnItemShareClick(new FeedAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getActivity(),"Share",Toast.LENGTH_SHORT).show();
+
+                ApiBus.getInstance().post(new PostShareEvent(pref.userId().getOr("6"),list.get(position).postId));
             }
         });
 
         RecyclerView recList = (RecyclerView) rootView.findViewById(R.id.scroll);
         recList.setHasFixedSize(true);
+
+        //animate recyclerview
+        recList.setItemAnimator(new ScaleInBottomAnimator());
+        recList.getItemAnimator().setAddDuration(1000);
+        recList.getItemAnimator().setRemoveDuration(1000);
+        recList.getItemAnimator().setMoveDuration(1000);
+        recList.getItemAnimator().setChangeDuration(1000);
+
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
@@ -414,6 +432,19 @@ public class FeedFragment extends BaseFragment {
         Intent login = new Intent(getActivity(), LoginActivity.class);
         startActivity(login);
         getActivity().finish();
+    }
+
+    @Subscribe public void onPostLoveSuccessEvent(PostLoveSuccessEvent event) {
+        Toast.makeText(getActivity(), "Loved", Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Subscribe public void onPostShareSuccessEvent(PostShareSuccessEvent event) {
+        Toast.makeText(getActivity(), "Shared", Toast.LENGTH_SHORT).show();
+    }
+
+    @Subscribe public void onPostCommentSuccessEvent(PostCommentSuccessEvent event) {
+        //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
     }
 
     /*

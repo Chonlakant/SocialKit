@@ -122,6 +122,7 @@
     <orderEntry type="library" exported="" name="google-api-client-android-1.20.0" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="snackbar-2.9.0" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-animators-1.1.2" level="project" />
     <orderEntry type="library" exported="" name="palette-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="httpclient-4.3.6" level="project" />
     <orderEntry type="library" exported="" name="YouTubeAndroidPlayerApi" level="project" />
@@ -131,8 +132,8 @@
     <orderEntry type="library" exported="" name="material-dialogs-0.6.3.5" level="project" />
     <orderEntry type="library" exported="" name="google-api-client-gson-1.20.0" level="project" />
     <orderEntry type="library" exported="" name="fragmenttransactionextended-1" level="project" />
-    <orderEntry type="library" exported="" name="google-api-client-1.20.0" level="project" />
     <orderEntry type="library" exported="" name="gson-2.2.4" level="project" />
+    <orderEntry type="library" exported="" name="google-api-client-1.20.0" level="project" />
     <orderEntry type="library" exported="" name="google-api-services-youtube-v3-rev120-1.19.0" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-21.0.3" level="project" />
     <orderEntry type="library" exported="" name="RoundCornerProgressBar-1.1.0" level="project" />

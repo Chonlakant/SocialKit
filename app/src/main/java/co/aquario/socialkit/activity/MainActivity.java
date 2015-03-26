@@ -114,48 +114,21 @@ public class MainActivity extends ActionBarActivity {
                         if(((Nameable) drawerItem).getName().equals("Channels")) {
 
                             ChannelFragment fragment = new ChannelFragment();
-                            /*
-                            FragmentManager manager = getSupportFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
-                            transaction.commit();
-                            */
-
                             getSupportFragmentManager().beginTransaction().replace(R.id.sub_container, fragment,"CHANNEL_MAIN").addToBackStack(null).commit();
 
                         } else if(((Nameable) drawerItem).getName().equals("Social")) {
 
                             SocialFragment fragment = new SocialFragment();
-                            /*
-                            FragmentManager manager = getSupportFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
-                            transaction.commit();
-                            */
-
                             getSupportFragmentManager().beginTransaction().replace(R.id.sub_container, fragment,"SOCIAL_MAIN").addToBackStack(null).commit();
 
                         } else if(((Nameable) drawerItem).getName().equals("Videos")) {
 
 
                             VideoListFragment fragment = new VideoListFragment();
-                             /*
-                            FragmentManager manager = getSupportFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
-                            transaction.commit();
-                            */
-
                             getSupportFragmentManager().beginTransaction().replace(R.id.sub_container, fragment,"VIDEO_MAIN").addToBackStack(null).commit();
 
                         } else if(((Nameable) drawerItem).getName().equals("Photos")) {
                             PhotoFragmentGrid fragment = new PhotoFragmentGrid();
-                            /*
-                            FragmentManager manager = getSupportFragmentManager();
-                            FragmentTransaction transaction = manager.beginTransaction();
-                            transaction.add(R.id.sub_container, fragment).addToBackStack(null);
-                            transaction.commit();
-                            */
 
                             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.sub_container, fragment,"PHOTO_MAIN");
@@ -174,7 +147,7 @@ public class MainActivity extends ActionBarActivity {
                             Intent login = new Intent(MainActivity.this, SlidingUpRecyclerViewActivity.class);
                             startActivity(login);
                         } else if(((Nameable) drawerItem).getName().equals("Setting")) {
-                            Intent channel = new Intent(MainActivity.this, ProfileActivity.class);
+                            Intent channel = new Intent(MainActivity.this, ProfileActivity_test.class);
                             startActivity(channel);
                         } else if(((Nameable) drawerItem).getName().equals("Log Out")) {
                             MainApplication.logout();

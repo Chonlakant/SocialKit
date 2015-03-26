@@ -82,7 +82,6 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
 
         authorName.setText(name);
 
-
         Picasso.with(getApplication())
                 .load(avatar)
                 .centerCrop()
@@ -91,7 +90,6 @@ public class YoutubeActivity extends YouTubeBaseActivity implements YouTubePlaye
                 .into(authorAvatar);
 
         youTubePlayerView.initialize(API_KEY, this);
-
 
     }
 

@@ -132,14 +132,14 @@
         </activity>
         <activity
             android:name=".activity.TakePhotoActivity"
+            android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActivity.FullScreen"
-            android:label=""/>
+            android:theme="@style/AppTheme.TransparentActivity.FullScreen" />
         <activity android:name=".activity.ProfileActivity" />
         <activity
             android:name=".activity.PostYoutubeActivity"
             android:label="Youtube"
-            android:theme="@style/AppTheme2">
+            android:theme="@style/AppTheme2" >
         </activity>
         <activity
             android:name=".activity.SoundCloudActivity"
@@ -156,17 +156,14 @@
             android:label="Write Post"
             android:theme="@style/AppTheme2" >
         </activity>
-
-        <activity
-            android:name=".fragment.ProfileDetailFragment"
-            android:label="Write Post"
-            android:theme="@style/AppTheme2" >
-        </activity>
-
         <activity
             android:name=".activity.CommentsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.TransparentActivity" />
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".activity.ProfileActivity_test"
+            android:label="@string/title_activity_profile_activity_test" >
+        </activity>
     </application>
 
 </manifest>

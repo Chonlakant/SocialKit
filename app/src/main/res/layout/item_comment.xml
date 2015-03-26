@@ -21,14 +21,16 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="fill_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:theme="@style/AppTheme2">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="Medium Text"
-                android:id="@+id/tvName" />
+                android:id="@+id/tvName"
+                android:textColor="@color/material_drawer_primary_text" />
 
             <TextView
                 android:id="@+id/tvComment"
@@ -37,7 +39,8 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
                 android:layout_weight="1"
-                android:text="Lorem ipsum dolor sit amet" />
+                android:text="Lorem ipsum dolor sit amet"
+                android:textColor="@color/material_drawer_secondary_text" />
 
         </LinearLayout>
 
