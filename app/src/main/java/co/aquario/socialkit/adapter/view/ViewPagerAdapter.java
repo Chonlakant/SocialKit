@@ -37,13 +37,13 @@ public class ViewPagerAdapter extends FragmentPagerAdapter implements PagerSlidi
     public int getPageIconResId(int i) {
         switch (i) {
             case 0:
-                return R.drawable.ic_action_news;
+                return R.drawable.ic_action_post;
             case 1:
-                return R.drawable.ic_action_users;
+                return R.drawable.ic_action_follower;
             case 2:
-                return R.drawable.ic_action_users;
+                return R.drawable.ic_action_following;
             case 3:
-                return R.drawable.ic_action_users;
+                return R.drawable.ic_action_friend;
             case 4:
                 return R.drawable.ic_heart_outline_grey;
         }

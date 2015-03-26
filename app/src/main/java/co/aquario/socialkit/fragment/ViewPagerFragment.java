@@ -69,19 +69,25 @@ public class ViewPagerFragment extends BaseFragment {
 
         PagerSlidingTabStrip mSlidingTabLayout = (PagerSlidingTabStrip) view.findViewById(R.id.tabs);
         //mSlidingTabLayout.setTextColorResource(R.color.white);
-        mSlidingTabLayout.setViewPager(mViewPager);
+
+        mSlidingTabLayout.setAllCaps(false);
+        mSlidingTabLayout.setShouldExpand(true);
+        //mSlidingTabLayout.setFillViewport(true);
+        //mSlidingTabLayout.setDistributeEvenly(true)
 
         mSlidingTabLayout.setBackgroundResource(R.color.white);
 
         mSlidingTabLayout.setIndicatorColorResource(R.color.indigo_700);
         mSlidingTabLayout.setDividerColor(getResources().getColor(android.R.color.transparent));
 
+        mSlidingTabLayout.setViewPager(mViewPager);
+
+
         mTabsLinearLayout = ((LinearLayout) mSlidingTabLayout.getChildAt(0));
         ImageButton ib = (ImageButton) mTabsLinearLayout.getChildAt(0);
         ib.setImageResource(R.drawable.ic_action_news_highlighted);
 
-        mSlidingTabLayout.setAllCaps(false);
-        mSlidingTabLayout.setShouldExpand(true);
+
 
         mSlidingTabLayout.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -96,33 +102,31 @@ public class ViewPagerFragment extends BaseFragment {
                     switch (i){
                         case 0:
                             if(i == position)
-                                ib.setImageResource(R.drawable.ic_action_news_highlighted);
+                                ib.setImageResource(R.drawable.ic_action_post_highlighted);
                             else
-                                ib.setImageResource(R.drawable.ic_action_news);
+                                ib.setImageResource(R.drawable.ic_action_post);
                             break;
                         case 1:
                             if(i == position)
-                                ib.setImageResource(R.drawable.ic_action_users_highlighted);
+                                ib.setImageResource(R.drawable.ic_action_follower_highlighted);
                             else
-                                ib.setImageResource(R.drawable.ic_action_users);
+                                ib.setImageResource(R.drawable.ic_action_follower);
                             break;
                         case 2:
                             if(i == position)
-                                ib.setImageResource(R.drawable.ic_action_users_highlighted);
+                                ib.setImageResource(R.drawable.ic_action_following_highlighted);
                             else
-                                ib.setImageResource(R.drawable.ic_action_users);
+                                ib.setImageResource(R.drawable.ic_action_following);
                             break;
                         case 3:
                             if(i == position)
-                                ib.setImageResource(R.drawable.ic_action_users_highlighted);
+                                ib.setImageResource(R.drawable.ic_action_friend_highlighted);
                             else
-                                ib.setImageResource(R.drawable.ic_action_users);
+                                ib.setImageResource(R.drawable.ic_action_friend);
                             break;
-
                         case 4:
                             if(i == position)
                                 ib.setImageResource(R.drawable.ic_heart_red);
-
                             else
                                 ib.setImageResource(R.drawable.ic_heart_outline_grey);
                             break;

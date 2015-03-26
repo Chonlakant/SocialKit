@@ -85,7 +85,6 @@ public class MainActivity extends ActionBarActivity {
         result = new Drawer()
                 .withActivity(this)
                 .withToolbar(toolbar)
-
                 .withHeader(R.layout.header)
                 .withActionBarDrawerToggle(true)
                 .withTranslucentStatusBar(true)
@@ -147,8 +146,7 @@ public class MainActivity extends ActionBarActivity {
                             Intent login = new Intent(MainActivity.this, SlidingUpRecyclerViewActivity.class);
                             startActivity(login);
                         } else if(((Nameable) drawerItem).getName().equals("Setting")) {
-                            Intent channel = new Intent(MainActivity.this, ProfileActivity_test.class);
-                            startActivity(channel);
+
                         } else if(((Nameable) drawerItem).getName().equals("Log Out")) {
                             MainApplication.logout();
                             Intent login = new Intent(MainActivity.this, LoginActivity.class);

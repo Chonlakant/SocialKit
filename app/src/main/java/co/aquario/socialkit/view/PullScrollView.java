@@ -142,8 +142,16 @@ public class PullScrollView extends ScrollView {
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if (ev.getAction() == MotionEvent.ACTION_DOWN) {
             mTouchDownY = ev.getY();
-            mCurrentTop = mInitTop = mHeader.getTop();
-            mCurrentBottom = mInitBottom = mHeader.getBottom();
+            if(mHeader == null)
+                mCurrentTop = mInitTop = 0;
+            else
+                mCurrentTop = mInitTop = mHeader.getTop();
+
+            if(mHeader == null)
+                mCurrentBottom = mInitBottom = 0;
+            else
+                mCurrentBottom = mInitBottom = mHeader.getBottom();
+
         }
         return super.onInterceptTouchEvent(ev);
     }

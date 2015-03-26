@@ -4,15 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mikepenz.materialdrawer.view.CircularImageView;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -24,13 +26,17 @@ import co.aquario.socialkit.event.LoadTimelineEvent;
 import co.aquario.socialkit.event.LoadTimelineSuccessEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.PostStory;
+import co.aquario.socialkit.view.PullScrollView;
+import co.aquario.socialkit.widget.RoundedTransformation;
 
 
 public class ProfileDetailFragment extends BaseFragment {
-    CircularImageView avatar;
+    ImageView avatar;
     ImageView cover;
     TextView titleTv;
     TextView usernameTv;
+    TextView bioTv;
+    PullScrollView scrollView;
 
     String imageTitle;
     String nameTitle;
@@ -47,6 +53,8 @@ public class ProfileDetailFragment extends BaseFragment {
 
     public static String USER_ID = "userId";
 
+
+
     public static ProfileDetailFragment newInstance(String userId){
         ProfileDetailFragment mFragment = new ProfileDetailFragment();
         Bundle mBundle = new Bundle();
@@ -61,8 +69,20 @@ public class ProfileDetailFragment extends BaseFragment {
         if (getArguments() != null) {
             userId = getArguments().getString(USER_ID);
         } else {
-            userId = prefManager.userId().getOr("1301");
+            userId = prefManager.userId().getOr("3");
         }
+
+        Log.v("profileDetailuserId",userId + "");
+        ApiBus.getInstance().post(new GetUserProfileEvent(userId));
+        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId), TYPE, 1, PER_PAGE, isHomeTimeline));
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ApiBus.getInstance().post(new GetUserProfileEvent(userId));
     }
 
     @Override
@@ -87,10 +107,22 @@ public class ProfileDetailFragment extends BaseFragment {
         username = (String) b.get("username");
         */
 
+        /*
         titleTv = (TextView) rootView.findViewById(R.id.name_title);
         usernameTv = (TextView) rootView.findViewById(R.id.name_username);
         avatar = (CircularImageView) rootView.findViewById(R.id.avatar);
         cover = (ImageView) rootView.findViewById(R.id.cover);
+        */
+
+        titleTv = (TextView) rootView.findViewById(R.id.user_name);
+        usernameTv = (TextView) rootView.findViewById(R.id.user_username);
+        bioTv = (TextView) rootView.findViewById(R.id.user_des);
+        avatar = (ImageView) rootView.findViewById(R.id.user_avatar);
+        cover = (ImageView) rootView.findViewById(R.id.user_cover);
+
+        scrollView = (PullScrollView) rootView.findViewById(R.id.scroll_view);
+        RelativeLayout head = (RelativeLayout) rootView.findViewById(R.id.scroll_view_head);
+        scrollView.setHeader(head);
 
         /*
 
@@ -121,19 +153,16 @@ public class ProfileDetailFragment extends BaseFragment {
         });
 
         recyclerView.setAdapter(adapter);
-        ApiBus.getInstance().register(this);
-        Log.v("profileDetailuserId",userId + "");
-        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId),TYPE,1,PER_PAGE,isHomeTimeline));
-        ApiBus.getInstance().post(new GetUserProfileEvent(userId));
 
         return rootView;
     }
 
     @Subscribe
     public void onLoadProfile(GetUserProfileSuccessEvent event) {
-        /*
-        titleTv.setText(event.getUser().name);
-        usernameTv.setText("@" + event.getUser().username);
+
+        titleTv.setText(event.getUser().getName());
+        usernameTv.setText("@" + event.getUser().getUsername());
+        bioTv.setText(Html.fromHtml(event.getUser().getAbout()));
 
         Picasso.with(getActivity())
                 .load(event.getUser().getCoverUrl())
@@ -142,8 +171,11 @@ public class ProfileDetailFragment extends BaseFragment {
 
         Picasso.with(getActivity())
                 .load(event.getUser().getAvatarUrl())
+                .centerCrop()
+                .resize(100, 100)
+                .transform(new RoundedTransformation(50, 4))
                 .into(avatar);
-                */
+
 
     }
 

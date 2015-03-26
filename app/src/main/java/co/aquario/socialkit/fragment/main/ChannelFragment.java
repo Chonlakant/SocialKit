@@ -3,12 +3,17 @@ package co.aquario.socialkit.fragment.main;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.GridView;
 
 import com.androidquery.AQuery;
@@ -29,9 +34,8 @@ import co.aquario.socialkit.model.Channel;
 import co.aquario.socialkit.widget.EndlessListOnScrollListener;
 
 
-public class ChannelFragment extends BaseFragment
-        {
-    String channelUrl = "http://api.vdomax.com/search/channel/a+?from=0&limit=20";
+public class ChannelFragment extends BaseFragment {
+    String channelUrl = "http://api.vdomax.com/search/channel/a?from=0&limit=20";
     String liveChannelUrl = "https://www.vdomax.com/ajax.php?t=getLiveChannel&user=";
 
     ArrayList<Channel> list = new ArrayList<Channel>();
@@ -46,12 +50,59 @@ public class ChannelFragment extends BaseFragment
     ChannelFragment fragment;
     char[] alphabet = "abcdefghijklmnopqrstuvwxyz".toCharArray();
 
-    public static ChannelFragment newInstance(String userId){
+    public static ChannelFragment newInstance(String userId) {
         ChannelFragment mFragment = new ChannelFragment();
         Bundle mBundle = new Bundle();
-        mBundle.putString(USER_ID,userId);
+        mBundle.putString(USER_ID, userId);
         mFragment.setArguments(mBundle);
         return mFragment;
+    }
+
+    boolean mSearchCheck = false;
+
+    private SearchView.OnQueryTextListener onQuerySearchView = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String s) {
+            isRefresh = true;
+            String searchChannelUrl = "http://api.vdomax.com/search/channel/"+s+"?from=0&limit=20";
+            aq.ajax(searchChannelUrl, JSONObject.class, fragment, "getJson");
+            Log.e("onQueryTextSubmit",s);
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String s) {
+            isRefresh = true;
+            String searchChannelUrl = "http://api.vdomax.com/search/channel/"+s+"?from=0&limit=20";
+            aq.ajax(searchChannelUrl, JSONObject.class, fragment, "getJson");
+            Log.e("onQueryTextChange",s);
+
+            if (mSearchCheck){
+
+                // implement your search here
+            }
+            return false;
+        }
+    };
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // TODO Auto-generated method stub
+        super.onCreateOptionsMenu(menu, inflater);
+
+        inflater.inflate(R.menu.menu, menu);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.menu_search));
+        searchView.setQueryHint("Search channel");
+
+        ((EditText) searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text))
+                .setHintTextColor(getResources().getColor(android.R.color.white));
+        searchView.setOnQueryTextListener(onQuerySearchView);
+
+        //menu.findItem(R.id.menu_add).setVisible(true);
+        menu.findItem(R.id.menu_search).setVisible(true);
+        mSearchCheck = false;
+
     }
 
     @Override
@@ -69,7 +120,7 @@ public class ChannelFragment extends BaseFragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_channel, container, false);
-        rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT ));
+        rootView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         aq = new AQuery(getActivity(), rootView);
         return rootView;
@@ -101,10 +152,10 @@ public class ChannelFragment extends BaseFragment
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getActivity(), SlidingUpRecyclerViewActivity.class);
                 i.putExtra("userId", list.get(position).id);
-                i.putExtra("avatar",list.get(position).getAvatarUrl());
-                i.putExtra("cover",list.get(position).getCoverUrl());
-                i.putExtra("name",list.get(position).name);
-                i.putExtra("username",list.get(position).username);
+                i.putExtra("avatar", list.get(position).getAvatarUrl());
+                i.putExtra("cover", list.get(position).getCoverUrl());
+                i.putExtra("name", list.get(position).name);
+                i.putExtra("username", list.get(position).username);
                 getActivity().startActivity(i);
             }
         });
@@ -114,7 +165,7 @@ public class ChannelFragment extends BaseFragment
             public void onLoadMore(int page, int totalItemsCount) {
                 currentPage = page;
                 isRefresh = false;
-                String loadMoreUrl = "http://api.vdomax.com/search/channel/" + alphabet[page] + "?from=" + page + "&limit=10";
+                String loadMoreUrl = "http://api.vdomax.com/search/channel/" + alphabet[page] + "?from=" + page + "&limit=20";
                 if (!isLoadding)
                     aq.ajax(loadMoreUrl, JSONObject.class, fragment, "getJson");
                 isLoadding = true;
@@ -124,14 +175,14 @@ public class ChannelFragment extends BaseFragment
 
         aq = new AQuery(getActivity());
         aq.ajax(channelUrl, JSONObject.class, this, "getJson");
-        Log.e("callme",fragment.channelUrl);
+        Log.e("callme", fragment.channelUrl);
     }
 
     public void getJson(String url, JSONObject jo, AjaxStatus status)
             throws JSONException {
         AQUtility.debug("jo", jo);
         if (jo != null) {
-            if(isRefresh)
+            if (isRefresh)
                 list.clear();
             isRefresh = false;
 
@@ -140,7 +191,7 @@ public class ChannelFragment extends BaseFragment
                 JSONObject obj = ja.optJSONObject(i);
 
                 String userId = obj.optString("id");
-                String name = obj.optString("name").replace("&#039;","'");
+                String name = obj.optString("name").replace("&#039;", "'");
                 String username = obj.optString("username");
                 String avatar = obj.optString("avatar_url");
                 String cover = obj.optString("cover_url");
@@ -148,15 +199,15 @@ public class ChannelFragment extends BaseFragment
                 String gender = obj.optString("gender");
                 boolean liveStatus = obj.optBoolean("status");
 
-                Channel channel = new Channel(userId,name,username,cover,avatar,liveCover,gender,liveStatus);
+                Channel channel = new Channel(userId, name, username, cover, avatar, liveCover, gender, liveStatus);
                 list.add(channel);
             }
             channelAdapter.notifyDataSetChanged();
             swipeLayout.setRefreshing(false);
             isLoadding = false;
             AQUtility.debug("done");
-            Log.e("araiwa","call?");
-            Log.e("sizesize",list.size() + "");
+            Log.e("araiwa", "call?");
+            Log.e("sizesize", list.size() + "");
 
         } else {
             AQUtility.debug("error!");
