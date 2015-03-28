@@ -18,9 +18,11 @@ import co.aquario.socialkit.MainApplication;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.LoginActivity;
 import co.aquario.socialkit.adapter.FriendRecyclerAdapter;
+import co.aquario.socialkit.event.FollowUserSuccessEvent;
 import co.aquario.socialkit.event.LoadFriendListEvent;
 import co.aquario.socialkit.event.LoadFriendListSuccessEvent;
 import co.aquario.socialkit.event.LogoutEvent;
+import co.aquario.socialkit.event.UnfollowUserSuccessEvent;
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.User;
 import co.aquario.socialkit.widget.EndlessRecyclerOnScrollListener;
@@ -137,6 +139,14 @@ public class FriendFragment extends BaseFragment {
             list.addAll(event.getFriendListData().users);
             adapter2.updateList(list);
         }
+    }
+
+    @Subscribe public void onFollowSuccess(FollowUserSuccessEvent event) {
+
+    }
+
+    @Subscribe public void onUnfollowSuccess(UnfollowUserSuccessEvent event) {
+
     }
 
     @Subscribe public void onLogout(LogoutEvent event) {

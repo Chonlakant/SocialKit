@@ -10,6 +10,9 @@ import java.util.Map;
 
 import co.aquario.socialkit.event.FailedNetworkEvent;
 import co.aquario.socialkit.event.FbAuthEvent;
+import co.aquario.socialkit.event.FollowRegisterEvent;
+import co.aquario.socialkit.event.FollowUserResponse;
+import co.aquario.socialkit.event.FollowUserSuccessEvent;
 import co.aquario.socialkit.event.FriendListDataResponse;
 import co.aquario.socialkit.event.GetStoryEvent;
 import co.aquario.socialkit.event.GetStorySuccessEvent;
@@ -36,6 +39,7 @@ import co.aquario.socialkit.event.RegisterSuccessEvent;
 import co.aquario.socialkit.event.RequestOtpEvent;
 import co.aquario.socialkit.event.StoryDataResponse;
 import co.aquario.socialkit.event.TimelineDataResponse;
+import co.aquario.socialkit.event.UnfollowUserSuccessEvent;
 import co.aquario.socialkit.event.UserProfileDataResponse;
 import co.aquario.socialkit.model.LoginData;
 import co.aquario.socialkit.model.RegisterData;
@@ -237,6 +241,26 @@ public class ApiHandlerVM {
         });
     }
 
+    @Subscribe public void onFollowUser(FollowRegisterEvent event) {
+        api.followUser(Integer.parseInt(event.getUserId()),new Callback<FollowUserResponse>() {
+            @Override
+            public void success(FollowUserResponse followUserResponse, Response response) {
+
+                Log.v("FollowRegisterEvent",followUserResponse.message);
+
+                if(followUserResponse.isFollowing)
+                    ApiBus.getInstance().post(new FollowUserSuccessEvent(followUserResponse.userId));
+                else
+                    ApiBus.getInstance().post(new UnfollowUserSuccessEvent(followUserResponse.userId));
+            }
+
+            @Override
+            public void failure(RetrofitError error) {
+
+            }
+        });
+    }
+
     @Subscribe public void onGetUserProfile(GetUserProfileEvent event) {
 
         api.getProfile(Integer.parseInt(event.getUserId()), new Callback<UserProfileDataResponse>() {
@@ -254,6 +278,8 @@ public class ApiHandlerVM {
         });
 
     }
+
+
 
     @Subscribe public void onHomeTimelineRequestEvent(LoadTimelineEvent event) {
         Map<String, String> options = new HashMap<String, String>();

@@ -1,22 +1,27 @@
 package co.aquario.socialkit.adapter;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ButtonRectangle;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 import co.aquario.socialkit.R;
+import co.aquario.socialkit.event.FollowRegisterEvent;
 import co.aquario.socialkit.fragment.ProfileDetailFragment;
+import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.model.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -38,19 +43,12 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final LayoutInflater mInflater = LayoutInflater.from(parent.getContext());
         final View sView = mInflater.inflate(R.layout.item_friend, parent, false);
+
+        ApiBus.getInstance().register(this);
+
         return new ViewHolder(sView,new OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                //Intent i = new Intent(context, SlidingUpRecyclerViewActivity.class);
-                /*
-                Intent i = new Intent(context, ProfileDetailFragment.class);
-                i.putExtra("userId",list.get(position).id);
-                i.putExtra("avatar",list.get(position).getAvatarUrl());
-                i.putExtra("cover",list.get(position).getCoverUrl());
-                i.putExtra("name",list.get(position).name);
-                i.putExtra("username",list.get(position).username);
-                context.startActivity(i);
-                */
 
                 ProfileDetailFragment fragment = new ProfileDetailFragment().newInstance(list.get(position).getId());
                 FragmentManager manager = ((ActionBarActivity) mActivity).getSupportFragmentManager();
@@ -61,6 +59,17 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
 
             @Override
             public void onFollowClick(View view, int position) {
+                Button button = (Button) view;
+                Log.v("isFollowing:",list.get(position).getIsFollowing() + "");
+                if (list.get(position).getIsFollowing()) {
+                    toggleUnfollow(button);
+
+                } else {
+                    toggleFollowing(button);
+                }
+
+                ApiBus.getInstance().post(new FollowRegisterEvent(list.get(position).getId()));
+                list.get(position).setIsFollowing(!list.get(position).getIsFollowing());
 
             }
         });
@@ -93,6 +102,8 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
                 .fit().centerCrop()
                 .into(holder.avatar);
 
+        holder.initButton(user.getIsFollowing(), holder.btnFollow);
+
     }
 
     @Override
@@ -100,13 +111,36 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
         return list.size();
     }
 
+
+
+    public void toggleFollowing(Button v) {
+        v.setTextColor(Color.parseColor("#ffffff"));
+        v.setText(Html.fromHtml("FOLLOWING"));
+
+        // change state
+        v.setSelected(true);
+        v.setPressed(false);
+
+    }
+
+    public void toggleUnfollow(Button v) {
+        v.setTextColor(Color.parseColor("#2C6497"));
+        v.setText("+ FOLLOW");
+
+        // change state
+        v.setSelected(false);
+        v.setPressed(false);
+
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView name;
         CircleImageView avatar;
-        ButtonRectangle btnFollow;
+        Button btnFollow;
 
         OnItemClickListener listener;
+        boolean isFollowing = false;
 
         public ViewHolder(View view, OnItemClickListener listener) {
             super(view);
@@ -115,7 +149,7 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
 
             name = (TextView) view.findViewById(R.id.profile_name);
             avatar = (CircleImageView) view.findViewById(R.id.profile_image);
-            btnFollow = (ButtonRectangle) view.findViewById(R.id.btn_follow);
+            btnFollow = (Button) view.findViewById(R.id.btn_follow);
 
             avatar.setOnClickListener(this);
             btnFollow.setOnClickListener(this);
@@ -133,10 +167,25 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
                 case R.id.btn_follow:
                     listener.onFollowClick(v, getPosition());
                     break;
-
-
             }
         }
+
+        public void initButton(boolean following,View v) {
+            Button button = (Button) v;
+
+            list.get(getPosition()).setIsFollowing(following);
+            isFollowing = following;
+
+            if (following) {
+                toggleFollowing(button);
+            } else {
+                toggleUnfollow(button);
+            }
+
+            //isFollowing = !isFollowing;
+        }
+
+
 
     }
 
@@ -145,7 +194,7 @@ public class FriendRecyclerAdapter extends RecyclerView.Adapter<FriendRecyclerAd
         public void onFollowClick(View view, int position);
     }
 
-    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+    public void setOnItemClickListener(final OnItemClickListener mItemClickListener) {
         this.mItemClickListener = mItemClickListener;
     }
 }

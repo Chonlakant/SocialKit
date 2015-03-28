@@ -38,6 +38,11 @@ public class ProfileDetailFragment extends BaseFragment {
     TextView bioTv;
     PullScrollView scrollView;
 
+    TextView countPost;
+    TextView countFollowing;
+    TextView countFollower;
+    TextView countFriend;
+
     String imageTitle;
     String nameTitle;
     String coverUrl;
@@ -73,8 +78,7 @@ public class ProfileDetailFragment extends BaseFragment {
         }
 
         Log.v("profileDetailuserId",userId + "");
-        ApiBus.getInstance().post(new GetUserProfileEvent(userId));
-        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId), TYPE, 1, PER_PAGE, isHomeTimeline));
+
 
 
     }
@@ -88,6 +92,8 @@ public class ProfileDetailFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        ApiBus.getInstance().post(new GetUserProfileEvent(userId));
+        ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId), TYPE, 1, PER_PAGE, isHomeTimeline));
     }
 
     @Override
@@ -119,6 +125,11 @@ public class ProfileDetailFragment extends BaseFragment {
         bioTv = (TextView) rootView.findViewById(R.id.user_des);
         avatar = (ImageView) rootView.findViewById(R.id.user_avatar);
         cover = (ImageView) rootView.findViewById(R.id.user_cover);
+
+        countPost = (TextView) rootView.findViewById(R.id.countPost);
+        countFollowing = (TextView) rootView.findViewById(R.id.countFollowing);
+        countFollower = (TextView) rootView.findViewById(R.id.countFollower);
+        countFriend = (TextView) rootView.findViewById(R.id.countFriend);
 
         scrollView = (PullScrollView) rootView.findViewById(R.id.scroll_view);
         RelativeLayout head = (RelativeLayout) rootView.findViewById(R.id.scroll_view_head);
@@ -175,6 +186,11 @@ public class ProfileDetailFragment extends BaseFragment {
                 .resize(100, 100)
                 .transform(new RoundedTransformation(50, 4))
                 .into(avatar);
+
+        countPost.setText(event.getCount().post + "");
+        countFollowing.setText(event.getCount().following + "");
+        countFollower.setText(event.getCount().follower + "");
+        countFriend.setText(event.getCount().friend + "");
 
 
     }

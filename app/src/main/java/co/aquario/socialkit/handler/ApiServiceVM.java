@@ -2,6 +2,7 @@ package co.aquario.socialkit.handler;
 
 import java.util.Map;
 
+import co.aquario.socialkit.event.FollowUserResponse;
 import co.aquario.socialkit.event.FriendListDataResponse;
 import co.aquario.socialkit.event.PostCommentDataResponse;
 import co.aquario.socialkit.event.StoryDataResponse;
@@ -39,6 +40,8 @@ public interface ApiServiceVM {
     public void getUserTimeline(@Path("id") int id,@QueryMap Map<String, String> options,
                                 Callback<TimelineDataResponse> responseJson);
 
+    @POST("/1.0/follow/{id}")
+    public void followUser(@Path("id") int id,Callback<FollowUserResponse> responseJson);
 
 
     @POST("/1.0/followers/{id}")

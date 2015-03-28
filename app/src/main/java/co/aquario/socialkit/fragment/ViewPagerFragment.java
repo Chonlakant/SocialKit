@@ -85,7 +85,7 @@ public class ViewPagerFragment extends BaseFragment {
 
         mTabsLinearLayout = ((LinearLayout) mSlidingTabLayout.getChildAt(0));
         ImageButton ib = (ImageButton) mTabsLinearLayout.getChildAt(0);
-        ib.setImageResource(R.drawable.ic_action_news_highlighted);
+        ib.setImageResource(R.drawable.ic_action_post);
 
 
 

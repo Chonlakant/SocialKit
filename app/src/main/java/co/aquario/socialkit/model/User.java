@@ -68,6 +68,7 @@ public class User extends BaseModel implements Parcelable {
     private static final String FIELD_NAME = "name";
     private static final String FIELD_TIME = "time";
     private static final String FIELD_EMAIL = "email";
+    private static final String FIELD_FOLLOWING = "is_following";
 
 
     @SerializedName(FIELD_AVATAR_ID)
@@ -112,6 +113,8 @@ public class User extends BaseModel implements Parcelable {
     private long mTime;
     @SerializedName(FIELD_EMAIL)
     private String mEmail;
+    @SerializedName(FIELD_FOLLOWING)
+    private boolean mIsFollowing;
 
 
     public User(){
@@ -286,6 +289,14 @@ public class User extends BaseModel implements Parcelable {
         return mEmail;
     }
 
+    public void setIsFollowing(boolean isFollowing) {
+        mIsFollowing = isFollowing;
+    }
+
+    public boolean getIsFollowing() {
+        return mIsFollowing;
+    }
+
     @Override
     public boolean equals(Object obj){
         if(obj instanceof User){
@@ -321,6 +332,7 @@ public class User extends BaseModel implements Parcelable {
         mName = in.readString();
         mTime = in.readLong();
         mEmail = in.readString();
+        mIsFollowing = in.readByte() != 0;
     }
 
     @Override
@@ -361,11 +373,12 @@ public class User extends BaseModel implements Parcelable {
         dest.writeString(mName);
         dest.writeLong(mTime);
         dest.writeString(mEmail);
+        dest.writeByte((byte) (mIsFollowing ? 1 : 0));
     }
 
     @Override
     public String toString(){
-        return "avatarId = " + mAvatarId + ", verified = " + mVerified + ", cover = " + mCover + ", coverId = " + mCoverId + ", language = " + mLanguage + ", about = " + mAbout + ", avatar = " + mAvatar + ", timestamp = " + mTimestamp + ", coverPosition = " + mCoverPosition + ", emailVerificationKey = " + mEmailVerificationKey + ", username = " + mUsername + ", type = " + mType + ", id = " + mId + ", lastLogged = " + mLastLogged + ", password = " + mPassword + ", emailVerified = " + mEmailVerified + ", active = " + mActive + ", timezone = " + mTimezone + ", name = " + mName + ", time = " + mTime + ", email = " + mEmail;
+        return "isFollowing = " + mIsFollowing + ", avatarId = " + mAvatarId + ", verified = " + mVerified + ", cover = " + mCover + ", coverId = " + mCoverId + ", language = " + mLanguage + ", about = " + mAbout + ", avatar = " + mAvatar + ", timestamp = " + mTimestamp + ", coverPosition = " + mCoverPosition + ", emailVerificationKey = " + mEmailVerificationKey + ", username = " + mUsername + ", type = " + mType + ", id = " + mId + ", lastLogged = " + mLastLogged + ", password = " + mPassword + ", emailVerified = " + mEmailVerified + ", active = " + mActive + ", timezone = " + mTimezone + ", name = " + mName + ", time = " + mTime + ", email = " + mEmail;
     }
 
     public String getAvatarUrl() {

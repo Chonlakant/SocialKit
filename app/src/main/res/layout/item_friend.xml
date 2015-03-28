@@ -17,7 +17,8 @@
         android:src="@drawable/profile"
         app:border_width="2dp"
         app:border_color="@color/indigo_700"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:padding="2dp" />
 
     <TextView
         android:id="@+id/profile_name"
@@ -29,12 +30,13 @@
         android:textColor="#222244"
         android:gravity="center" />
 
-    <com.gc.materialdesign.views.ButtonRectangle
+    <Button
         android:id="@+id/btn_follow"
-        android:textSize="10sp"
-        android:background="#312783"
-        android:text="Follow"
-        android:layout_width="match_parent"
-        android:layout_height="45dp" />
+        android:textStyle="bold"
+        android:textSize="13dp"
+        android:layout_width="96dp"
+        android:layout_height="36dp"
+        android:background="@drawable/follow_button_selector"
+        android:text="Loading" />
 
 </LinearLayout>
