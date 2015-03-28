@@ -271,11 +271,11 @@ public class MainTimelineActivity extends ActionBarActivity implements Observabl
                 case 0:
                     return FeedFragment.newInstance("");
                 case 1:
-                    return FriendFragment.newInstance("FOLLOWER","6");
+                    return FriendFragment.newInstance("FOLLOWER", "6");
                 case 2:
-                    return FriendFragment.newInstance("FOLLOWING","6");
+                    return FriendFragment.newInstance("FOLLOWING", "6");
                 case 3:
-                    return FriendFragment.newInstance("FRIEND","6");
+                    return FriendFragment.newInstance("FRIEND", "6");
                 /*
                 case 4:
                     return MainFragment.newInstance("");

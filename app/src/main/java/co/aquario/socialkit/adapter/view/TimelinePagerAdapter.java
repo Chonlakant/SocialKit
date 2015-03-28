@@ -27,11 +27,11 @@ public class TimelinePagerAdapter extends FragmentPagerAdapter {
             case 0:
                 return new FeedFragment().newInstance("");
             case 1:
-                return FriendFragment.newInstance("FOLLOWING","6");
+                return FriendFragment.newInstance("FOLLOWING", "6");
             case 2:
-                return FriendFragment.newInstance("FOLLOWER","6");
+                return FriendFragment.newInstance("FOLLOWER", "6");
             case 3:
-                return FriendFragment.newInstance("FRIEND","6");
+                return FriendFragment.newInstance("FRIEND", "6");
             default:
                 return FeedFragment.newInstance("");
         }

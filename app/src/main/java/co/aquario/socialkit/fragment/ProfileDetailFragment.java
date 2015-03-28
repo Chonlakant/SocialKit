@@ -1,5 +1,6 @@
 package co.aquario.socialkit.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -30,7 +32,7 @@ import co.aquario.socialkit.view.PullScrollView;
 import co.aquario.socialkit.widget.RoundedTransformation;
 
 
-public class ProfileDetailFragment extends BaseFragment {
+public class ProfileDetailFragment extends BaseFragment implements View.OnClickListener {
     ImageView avatar;
     ImageView cover;
     TextView titleTv;
@@ -42,6 +44,8 @@ public class ProfileDetailFragment extends BaseFragment {
     TextView countFollowing;
     TextView countFollower;
     TextView countFriend;
+
+    Button btnFollow;
 
     String imageTitle;
     String nameTitle;
@@ -96,6 +100,8 @@ public class ProfileDetailFragment extends BaseFragment {
         ApiBus.getInstance().post(new LoadTimelineEvent(Integer.parseInt(userId), TYPE, 1, PER_PAGE, isHomeTimeline));
     }
 
+    boolean isFollowing;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -130,6 +136,9 @@ public class ProfileDetailFragment extends BaseFragment {
         countFollowing = (TextView) rootView.findViewById(R.id.countFollowing);
         countFollower = (TextView) rootView.findViewById(R.id.countFollower);
         countFriend = (TextView) rootView.findViewById(R.id.countFriend);
+
+        btnFollow = (Button) rootView.findViewById(R.id.btn_follow);
+        btnFollow.setOnClickListener(this);
 
         scrollView = (PullScrollView) rootView.findViewById(R.id.scroll_view);
         RelativeLayout head = (RelativeLayout) rootView.findViewById(R.id.scroll_view_head);
@@ -168,6 +177,57 @@ public class ProfileDetailFragment extends BaseFragment {
         return rootView;
     }
 
+    @Override
+    public void onClick(View v) {
+        Button button = (Button) v;
+
+        if (isFollowing) {
+            toggleUnfollow(button);
+        } else {
+            toggleFollowing(button);
+        }
+
+        isFollowing = !isFollowing;
+
+        Log.v("You ","select: " + button.getText());
+    }
+
+
+    public void initButton(boolean following,View v) {
+        Button button = (Button) v;
+
+        isFollowing = following;
+
+        if (following) {
+            toggleFollowing(button);
+        } else {
+            toggleUnfollow(button);
+        }
+
+        //isFollowing = !isFollowing;
+    }
+
+    public void toggleFollowing(Button v) {
+        v.setTextColor(Color.parseColor("#ffffff"));
+        //v.setText(Html.fromHtml("&#x2713; FOLLOWING"));
+        v.setText(Html.fromHtml("FOLLOWING"));
+
+        // change state
+        v.setSelected(true);
+        v.setPressed(false);
+
+    }
+
+    public void toggleUnfollow(Button v) {
+        v.setTextColor(Color.parseColor("#2C6497"));
+        v.setText("+ FOLLOW");
+
+        // change state
+        v.setSelected(false);
+        v.setPressed(false);
+
+    }
+
     @Subscribe
     public void onLoadProfile(GetUserProfileSuccessEvent event) {
 
@@ -191,6 +251,9 @@ public class ProfileDetailFragment extends BaseFragment {
         countFollowing.setText(event.getCount().following + "");
         countFollower.setText(event.getCount().follower + "");
         countFriend.setText(event.getCount().friend + "");
+
+        isFollowing = event.getUser().getIsFollowing();
+        initButton(isFollowing,btnFollow);
 
 
     }
