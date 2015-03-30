@@ -12,12 +12,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.gc.materialdesign.views.ButtonFlat;
 import com.squareup.picasso.Picasso;
 
 import org.ocpsoft.prettytime.PrettyTime;
@@ -222,9 +222,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
         TextView nView;
         ImageView typeIcon;
 
-        ButtonFlat btnLove;
-        ButtonFlat btnComment;
-        ButtonFlat btnShare;
+        Button btnLove;
+        Button btnComment;
+        Button btnShare;
 
         RelativeLayout mediaLayout;
         RelativeLayout soundCloudLayout;
@@ -246,9 +246,9 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.ViewHolder> {
             nView = (TextView) view.findViewById(R.id.view);
             typeIcon = (ImageView) view.findViewById(R.id.ic_type);
 
-            btnComment = (ButtonFlat) view.findViewById(R.id.btn_comment);
-            btnLove = (ButtonFlat) view.findViewById(R.id.btn_love);
-            btnShare = (ButtonFlat) view.findViewById(R.id.btn_share);
+            btnComment = (Button) view.findViewById(R.id.btn_comment);
+            btnLove = (Button) view.findViewById(R.id.btn_love);
+            btnShare = (Button) view.findViewById(R.id.btn_share);
 
             mediaLayout = (RelativeLayout) view.findViewById(R.id.media_group);
             soundCloudLayout = (RelativeLayout) view.findViewById(R.id.soundcloud_group);
