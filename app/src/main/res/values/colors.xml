@@ -297,4 +297,20 @@
     <color name="md_yellow_A200">#ffff00</color>
     <color name="md_yellow_A400">#ffea00</color>
     <color name="md_yellow_A700">#ffd600</color>
+    <color name="light_blue">#d3fcff</color>
+    <color name="primary_black">#BB000000</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1976D2</color>
+    <color name="colorPrimaryLight">#03A9F4</color>
+    <color name="dark_blue">#0D47A1</color>
+    <color name="grey">#bcbcbc</color>
+    <color name="light_grey">#EEEEEE</color>
+    <color name="primary_text">#D9000000</color>
+    <color name="secondary_text">#8C000000</color>
+    <color name="hint">#40000000</color>
+
+    <color name="indicator_1">#55B3C2</color>
+    <color name="indicator_2">#64A4A4</color>
+    <color name="indicator_3">#66D7B9</color>
+    <color name="indicator_4">#FDBC7D</color>
 </resources>

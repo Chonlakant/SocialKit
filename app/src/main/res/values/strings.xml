@@ -16,4 +16,42 @@
 
 
     <string name="txt_yo_yo">Yo Yo</string>
+
+
+    <string name="details">Details</string>
+    <string name="shipping">Shipping</string>
+    <string name="category">Category</string>
+    <string name="payment">Payment</string>
+    <string name="pricing">Pricing</string>
+    <string name="brand">Brand</string>
+    <string name="condition">Condition</string>
+    <string name="required">(required)</string>
+    <string name="description">Description</string>
+
+    <string name="search">Search</string>
+    <string name="cart">My Cart</string>
+    <string name="cart_icon">Cart</string>
+    <string name="bought">Purchased!</string>
+    <string name="add_cart">Added to Cart!</string>
+    <string name="ok">OK</string>
+    <string name="show_cart">Open Cart</string>
+    <string name="sort">Sort</string>
+    <string name="sort_by">Sort by...</string>
+    <array name="sort_options">
+        <item>Hot</item>
+        <item>New</item>
+        <item>Price: Low to High</item>
+        <item>Price: High to Low</item>
+    </array>
+
+    <string name="login_error_message">Username or Password is incorrect.</string>
+    <string name="register_error_message">Register failed, Try again!</string>
+    <string name="register_password_error">Password does not match</string>
+    <string name="register_success">Register Successful</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_item_list">ItemListActivity</string>
+    <string name="title_activity_cart">CartActivity</string>
 </resources>
