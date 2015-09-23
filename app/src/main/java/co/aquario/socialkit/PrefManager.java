@@ -32,7 +32,29 @@ public class PrefManager extends PrettySharedPreferences<PrefManager> {
         return getBooleanEditor("isLogin");
     }
 
-    public StringEditor<PrefManager> string(String key) {
-        return getStringEditor(key);
+    public BooleanEditor<PrefManager> isAddress() {
+        return getBooleanEditor("isAddress");
+    }
+    public StringEditor<PrefManager> name() {
+        return getStringEditor("name");
+    }
+    public StringEditor<PrefManager> phone() {
+        return getStringEditor("phone");
+    }
+
+    public StringEditor<PrefManager> district() {
+        return getStringEditor("district");
+    }
+
+    public StringEditor<PrefManager> country() {
+        return getStringEditor("country");
+    }
+
+    public StringEditor<PrefManager> postal() {
+        return getStringEditor("postal");
+    }
+
+    public StringEditor<PrefManager> home() {
+        return getStringEditor("home");
     }
 }

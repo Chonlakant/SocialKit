@@ -49,7 +49,7 @@ public class ItemActivity extends AppCompatActivity {
     String urlImage;
     int ProductsSize;
     ProductAquery list;
-    Controller aController;
+    MainApplication aController;
      EditText editTextQuantity;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,7 +58,7 @@ public class ItemActivity extends AppCompatActivity {
 
         Toast.makeText(getApplicationContext(), "หน้ารานละเอียด", Toast.LENGTH_SHORT).show();
         editTextQuantity = (EditText) findViewById(R.id.editTextQuantity);
-        aController = (Controller) getApplicationContext();
+        aController = (MainApplication) getApplicationContext();
 
         // Get the Item extras
         Bundle extras = getIntent().getExtras();

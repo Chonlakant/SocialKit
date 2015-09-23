@@ -206,7 +206,7 @@
                             android:layout_weight="2"
                             android:gravity="left|center"
                             android:padding="10dp"
-                            android:text="Beauty > Accessories > Phone" />
+                            android:text="rice" />
 
                     </LinearLayout>
 
@@ -241,7 +241,7 @@
                             android:layout_weight="2"
                             android:gravity="left|center"
                             android:padding="10dp"
-                            android:text="Samsung" />
+                            android:text="Folk rice" />
 
                     </LinearLayout>
 

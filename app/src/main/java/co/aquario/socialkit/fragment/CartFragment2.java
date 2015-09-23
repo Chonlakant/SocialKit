@@ -33,6 +33,7 @@ import co.aquario.socialkit.adapater.ItemListAdapter2;
 import co.aquario.socialkit.adapater.ProductAdapter;
 import co.aquario.socialkit.model.ProductAquery;
 import co.aquario.socialkit.model.ShoppingCartHelper;
+import co.aquario.socialkit.model.Storage;
 import me.drakeet.materialdialog.MaterialDialog;
 
 
@@ -129,8 +130,6 @@ public class CartFragment2 extends DialogFragment  {
                                         public void onClick(View v) {
                                             mMaterialDialog.dismiss();
                                             Toast.makeText(getActivity(), "ตกลง", Toast.LENGTH_LONG).show();
-//                                            Intent i =new Intent(getActivity(), Activity_main_login.class);
-//                                            startActivity(i);
                                             Intent i =new Intent(getActivity(), Activity_main_Buy.class);
                                             startActivity(i);
 

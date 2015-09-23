@@ -7,13 +7,16 @@ import android.net.Uri;
 import android.util.Log;
 import android.widget.ImageView;
 
-import com.mikepenz.materialdrawer.util.DrawerImageLoader;
 import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
 
 import co.aquario.socialkit.handler.ApiBus;
 import co.aquario.socialkit.handler.ApiHandler;
 import co.aquario.socialkit.handler.ApiService;
 import co.aquario.socialkit.model.Controller;
+import co.aquario.socialkit.model.ModelCart;
+import co.aquario.socialkit.model.ProductAquery;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
@@ -25,29 +28,15 @@ public class MainApplication extends Application {
     private static final String ENDPOINT = "http://wallsplash.lanora.io";
     private static PrefManager prefManager;
     private ApiHandler someApiHandler;
-
+    private ArrayList<ProductAquery> myProducts = new ArrayList<ProductAquery>();
+    private ModelCart myCart = new ModelCart();
     @Override public void onCreate() {
         super.onCreate();
         someApiHandler = new ApiHandler(this, buildApi(),
                 ApiBus.getInstance());
         someApiHandler.registerForEvents();
         prefManager = new PrefManager(getSharedPreferences("App", MODE_PRIVATE));
-        DrawerImageLoader.init(new DrawerImageLoader.IDrawerImageLoader() {
-            @Override
-            public void set(ImageView imageView, Uri uri, Drawable placeholder) {
-                Picasso.with(imageView.getContext()).load(uri).placeholder(placeholder).into(imageView);
-            }
 
-            @Override
-            public void cancel(ImageView imageView) {
-                Picasso.with(imageView.getContext()).cancelRequest(imageView);
-            }
-
-            @Override
-            public Drawable placeholder(Context ctx) {
-                return null;
-            }
-        });
     }
 
     ApiService buildApi() {
@@ -75,6 +64,27 @@ public class MainApplication extends Application {
 
     public static PrefManager getPrefManager() {
         return prefManager;
+    }
+    public ProductAquery getProducts(int pPosition) {
+
+        return myProducts.get(pPosition);
+    }
+
+    public void setProducts(ProductAquery Products) {
+
+        myProducts.add(Products);
+
+    }
+
+    public ModelCart getCart() {
+
+        return myCart;
+
+    }
+
+    public int getProductsArraylistSize() {
+
+        return myProducts.size();
     }
 
 }

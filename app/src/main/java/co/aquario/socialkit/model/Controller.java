@@ -4,11 +4,13 @@ import android.app.Application;
 
 import java.util.ArrayList;
 
+import co.aquario.socialkit.PrefManager;
+
 public class Controller extends Application {
 	
 	private ArrayList<ProductAquery> myProducts = new ArrayList<ProductAquery>();
 	private  ModelCart myCart = new ModelCart();
-	
+	private static PrefManager prefManager;
 
 	public ProductAquery getProducts(int pPosition) {
 		

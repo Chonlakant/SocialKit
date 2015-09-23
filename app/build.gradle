@@ -47,9 +47,6 @@ dependencies {
 
     compile 'com.github.paolorotolo:appintro:1.4.0'
 
-    compile('com.mikepenz:materialdrawer:3.0.8@aar') {
-        transitive = true
-    }
 
     compile 'com.github.nkzawa:socket.io-client:0.5.1'
 
@@ -67,4 +64,7 @@ dependencies {
     compile 'com.github.talenguyen:prettysharedpreferences:1.0.2'
     compile 'com.rengwuxian.materialedittext:library:2.1.4'
     compile 'com.ogaclejapan.smarttablayout:utils-v4:1.4.1@aar'
+    compile 'com.weiwangcn.betterspinner:library:1.1.0'
+
+    compile 'com.google.android.gms:play-services-location:7.5.0'
 }

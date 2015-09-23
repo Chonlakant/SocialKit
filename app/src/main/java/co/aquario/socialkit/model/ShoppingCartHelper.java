@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
-public class ShoppingCartHelper extends Activity {
+public class ShoppingCartHelper  {
 
     public static final String PRODUCT_INDEX = "PRODUCT_INDEX";
 

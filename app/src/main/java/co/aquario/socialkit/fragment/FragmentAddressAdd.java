@@ -2,6 +2,7 @@ package co.aquario.socialkit.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -15,29 +16,34 @@ import com.rengwuxian.materialedittext.MaterialEditText;
 import java.util.ArrayList;
 import java.util.List;
 
+import co.aquario.socialkit.MainApplication;
+import co.aquario.socialkit.PrefManager;
 import co.aquario.socialkit.R;
 import co.aquario.socialkit.activity.ItemListActivitySave;
+import co.aquario.socialkit.adapater.ProductAdapter;
 import co.aquario.socialkit.model.AddAddress;
+import co.aquario.socialkit.model.Storage;
 
 
-public class FragmentAddressAdd extends BaseFragment {
+public class FragmentAddressAdd extends Fragment {
     MaterialEditText et_name;
-    MaterialEditText et_pass;
+    MaterialEditText et_phone;
     MaterialEditText et_contry;
     MaterialEditText et_district;
     MaterialEditText et_postal;
     MaterialEditText et_home;
+
     public static final String ARG_PAGE = "ARG_PAGE";
     Button btn_add;
-    private int mPage;
+//    private int mPage;
     String name;
-    String pass;
+    String phone;
     String contry;
     String district;
     String postal;
     String home;
-    List<AddAddress> list = new ArrayList<>();
 
+    List<AddAddress> list = new ArrayList<>();
     public static FragmentAddressAdd newInstance(int page) {
         Bundle args = new Bundle();
         args.putInt(ARG_PAGE, page);
@@ -49,20 +55,28 @@ public class FragmentAddressAdd extends BaseFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mPage = getArguments().getInt(ARG_PAGE);
+        pref = MainApplication.getPrefManager();
+        Log.e("aaaaa",(pref == null) + "" );
+      //  mPage = getArguments().getInt(ARG_PAGE);
 
     }
+
+    PrefManager pref;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_address, container, false);
 
+//        String password = pref.passWord().getOr("");
+//        String username = pref.userName().getOr("");
+
         et_name = (MaterialEditText) rootView.findViewById(R.id.et_name);
-        et_pass = (MaterialEditText) rootView.findViewById(R.id.et_pass);
+        et_phone = (MaterialEditText) rootView.findViewById(R.id.et_phone);
         et_contry = (MaterialEditText) rootView.findViewById(R.id.et_contry);
         et_district = (MaterialEditText) rootView.findViewById(R.id.et_district);
         et_postal = (MaterialEditText) rootView.findViewById(R.id.et_postal);
         et_home = (MaterialEditText) rootView.findViewById(R.id.et_home);
+
 
         btn_add = (Button) rootView.findViewById(R.id.btn_add);
 
@@ -70,24 +84,53 @@ public class FragmentAddressAdd extends BaseFragment {
             @Override
             public void onClick(View view) {
                 name = et_name.getText().toString();
-                pass = et_pass.getText().toString();
+                phone = et_phone.getText().toString();
                 contry = et_contry.getText().toString();
                 district = et_district.getText().toString();
                 postal = et_postal.getText().toString();
                 home = et_home.getText().toString();
-                Log.e("name", name);
+                Log.e("name455", name);
 
 
-                AddAddress add = new AddAddress(name,pass,contry,district,postal,home);
+                pref.name().put(name);
+                pref.phone().put(phone);
+                pref.country().put(contry);
+                pref.district().put(district);
+                pref.postal().put(postal);
+                pref.home().put(home);
+                pref.isAddress().put(true);
+                pref.commit();
+
+                AddAddress add = new AddAddress(name, phone, contry, district, postal, home);
                 list.add(add);
 
-                Toast.makeText(getActivity(),list.size()+"",Toast.LENGTH_SHORT).show();
+                Storage.address = add;
+
+                FragmentPayMentsDetail oneFragment = new FragmentPayMentsDetail();
+                FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+                transaction.replace(R.id.container, oneFragment);
+                transaction.addToBackStack(null);
+                transaction.commit();
+
+                Toast.makeText(getActivity(), list.size() + "", Toast.LENGTH_SHORT).show();
             }
         });
-
-
 
         return rootView;
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(pref.isAddress().getOr(false)){
+            et_name.setText(pref.name().getOr("null"));
+            et_phone.setText(pref.phone().getOr("null"));
+            et_contry.setText(pref.country().getOr("null"));
+            et_district.setText(pref.district().getOr("null"));
+            et_postal.setText(pref.postal().getOr("null"));
+            et_home.setText(pref.home().getOr("null"));
+
+        }
+    }
 }

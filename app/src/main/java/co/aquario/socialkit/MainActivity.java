@@ -1,54 +1,27 @@
 package co.aquario.socialkit;
 
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.typeface.FontAwesome;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.accountswitcher.AccountHeader;
-
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialdrawer.model.interfaces.Nameable;
-import com.mikepenz.materialdrawer.model.interfaces.OnCheckedChangeListener;
-import com.squareup.otto.Subscribe;
-import com.squareup.picasso.Picasso;
 
 import co.aquario.socialkit.adapater.FragmentAdapter;
 import co.aquario.socialkit.adapater.TabListener;
-import co.aquario.socialkit.custom.CustomPrimaryDrawerItem;
-import co.aquario.socialkit.event.FailedEvent;
 import co.aquario.socialkit.event.SomeEvent;
-import co.aquario.socialkit.event.SuccessEvent;
-import co.aquario.socialkit.fragment.BaseFragment;
-import co.aquario.socialkit.fragment.CartFragment;
 import co.aquario.socialkit.fragment.CartFragment2;
 import co.aquario.socialkit.handler.ApiBus;
-import co.aquario.socialkit.model.SomeData;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int PROFILE_SETTING = 1;
 
-    //save our header or result
-    private AccountHeader headerResult = null;
-    private Drawer result = null;
+
     private Toolbar toolbar;
-    private IProfile profile;
+
 
     Bundle savedState;
     TabListener mTabListener;
@@ -93,11 +66,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         //handle the back press :D close the drawer first and if the drawer is closed close the activity
-        if (result != null && result.isDrawerOpen()) {
-            result.closeDrawer();
-        } else {
-            super.onBackPressed();
-        }
+//        if (result != null && result.isDrawerOpen()) {
+//            result.closeDrawer();
+//        } else {
+//            super.onBackPressed();
+//        }
     }
 
     @Override
