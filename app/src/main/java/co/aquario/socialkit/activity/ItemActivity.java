@@ -2,15 +2,19 @@ package co.aquario.socialkit.activity;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -59,6 +63,11 @@ public class ItemActivity extends AppCompatActivity {
         Toast.makeText(getApplicationContext(), "หน้ารานละเอียด", Toast.LENGTH_SHORT).show();
         editTextQuantity = (EditText) findViewById(R.id.editTextQuantity);
         aController = (MainApplication) getApplicationContext();
+
+
+        //editTextQuantity.setInputType(InputType.TYPE_NULL);
+
+
 
         // Get the Item extras
         Bundle extras = getIntent().getExtras();

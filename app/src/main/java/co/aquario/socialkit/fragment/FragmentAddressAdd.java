@@ -4,12 +4,15 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.rengwuxian.materialedittext.MaterialEditText;
 
@@ -42,7 +45,7 @@ public class FragmentAddressAdd extends Fragment {
     String district;
     String postal;
     String home;
-
+    Toolbar toolbar;
     List<AddAddress> list = new ArrayList<>();
     public static FragmentAddressAdd newInstance(int page) {
         Bundle args = new Bundle();
@@ -69,7 +72,7 @@ public class FragmentAddressAdd extends Fragment {
 
 //        String password = pref.passWord().getOr("");
 //        String username = pref.userName().getOr("");
-
+        //toolbar = (Toolbar) rootView.findViewById(R.id.toolbar);
         et_name = (MaterialEditText) rootView.findViewById(R.id.et_name);
         et_phone = (MaterialEditText) rootView.findViewById(R.id.et_phone);
         et_contry = (MaterialEditText) rootView.findViewById(R.id.et_contry);
@@ -77,7 +80,10 @@ public class FragmentAddressAdd extends Fragment {
         et_postal = (MaterialEditText) rootView.findViewById(R.id.et_postal);
         et_home = (MaterialEditText) rootView.findViewById(R.id.et_home);
 
+//        if (toolbar != null)
+//            getActivity().setTitle("ที่อยู่จัดส่ง");
 
+      //  toolbar.setTitle("ที่อยู่จัดส่ง");
         btn_add = (Button) rootView.findViewById(R.id.btn_add);
 
         btn_add.setOnClickListener(new View.OnClickListener() {

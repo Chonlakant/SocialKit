@@ -60,15 +60,15 @@ public class ItemListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onBackPressed() {
-        int count = getSupportFragmentManager().getBackStackEntryCount();
-        // Closes the activity if end of back stack
-        if (count <= 1 ) {
-            finish();
-        } else {
-            getFragmentManager().popBackStack();
-        }
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        int count = getSupportFragmentManager().getBackStackEntryCount();
+//        // Closes the activity if end of back stack
+//        if (count <= 1 ) {
+//            finish();
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
+//
+//    }
 }

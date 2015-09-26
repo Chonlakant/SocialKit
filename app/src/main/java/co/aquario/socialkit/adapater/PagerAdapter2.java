@@ -16,7 +16,7 @@ import co.aquario.socialkit.fragment.FragmentRegister;
  */
 public class PagerAdapter2 extends FragmentPagerAdapter {
     final int PAGE_COUNT = 3;
-    private String tabTitles[] = new String[] { "ที่อยู่การจัดส่ง","การชำละเงิน","การยืนยัน"};
+    private String tabTitles[] = new String[] { "ที่อยู่การจัดส่ง","การชำละเงิน"};
 //    PrefManager pref = MainApplication.getPrefManager();
 //    String title = pref.zodiac().getOr("");
 //    String data = pref.zodiac().getOr("");
@@ -38,9 +38,6 @@ public class PagerAdapter2 extends FragmentPagerAdapter {
                 fragment = new FragmentAddressAdd().newInstance(position);
                 break;
             case 1:
-                fragment = new FragmentPayMents().newInstance(position);
-                break;
-            case 2:
                 fragment = new FragmentPayMentsDetail().newInstance(position);
                 break;
 

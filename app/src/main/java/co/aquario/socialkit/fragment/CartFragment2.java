@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
@@ -19,7 +20,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +54,7 @@ public class CartFragment2 extends DialogFragment  {
     ProductAquery curProduct;
     MaterialDialog mMaterialDialog;
     UserManager mManager;
+    double subTotal = 0 ;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,7 +93,13 @@ public class CartFragment2 extends DialogFragment  {
         list = (ListView) v.findViewById(R.id.cart_items_list);
         mAdapter = new ProductAdapter(mCartList, getActivity().getLayoutInflater(), true, getActivity());
         list.setAdapter(mAdapter);
-
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(getActivity(), "Hello", Toast.LENGTH_SHORT).show();
+                removeItemFromList(i);
+            }
+        });
 
         // Cancel button
         ImageView cancelButton = (ImageView) v.findViewById(R.id.x_button);
@@ -131,6 +141,7 @@ public class CartFragment2 extends DialogFragment  {
                                             mMaterialDialog.dismiss();
                                             Toast.makeText(getActivity(), "ตกลง", Toast.LENGTH_LONG).show();
                                             Intent i =new Intent(getActivity(), Activity_main_Buy.class);
+                                            i.putExtra("sumTotal",subTotal);
                                             startActivity(i);
 
                                         }
@@ -168,6 +179,55 @@ public class CartFragment2 extends DialogFragment  {
         return v;
     }
 
+    protected void removeItemFromList(int position) {
+        final int deletePosition = position;
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(
+                getActivity());
+
+        alert.setTitle("ลบ");
+        alert.setMessage("คุณต้องการลบสินค้านี้หรือไม่?");
+        alert.setPositiveButton("ตกลง", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TOD O Auto-generated method stub
+
+                // main code on after clicking yes
+                mCartList.remove(deletePosition);
+                mAdapter.notifyDataSetChanged();
+                mAdapter.notifyDataSetInvalidated();
+                // Refresh the data
+                if (mAdapter != null) {
+                    mAdapter.notifyDataSetChanged();
+                }
+
+
+                int quantity = 0;
+                for (ProductAquery p : mCartList) {
+                    quantity = ShoppingCartHelper.getProductQuantity(p);
+                    subTotal += p.getPrice() * quantity;
+
+                    ShoppingCartHelper.setQuantity(p, quantity);
+
+
+                }
+                productPriceTextView.setText("ราคารวม:" + subTotal);
+                number_items.setText("จำนวน: " + quantity);
+
+            }
+        });
+        alert.setNegativeButton("ยกเลิก", new OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // TODO Auto-generated method stub
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -187,7 +247,6 @@ public class CartFragment2 extends DialogFragment  {
             mAdapter.notifyDataSetChanged();
         }
 
-        double subTotal = 0;
         int quantity = 0;
         for (ProductAquery p : mCartList) {
             quantity = ShoppingCartHelper.getProductQuantity(p);

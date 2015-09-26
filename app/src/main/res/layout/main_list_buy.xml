@@ -4,7 +4,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/tool_bar" />
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/action_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="@color/md_green_600"
+        android:elevation="1dp"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="สรุปการสั่งซื้อ"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -17,7 +36,7 @@
         <ListView
             android:id="@+id/cart_items_list"
             android:layout_width="wrap_content"
-            android:layout_height="200dp" />
+            android:layout_height="150dp" />
 
 
         <LinearLayout
@@ -161,7 +180,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="5dp"
             android:text="สรุปออเดอร์"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/md_green_600"
@@ -270,7 +289,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="20dp"
             android:background="@color/md_green_600"
             android:text="ชำระเงิน"
             android:textColor="@android:color/white"
