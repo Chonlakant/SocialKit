@@ -138,8 +138,6 @@ public class FragmentPayMents extends StatedFragment {
                 }
                 if (i == 2) {
                     if (mMaterialDialog != null) {
-
-
                         mMaterialDialog.setTitle("การชำระเงิน")
                                 .setMessage(
                                         "โอนเงิน เข้าบัญชี ธนสคารกสิกรไทย(KBANK) นายอนุกูล ทรายเพชร และ นาย ธนานนท์ เงินถาวร 730-2-12382-5 เซนทรัลลาดพร้าวแจ้งโอนเงินมาที่ Folkrice.th@gmail.com หรือ Line FolkRice"
@@ -158,7 +156,7 @@ public class FragmentPayMents extends StatedFragment {
                                 .setCanceledOnTouchOutside(false)
                                         // You can change the message anytime.
                                         // mMaterialDialog.setTitle("提示");
-                                
+
                                 .show();
                     }
                 }
