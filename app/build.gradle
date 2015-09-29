@@ -5,7 +5,7 @@ android {
     buildToolsVersion '22.0.1'
 
     defaultConfig {
-        applicationId "co.aquario.socialkit"
+        applicationId "co.aquario.folkrice"
         minSdkVersion 15
         targetSdkVersion 22
         versionCode 1
@@ -63,5 +63,6 @@ dependencies {
     compile 'com.weiwangcn.betterspinner:library:1.1.0'
     compile 'com.inthecheesefactory.thecheeselibrary:stated-fragment-support-v4:0.9.3'
     compile files('libs/PayPalAndroidSDK-2.10.0.jar')
+    compile 'com.avast:android-styled-dialogs:2.2.0'
 
 }
