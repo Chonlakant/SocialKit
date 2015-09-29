@@ -69,7 +69,6 @@ public class ShopFragment extends BaseFragment {
         mRecyclerView.setAdapter(mShopItemAdapter);
         mRecyclerView.setHasFixedSize(true);
 
-        Toast.makeText(getActivity(), "หน้าแรก", Toast.LENGTH_SHORT).show();
 
         return view;
     }
@@ -145,8 +144,6 @@ public class ShopFragment extends BaseFragment {
                         // Open corresponding subcategory list
                         Intent i = new Intent(getActivity(), ItemListActivity.class);
                         startActivity(i);
-                        Toast.makeText(getActivity(), "ไปItemActivity", Toast.LENGTH_SHORT).show();
-
                         // Close the category
                         ExpandAnimation expand = new ExpandAnimation(holder.subCatView, 150);
                         v.startAnimation(expand);
